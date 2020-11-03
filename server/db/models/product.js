@@ -20,10 +20,10 @@ Product.init(
     available: {
       type: S.BOOLEAN,
       defaultValue: true,
-      set(valor) {
-        if (valor == true) this.title = this.title.replace(" NO DISPONIBLE", "");
-        else this.title = `${this.title} NO DISPONIBLE`;
-      },
+      // set(valor) {
+      //   if (valor == true) this.title = this.title.replace(" NO DISPONIBLE", "");
+      //   else this.title = `${this.title} NO DISPONIBLE`;
+      // },
     },
     stock: {
       type: S.INTEGER,
@@ -34,7 +34,7 @@ Product.init(
       },
     },
     imageUrl: {
-        type: S.ARRAY(S.STRING),
+        type: S.STRING,
     },
     ISBN: {
         type: S.STRING,

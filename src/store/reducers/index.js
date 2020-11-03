@@ -1,7 +1,9 @@
 import { combineReducers } from "redux";
 
+import productsReducer from "./productsReducer"
+
 export default combineReducers({
-  // movies: moviesReducer,
+  products: productsReducer,
   // users: usersReducer,
   // favs: favsReducer,
 });

@@ -30,8 +30,6 @@ const theme = createMuiTheme({
   },
 });
 
-
-
  function Navbar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
