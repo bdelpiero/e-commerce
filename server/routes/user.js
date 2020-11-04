@@ -25,4 +25,24 @@ router.post("/logout", function (req, res) {
   res.status(200).send("Deslogueado correctamente");
 });
 
+router.put("/admin", (req, res, next) => {
+  if (req.user.rol !== "admin") res.sendStatus(401);
+  User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  }).then((user) => {
+    if (user && user.rol === "user") {
+      user.update({
+        rol: "admin",
+      });
+    } else if (user && user.rol === "admin") {
+      user.update({
+        rol: "user",
+      });
+    }
+    res.sendStatus(200);
+  });
+});
+
 module.exports = router;
