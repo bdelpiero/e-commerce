@@ -6,7 +6,10 @@ function Products({ products }) {
     <div>
       {products &&
         products.map((product) => (
-          <div key={product.id}> {product.title} </div>
+          <div key={product.id}>
+           
+            <Link to={`/products/${product.id}`}><img src={product.imageUrl} style={{height:"300px"}}></img></Link>
+          </div>
         ))}
     </div>
   );
