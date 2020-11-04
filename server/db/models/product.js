@@ -4,9 +4,9 @@ const db = require("../db");
 class Product extends S.Model {}
 Product.init(
   {
-    title: { 
-        type: S.STRING,
-        allowNull: false
+    title: {
+      type: S.STRING,
+      allowNull: false,
     },
     price: {
       type: S.REAL,
@@ -14,16 +14,16 @@ Product.init(
         return "$" + this.getDataValue("price");
       },
     },
-    description: { 
-        type: S.TEXT
+    description: {
+      type: S.TEXT,
     },
     available: {
       type: S.BOOLEAN,
       defaultValue: true,
-      set(valor) {
-        if (valor == true) this.title = this.title.replace(" NO DISPONIBLE", "");
-        else this.title = `${this.title} NO DISPONIBLE`;
-      },
+      // set(valor) {
+      //   if (valor == true) this.title = this.title.replace(" NO DISPONIBLE", "");
+      //   else this.title = `${this.title} NO DISPONIBLE`;
+      // },
     },
     stock: {
       type: S.INTEGER,
@@ -34,10 +34,17 @@ Product.init(
       },
     },
     imageUrl: {
-        type: S.ARRAY(S.STRING),
+      type: S.STRING,
     },
     ISBN: {
-        type: S.STRING,
+      type: S.STRING,
+    },
+    author: {
+      type: S.STRING,
+      allowNull: false,
+    },
+    publisher: {
+      type: S.STRING,
     },
     // aditionalInformation: {
     //     type: S.ARRAY(S.STRING),
@@ -51,16 +58,16 @@ Product.init(
 
 // Class methods:
 Product.availability = function () {
-    return Product.findAll({
-      where: {
-        [S.Op.or]: [{ stock: 0 }, { available: false }],
-      },
-    });
-  };
+  return Product.findAll({
+    where: {
+      [S.Op.or]: [{ stock: 0 }, { available: false }],
+    },
+  });
+};
 
 // // Instance methods
 // Producto.prototype.ganancia = function () {
 //     return this.stock * +this.precio.substring(1);
 //   };
 
-module.exports = Product
+module.exports = Product;
