@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-
+import loginReducer from "./loginReducer"
 export default combineReducers({
   // movies: moviesReducer,
-  // users: usersReducer,
+     login: loginReducer
   // favs: favsReducer,
 });
