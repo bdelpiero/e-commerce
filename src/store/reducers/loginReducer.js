@@ -1,4 +1,4 @@
-import IS_LOGGED from "../constant"
+import {IS_LOGGED} from "../constant"
 const initalState = {
   loggedUser:{},
 }

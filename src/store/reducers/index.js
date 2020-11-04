@@ -1,7 +1,10 @@
 import { combineReducers } from "redux";
 import loginReducer from "./loginReducer"
+import productsReducer from "./productsReducer"
+
 export default combineReducers({
-  // movies: moviesReducer,
-     login: loginReducer
+  products: productsReducer,
+      login: loginReducer
+  // users: usersReducer,
   // favs: favsReducer,
 });

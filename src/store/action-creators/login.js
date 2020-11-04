@@ -1,4 +1,4 @@
-import IS_LOGGED from "../constant"
+import {IS_LOGGED} from "../constant"
 import axios from 'axios'
 
  const loggUser = user =>({
