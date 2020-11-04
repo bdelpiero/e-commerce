@@ -64,6 +64,15 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  none:{
+    textDecorationLine: "none",
+    color: "white",
+    fontSize:"100%",
+    marginTop:"5%"
+  },
+  noneTwo:{
+    textDecorationLine: "none",
+  }
 }));
 
 export default useStyles
