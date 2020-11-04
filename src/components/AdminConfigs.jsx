@@ -11,25 +11,15 @@ import useStyles from '../styles/AdminConfigStyle'
 import Button from '@material-ui/core/Button';
 
 
- function AdminConfigs({handleChange}) {
+ function AdminConfigs({handleChange, handleSubmit}) {
   const classes = useStyles();
 
   return (
     <div className={classes.center}>
     <p className="">Want to add a new admin?</p>
-    <form>
+    <form onSubmit={handleSubmit}>
       <FormControl className={classes.margin}>
-        <InputLabel  htmlFor="input-with-icon-adornment">username</InputLabel>
-        <Input
-        onChange={handleChange}
-         name="username"
-          id="input-with-icon-adornment"
-          startAdornment={
-            <InputAdornment position="start">
-              <AccountCircle />
-            </InputAdornment>
-          }
-        />
+        
         <TextField
           className={classes.margin}
           id="input-with-icon-textfield"
