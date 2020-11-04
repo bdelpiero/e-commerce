@@ -12,7 +12,6 @@ router.post("/register", (req, res, next) => {
     if (data) {
       return res.sendStatus(400);
     }
-
     User.create(req.body).then(() => {
       res.sendStatus(201);
     });
@@ -20,6 +19,10 @@ router.post("/register", (req, res, next) => {
 });
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
   res.send(req.user);
+});
+router.post("/logout", function (req, res) {
+  req.logout();
+  res.status(200).send("Deslogueado correctamente");
 });
 
 module.exports = router;
