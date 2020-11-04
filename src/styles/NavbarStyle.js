@@ -72,7 +72,9 @@ const useStyles = makeStyles((theme) => ({
   },
   noneTwo:{
     textDecorationLine: "none",
-  }
+    color:"black",
+  },
+
 }));
 
 export default useStyles

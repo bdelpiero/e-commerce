@@ -18,11 +18,17 @@ router.post("/register", (req, res, next) => {
   });
 });
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
+  console.log(req.user);
   res.send(req.user);
 });
 router.post("/logout", function (req, res) {
-  req.logout();
+  req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
+router.post("/verificate",(req,res,next)=>{
+  console.log(req.user);
+  if(req.user)return res.send(req.user)
+  res.send({})
+})
 
 module.exports = router;
