@@ -17,7 +17,7 @@ router.post("/register", (req, res, next) => {
     });
   });
 });
-router.post("/login", passport.authenticate("local"), (req, res, next) => {
+router.post("/login", passport.authenticate("local", { session: true }), (req, res, next) => {
   console.log(req.user);
   res.send(req.user);
 });
@@ -25,14 +25,14 @@ router.post("/logout", function (req, res) {
   req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
-router.post("/verificate",(req,res,next)=>{
+router.get("/verificate",(req,res,next)=>{
   console.log(req.user);
   if(req.user)return res.send(req.user)
   res.send({})
 })
 
 router.put("/admin", (req, res, next) => {
-//  if (req.user.rol !== "admin") res.sendStatus(401);
+  //if (req.user.rol !== "admin") res.sendStatus(401);
   User.findOne({
     where: {
       email: req.body.email,

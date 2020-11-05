@@ -94,7 +94,7 @@ const theme = createMuiTheme({
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile{console.log(user)}</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       {user.rol == "admin"?
       <Link to="/configs" className={classes.noneTwo}><MenuItem onClick={handleMenuClose}>Admin settings</MenuItem></Link>
       :

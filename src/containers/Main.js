@@ -8,17 +8,24 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductsContainer from "../containers/ProductsContainer"
 import { fetchIsLogged,login,loggUser } from "../store/action-creators/login"
 import axios from 'axios'
+axios.defaults.withCredentials = true;
 
 function App() {
 const dispatch = useDispatch()
 const islogged = useSelector((state)=>{
 return state.login.logged
 })
+const config = {
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};
 
 useEffect(()=>{
-  axios.post("http://localhost:1337/api/user/verificate",{},{withCredentials:true})
-              .then(res => res.data)
-              .then((user) => dispatch(loggUser(user)))
+axios.get("http://localhost:1337/api/user/verificate",{},config)
+     .then(res => res.data)
+     .then(data=> dispatch(login(data)))
 },[])
 
   return (

@@ -5,20 +5,30 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-
+const FileStore = require('session-file-store')(session)
 const db = require("./db/db");
 const { User } = require("./db/models");
 
 const app = express();
 const routes = require("./routes");
 
-app.use(cors()); // esta librería es para poder trabajar front con back en localhost
+app.use(cors({
+  methods:['GET','POST','PUT'],
+  credentials: true
+})) // esta librería es para poder trabajar front con back en localhost
+
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(cookieParser()); // popula req.cookie
-app.use(session({ secret: "bootcamp" })); // popula req.session
+app.use(session({
+  store: new FileStore,
+   secret: "bootcamp",
+   resave: false,
+  saveUninitialized: false
+ })); // popula req.session
+app.use(cookieParser("bootcamp")); // popula req.cookie
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -59,7 +69,7 @@ passport.deserializeUser(function (id, done) {
 app.use("/api", routes); //todas las rutas empiezan con api
 app.use("/", (req, res, next) => res.redirect("/api")); // me aseguro que si o si vaya para /api si entraste en otra ruta
 
-db.sync({ force: true }).then(() =>
+db.sync({ force: false }).then(() =>
   app.listen(1337, (req, res, next) => {
     console.log("API on port 1337");
   })
