@@ -59,7 +59,7 @@ passport.deserializeUser(function (id, done) {
 app.use("/api", routes); //todas las rutas empiezan con api
 app.use("/", (req, res, next) => res.redirect("/api")); // me aseguro que si o si vaya para /api si entraste en otra ruta
 
-db.sync({ force: true }).then(() =>
+db.sync({ force: false }).then(() =>
   app.listen(1337, (req, res, next) => {
     console.log("API on port 1337");
   })
