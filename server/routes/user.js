@@ -1,8 +1,12 @@
 const express = require("express");
 const passport = require("passport");
+const { findOne } = require("../db/models/user");
+const Order = require("../db/models/order");
 const User = require("../db/models/user");
 const router = express.Router();
+const { Op } = require("sequelize");
 
+/* -------User Register, Login, LogOut--------- */
 router.post("/register", (req, res, next) => {
   User.findOne({
     where: {
@@ -25,14 +29,15 @@ router.post("/logout", function (req, res) {
   req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
-router.post("/verificate",(req,res,next)=>{
+
+router.post("/verificate", (req, res, next) => {
   console.log(req.user);
-  if(req.user)return res.send(req.user)
-  res.send({})
-})
+  if (req.user) return res.send(req.user);
+  res.send({});
+});
 
 router.put("/admin", (req, res, next) => {
-//  if (req.user.rol !== "admin") res.sendStatus(401);
+  //  if (req.user.rol !== "admin") res.sendStatus(401);
   User.findOne({
     where: {
       email: req.body.email,
