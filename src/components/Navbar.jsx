@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Redirect } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 // import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -16,11 +16,12 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
-import Button from '@material-ui/core/Button';
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import Button from "@material-ui/core/Button";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import green from "@material-ui/core/colors/green";
-import useStyles from "../styles/NavbarStyle"
+import useStyles from "../styles/NavbarStyle";
 import { useSelector, useDispatch } from "react-redux";
 
 const theme = createMuiTheme({
@@ -34,16 +35,13 @@ const theme = createMuiTheme({
   },
 });
 
-
-
- function Navbar(props) {
+function Navbar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const logged = useSelector((state)=>{
-    return state.login.loggedUser
-  })
-
+  const logged = useSelector((state) => {
+    return state.login.loggedUser;
+  });
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -67,11 +65,10 @@ const theme = createMuiTheme({
 
   const handleLogout = () => {
     console.log("logout attempt...");
-  /*  axios.post("http://localhost:1337/api/user/logout")
+    /*  axios.post("http://localhost:1337/api/user/logout")
     .then(res => res.data)
     .then(()=> console.log("logout successfully"))*/
-  }
-
+  };
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -144,7 +141,10 @@ const theme = createMuiTheme({
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-            <Link to="/" className={classes.none}>  Bookstore</Link>
+              <Link to="/" className={classes.none}>
+                {" "}
+                Bookstore
+              </Link>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -161,18 +161,42 @@ const theme = createMuiTheme({
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-             {logged?
-            <Button color="inherit" onClick={handleLogout} className={classes.none} title="register">Logout</Button>
-             :
-             <div>
-           <Link to="/login" className={classes.noneTwo}><Button color="inherit" className={classes.none} title="login">login{console.log(logged)}</Button></Link>
-           <Link to="/register" className={classes.noneTwo}><Button color="inherit" className={classes.none} title="register">Sign up</Button></Link>
-           </div>
-
-             }
+              {logged ? (
+                <Button
+                  color="inherit"
+                  onClick={handleLogout}
+                  className={classes.none}
+                  title="register"
+                >
+                  Logout
+                </Button>
+              ) : (
+                <div>
+                  <Link to="/login" className={classes.noneTwo}>
+                    <Button
+                      color="inherit"
+                      className={classes.none}
+                      title="login"
+                    >
+                      login{console.log(logged)}
+                    </Button>
+                  </Link>
+                  <Link to="/register" className={classes.noneTwo}>
+                    <Button
+                      color="inherit"
+                      className={classes.none}
+                      title="register"
+                    >
+                      Sign up
+                    </Button>
+                  </Link>
+                </div>
+              )}
               <IconButton aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
+                  <Link to="/user/cart/6">
+                    <AddShoppingCartIcon />
+                  </Link>
                 </Badge>
               </IconButton>
               <IconButton
@@ -214,4 +238,4 @@ const theme = createMuiTheme({
   );
 }
 
-export default Navbar
+export default Navbar;
