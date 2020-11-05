@@ -6,9 +6,9 @@ const getProd = (product) => ({
   product,
 });
 
-export const fetchProduct = (user) => (dispatch) => {
+export const fetchProduct = (cart) => (dispatch) => {
   return axios
-    .get(`http://localhost:1337/api/user/cart/${user.id}`)
+    .get(`http://localhost:1337/api/user/cart`, {})
     .then((res) => res.data)
     .then((product) => dispatch(getProd(product)));
 };

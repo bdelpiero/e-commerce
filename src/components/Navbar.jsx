@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { withRouter } from "react-router-dom";
-// import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -23,6 +22,8 @@ import purple from "@material-ui/core/colors/purple";
 import green from "@material-ui/core/colors/green";
 import useStyles from "../styles/NavbarStyle";
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { fetchIsLogged, loggUser, login } from "../store/action-creators/login";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,11 +37,18 @@ const theme = createMuiTheme({
 });
 
 function Navbar(props) {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const logged = useSelector((state) => {
+    return state.login.loggedUser.id;
+  });
+  const user = useSelector((state) => {
     return state.login.loggedUser;
+  });
+  const islogged = useSelector((state) => {
+    return state.login.logged;
   });
 
   const isMenuOpen = Boolean(anchorEl);
@@ -65,9 +73,12 @@ function Navbar(props) {
 
   const handleLogout = () => {
     console.log("logout attempt...");
-    /*  axios.post("http://localhost:1337/api/user/logout")
-    .then(res => res.data)
-    .then(()=> console.log("logout successfully"))*/
+
+    axios
+      .post("http://localhost:1337/api/user/logout")
+      .then((res) => res.data)
+      .then(() => dispatch(loggUser({})))
+      .then(() => dispatch(login(false)));
   };
 
   const menuId = "primary-search-account-menu";
@@ -81,8 +92,14 @@ function Navbar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Profile{console.log(user)}</MenuItem>
+      {user.rol == "admin" ? (
+        <Link to="/configs" className={classes.noneTwo}>
+          <MenuItem onClick={handleMenuClose}>Admin settings</MenuItem>
+        </Link>
+      ) : (
+        <MenuItem onClick={handleMenuClose}>settings</MenuItem>
+      )}
     </Menu>
   );
 

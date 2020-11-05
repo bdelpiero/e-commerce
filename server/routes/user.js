@@ -22,22 +22,22 @@ router.post("/register", (req, res, next) => {
   });
 });
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
+  console.log(req.user);
   res.send(req.user);
 });
 router.post("/logout", function (req, res) {
-  req.logout();
+  req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
-/* ----------Ruta User Cart--------------- */
-router.post("/cart/:id", (req, res, next) => {});
-router.get("/cart/:id", (req, res, next) => {});
-router.put("/cart/:id", (req, res, next) => {});
-router.delete("/cart/:id", (req, res, next) => {});
 
-/* --------Rutas Admin--------- */
+router.post("/verificate", (req, res, next) => {
+  console.log(req.user);
+  if (req.user) return res.send(req.user);
+  res.send({});
+});
 
 router.put("/admin", (req, res, next) => {
-  if (req.user.rol !== "admin") res.sendStatus(401);
+  //  if (req.user.rol !== "admin") res.sendStatus(401);
   User.findOne({
     where: {
       email: req.body.email,
