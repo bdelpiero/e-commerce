@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid rgba(90, 90, 90, 0.61);
+  margin: 50px;
+}
+
+.imgDiv {
+  margin: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.377);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.imgSize {
+  height: 600px;
+  width: 350px;
+}

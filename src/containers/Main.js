@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { Route, Redirect, Switch } from "react-router-dom";
@@ -8,7 +9,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductsContainer from "../containers/ProductsContainer";
 import CartContainer from "./CartContainer";
 import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
+import ProductContainer from "../containers/ProductContainer"
 import axios from "axios";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -39,9 +42,10 @@ function App() {
           <Route path="/products" component={ProductsContainer} />
           <Route path="/cart" component={CartContainer} />
           <Route path="/configs" component={AdminConfigsContainer} />
-          <Route path="/products/:productId" />
+          <Route path="/products/:productId" component={ProductContainer}/>
         </Switch>
       </div>
+
     </div>
   );
 }
