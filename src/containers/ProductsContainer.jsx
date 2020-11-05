@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Products from "../components/Products"
+import Sidebar from "../components/Sidebar"
 
 import {fetchProducts} from "../store/action-creators/products";
 
@@ -20,7 +21,8 @@ function ProductsContainer() {
 
   return (
     <div>
-      <Products products={products}/>
+      {/* <Products products={products} /> */}
+      <Sidebar products={products}/>
     </div>
   );
 }
