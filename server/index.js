@@ -25,9 +25,10 @@ app.use(session({
   store: new FileStore,
    secret: "bootcamp",
    resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie:{secure:false}
  })); // popula req.session
-app.use(cookieParser("bootcamp")); // popula req.cookie
+app.use(cookieParser()); // popula req.cookie
 
 app.use(passport.initialize());
 app.use(passport.session());

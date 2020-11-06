@@ -1,50 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from "../components/Navbar"
-import { Route, Redirect, Switch } from 'react-router-dom';
-import RegisterContainer from "./registerContainer"
-import LoginContainer from "./LoginContainer"
-import AdminConfigsContainer from "./AdminConfigsContainer"
+
+import React, { useState, useEffect } from "react";
+import Navbar from "../components/Navbar";
+import { Route, Redirect, Switch } from "react-router-dom";
+import RegisterContainer from "./registerContainer";
+import LoginContainer from "./LoginContainer";
+import AdminConfigsContainer from "./AdminConfigsContainer";
 import { useSelector, useDispatch } from "react-redux";
-import ProductsContainer from "../containers/ProductsContainer"
-import { fetchIsLogged,login,loggUser } from "../store/action-creators/login"
-import axios from 'axios'
-axios.defaults.withCredentials = true;
+import ProductsContainer from "../containers/ProductsContainer";
+import CartContainer from "./CartContainer";
+import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
+import ProductContainer from "../containers/ProductContainer"
+import axios from "axios";
+
 
 function App() {
-const dispatch = useDispatch()
-const islogged = useSelector((state)=>{
-return state.login.logged
-})
-const config = {
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-};
+  const dispatch = useDispatch();
+  const islogged = useSelector((state) => {
+    return state.login.logged;
+  });
 
-useEffect(()=>{
-axios.get("http://localhost:1337/api/user/verificate",{},config)
-     .then(res => res.data)
-     .then(data=> dispatch(login(data)))
-},[])
+  useEffect(() => {
+    axios
+      .get(
+        "http://localhost:1337/api/user/verificate",
+        {},
+        { withCredentials: true }
+      )
+      .then((res) => res.data)
+      .then((user) => dispatch(loggUser(user)));
+  }, []);
 
   return (
     <div>
+      <Navbar />
+      <div>
+        <Switch>
+          <Route path="/register" component={RegisterContainer} />
+          <Route path="/login" component={LoginContainer} />
+          {/* <Route exact path ="/" /> */}
 
-    <Navbar />
-    <div>
-      <Switch>
-         <Route path="/register" component={RegisterContainer} />
-         <Route path="/login" component={LoginContainer} />
-        {/* <Route exact path ="/" /> */}
-        <Route path="/products" component={ProductsContainer}/>
-        <Route path="/configs" component={AdminConfigsContainer}/>
-        <Route path="/products/:productId"/>
-
-      </Switch>
+          <Route exact path="/products" component={ProductsContainer} />
+          <Route path="/cart" component={CartContainer} />
+          <Route path="/configs" component={AdminConfigsContainer} />
+          <Route path="/products/:productId" component={ProductContainer}/>
+        </Switch>
       </div>
+
     </div>
-  )
+  );
 }
 
 export default App;
