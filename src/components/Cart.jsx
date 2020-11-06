@@ -33,6 +33,14 @@ const useStyles = makeStyles({
   table: {
     minWidth: 700,
   },
+  buttons: {
+    margin: 20,
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  firstButton: {
+    marginRight: 20,
+  },
 });
 
 function Cart({ productsInCart }) {
@@ -75,15 +83,22 @@ function Cart({ productsInCart }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button variant='contained' color='primary'>
-        Seguir comprando
-      </Button>
-      <Button variant='contained' color='primary'>
-        Limpia pedido
-      </Button>
-      <Button variant='contained' color='primary'>
-        Realizar pedido
-      </Button>
+      <div className={classes.buttons}>
+        <Button variant='contained' color='primary'>
+          Seguir comprando
+        </Button>
+        <div className={classes.buttonsLeft}>
+          <Button
+            variant='contained'
+            color='primary'
+            className={classes.firstButton}>
+            Limpia pedido
+          </Button>
+          <Button variant='contained' color='primary'>
+            Realizar pedido
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
