@@ -1,27 +1,33 @@
 const S = require("sequelize");
 const db = require("../db");
-const Product = require("./product")
+const Product = require("./product");
 
 class Order extends S.Model {}
 
 Order.init(
   {
-    status: { 
-        type: S.ENUM("Pendiente","Creado","Procesando","Cancelado","Completado"),
-        defaultValue: "Pendiente"
+    status: {
+      type: S.ENUM(
+        "Pendiente",
+        "Creado",
+        "Procesando",
+        "Cancelado",
+        "Completado"
+      ),
+      defaultValue: "Pendiente",
     },
-    total:{ 
-        type: S.REAL,
+    total: {
+      type: S.REAL,
     },
     paymentMethod: {
-        type: S.ENUM("Efectivo", "Tarjeta de Credito", "Transferencia Bancaria"),
-        allowNull: false
+      type: S.ENUM("Efectivo", "Tarjeta de Credito", "Transferencia Bancaria"),
+      // allowNull: false
     },
-    shippingAdress:{
-        type:S.STRING,
-        allowNull: false,
-        // defaultValue: "la direccion al crear la cuenta"
-    }
+    shippingAdress: {
+      type: S.STRING,
+      // allowNull: false,
+      // defaultValue: "la direccion al crear la cuenta"
+    },
   },
   {
     sequelize: db,
@@ -36,4 +42,4 @@ Order.init(
 //                 }, 0))
 // }
 
-module.exports = Order
+module.exports = Order;

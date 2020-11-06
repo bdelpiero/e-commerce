@@ -1,9 +1,12 @@
 import React from "react";
 
-function Cart() {
+function Cart({ productsInCart }) {
+  console.log("IN CART:", productsInCart);
   return (
     <div>
-      <p>CARRITO</p>
+      {productsInCart.map((product) => {
+        return <p>{product.title}</p>;
+      })}
     </div>
   );
 }

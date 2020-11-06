@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { Route, Redirect, Switch } from "react-router-dom";
@@ -9,9 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductsContainer from "../containers/ProductsContainer";
 import CartContainer from "./CartContainer";
 import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
-import ProductContainer from "../containers/ProductContainer"
+import ProductContainer from "../containers/ProductContainer";
+import { createCart } from "../store/action-creators/cart";
 import axios from "axios";
-
 
 function App() {
   const dispatch = useDispatch();
@@ -20,14 +19,16 @@ function App() {
   });
 
   useEffect(() => {
+    //axios.defaults.withCredentials = true;
+
     axios
-      .post(
-        "http://localhost:1337/api/user/verificate",
-        {},
-        { withCredentials: true }
-      )
+      .get("http://localhost:1337/api/user/verificate")
       .then((res) => res.data)
-      .then((user) => dispatch(loggUser(user)));
+      .then((user) => {
+        console.log(user);
+        return dispatch(loggUser(user));
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -35,17 +36,15 @@ function App() {
       <Navbar />
       <div>
         <Switch>
-          <Route path="/register" component={RegisterContainer} />
-          <Route path="/login" component={LoginContainer} />
-          {/* <Route exact path ="/" /> */}
-
-          <Route path="/products" component={ProductsContainer} />
-          <Route path="/cart" component={CartContainer} />
-          <Route path="/configs" component={AdminConfigsContainer} />
-          <Route path="/products/:productId" component={ProductContainer}/>
+          <Route path='/register' component={RegisterContainer} />
+          <Route path='/login' component={LoginContainer} />
+          <Route exact path='/' component={ProductsContainer} />
+          <Route exact path='/products' component={ProductsContainer} />
+          <Route path='/cart' component={CartContainer} />
+          <Route path='/configs' component={AdminConfigsContainer} />
+          <Route path='/products/:productId' component={ProductContainer} />
         </Switch>
       </div>
-
     </div>
   );
 }
