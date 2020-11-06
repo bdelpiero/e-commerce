@@ -35,12 +35,11 @@ export const addProductToCart = (product, user) => (dispatch) => {
     .then((cart) => dispatch(setCart(cart)))
     .catch((err) => console.log(err));
 };
-export const delProductFromCart = (product, user) => (dispatch) => {
+export const delProductFromCart = (product, user, cart) => (dispatch) => {
+  console.log("ACA ESTA EL USER", user);
   return axios
-    .delete(`http://localhost:1337/api/orders/${product.id}`, {
-      userId: user.id,
-    })
-    .then(() => fetchCart(user)) // HACER FETCH CART DE NUEVO
+    .delete(`http://localhost:1337/api/orders/${user.id}/${product.id}`)
+    .then(() => fetchCartProducts(cart)) // HACER FETCH CART DE NUEVO
     .catch((err) => console.log(err));
 };
 

@@ -48,7 +48,7 @@ function Cart({ productsInCart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-
+  const cart = useSelector((state) => state.cart.productsInCart);
   return (
     <div>
       <TableContainer component={Paper}>
@@ -90,7 +90,9 @@ function Cart({ productsInCart }) {
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
-                    onClick={() => dispatch(delProductFromCart(product, user))}
+                    onClick={() =>
+                      dispatch(delProductFromCart(product, user, cart))
+                    }
                   >
                     <Icon component={DeleteIcon} />
                   </Button>
