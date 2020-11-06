@@ -147,7 +147,7 @@ export default function AddProducts({ handleChange, handleSubmit }) {
       color="secondary"
       className={classes.submit}
     >
-      Sign In
+      Add product
     </Button>
 
     <Grid container>
