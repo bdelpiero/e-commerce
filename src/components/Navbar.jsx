@@ -18,8 +18,8 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Button from "@material-ui/core/Button";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import purple from "@material-ui/core/colors/purple";
-import green from "@material-ui/core/colors/green";
+import blue from "@material-ui/core/colors/blue";
+import red from "@material-ui/core/colors/red";
 import useStyles from "../styles/NavbarStyle";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -28,10 +28,10 @@ import { fetchIsLogged, loggUser, login } from "../store/action-creators/login";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: purple[500],
+      main: blue[500],
     },
     secondary: {
-      main: green[500],
+      main: red[500],
     },
   },
 });
@@ -116,7 +116,8 @@ function Navbar(props) {
       onClose={handleMobileMenuClose}>
       <MenuItem>
         <IconButton aria-label='show 4 new mails' color='inherit'>
-          <Badge badgeContent={4} color='secondary'>
+          {/* <Badge badgeContent={""} color='secondary'> */}
+          <Badge color='secondary'>
             <MailIcon />
           </Badge>
         </IconButton>
@@ -124,7 +125,8 @@ function Navbar(props) {
       </MenuItem>
       <MenuItem>
         <IconButton aria-label='show 11 new notifications' color='inherit'>
-          <Badge badgeContent={11} color='secondary'>
+          {/* <Badge badgeContent={""} color='secondary'> */}
+          <Badge color='secondary'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -205,7 +207,8 @@ function Navbar(props) {
                 </div>
               )}
               <IconButton aria-label='show 4 new mails' color='inherit'>
-                <Badge badgeContent={4} color='secondary'>
+                {/* <Badge badgeContent={""} color='secondary'> */}
+                <Badge color='secondary'>
                   <Link to='/cart'>
                     <AddShoppingCartIcon />
                   </Link>
@@ -214,7 +217,8 @@ function Navbar(props) {
               <IconButton
                 aria-label='show 17 new notifications'
                 color='inherit'>
-                <Badge badgeContent={17} color='secondary'>
+                {/* <Badge badgeContent={""} color='secondary'> */}
+                <Badge color='secondary'>
                   <NotificationsIcon />
                 </Badge>
               </IconButton>

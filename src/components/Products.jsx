@@ -106,10 +106,8 @@ function Products({ products }) {
                   <span> {product.price}</span>
                 </Typography>
                 <IconButton aria-label='show 4 new mails' color='inherit'>
-                  <Badge badgeContent={4} color='secondary'>
-                    {/* <Link to='/user/cart/6'>
-                      <AddShoppingCartIcon />
-                    </Link> */}
+                  {/* <Badge badgeContent={4} color='secondary'> */}
+                  <Badge color='secondary'>
                     <button
                       onClick={() => dispatch(addProductToCart(product, user))}>
                       <AddShoppingCartIcon />
