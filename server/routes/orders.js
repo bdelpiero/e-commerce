@@ -66,6 +66,10 @@ router.post("/:productId", (req, res, next) => {
     .then((order) => {
       const product = Product.findByPk(productId);
       return product.then((product) => {
+        // restar al product la cantidad que viene en el body, sumarlo a la order
+        // y actualizar la entrada en ambas tablas (Order_Product y Product).
+        // if (order.hasProduct(product)) modificar la entrada en la tabla pivot
+        // else: (hacer lo que sigue)
         product.addOrder(order[0].id);
         return order[0];
       });
