@@ -18,6 +18,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
+import { addProductToCart } from "../store/action-creators/cart";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Products({ products }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = React.useState(5);
   const classes = useStyles();
 
@@ -103,9 +107,13 @@ function Products({ products }) {
                 </Typography>
                 <IconButton aria-label='show 4 new mails' color='inherit'>
                   <Badge badgeContent={4} color='secondary'>
-                    <Link to='/user/cart/6'>
+                    {/* <Link to='/user/cart/6'>
                       <AddShoppingCartIcon />
-                    </Link>
+                    </Link> */}
+                    <button
+                      onClick={() => dispatch(addProductToCart(product, user))}>
+                      <AddShoppingCartIcon />
+                    </button>
                   </Badge>
                 </IconButton>
               </CardContent>
