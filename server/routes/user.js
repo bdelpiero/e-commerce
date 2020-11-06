@@ -30,7 +30,7 @@ router.post("/logout", function (req, res) {
   res.status(200).send("Deslogueado correctamente");
 });
 
-router.post("/verificate", (req, res, next) => {
+router.get("/verificate", (req, res, next) => {
   console.log(req.user);
   if (req.user) return res.send(req.user);
   res.send({});

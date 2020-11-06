@@ -19,8 +19,6 @@ import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -52,69 +50,60 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginTop: 7,
     color: "red",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 }));
 
+function Products({ products }) {
+  const [spacing, setSpacing] = React.useState(5);
+  const classes = useStyles();
 
- function Products({products}) {
-
- const [spacing, setSpacing] = React.useState(5);
- const classes = useStyles();
-
- const handleChange = (event) => {
-   setSpacing(Number(event.target.value));
- };
-
+  const handleChange = (event) => {
+    setSpacing(Number(event.target.value));
+  };
 
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
-      <Grid container justify="center" spacing={spacing}>
+      <Grid container justify='center' spacing={spacing}>
         {products &&
           products.map((product) => (
             <Grid key={product.id} item>
               <Card className={classes.cardroot}>
                 <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
-                    image={product.imageUrl}
-                    title="Contemplative Reptile"
-                  />
+                  <Link to={`/products/${product.id}`}>
+                    <CardMedia
+                      className={classes.media}
+                      image={product.imageUrl}
+                      title='Contemplative Reptile'
+                    />
+                  </Link>
                 </CardActionArea>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Agregar al carrito
-                  </Button>
-                </CardActions>
               </Card>
               <CardContent>
                 <Typography
                   gutterBottom
-                  variant="h5"
-                  component="h2"
-                  className={classes.titletypo}
-                >
+                  variant='h5'
+                  component='h2'
+                  className={classes.titletypo}>
                   {product.title}
                 </Typography>
                 <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                  className={classes.authortypo}
-                >
+                  variant='body2'
+                  color='textSecondary'
+                  component='p'
+                  className={classes.authortypo}>
                   <span>by: {product.author}</span>
                 </Typography>
                 <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                  className={classes.pricetypo}
-                >
+                  variant='body2'
+                  color='textSecondary'
+                  component='p'
+                  className={classes.pricetypo}>
                   <span> {product.price}</span>
                 </Typography>
-                <IconButton aria-label="show 4 new mails" color="inherit">
-                  <Badge badgeContent={4} color="secondary">
-                    <Link to="/user/cart/6">
+                <IconButton aria-label='show 4 new mails' color='inherit'>
+                  <Badge badgeContent={4} color='secondary'>
+                    <Link to='/user/cart/6'>
                       <AddShoppingCartIcon />
                     </Link>
                   </Badge>
@@ -126,8 +115,5 @@ const useStyles = makeStyles((theme) => ({
     </Grid>
   );
 }
-
-
-
 
 export default Products;

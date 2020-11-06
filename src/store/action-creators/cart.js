@@ -1,14 +1,68 @@
-import { SET_PRODUCT, GET_PRODUCT } from "../constant";
+import { GET_PRODUCTS, SET_PRODUCT, SET_CART, GET_CART } from "../constant";
 import axios from "axios";
 
-const getProd = (product) => ({
-  type: GET_PRODUCT,
+const getProds = (products) => ({
+  type: GET_PRODUCTS,
+  products,
+});
+
+// Products.jsx y Product.jsx
+const setProd = (product) => ({
+  type: SET_PRODUCT,
   product,
 });
 
-export const fetchProduct = (cart) => (dispatch) => {
+const setCart = (cart) => ({
+  type: SET_CART,
+  cart,
+});
+
+export const fetchCartProducts = (cart) => (dispatch) => {
+  console.log("cart en fetch: ", cart);
+  if (!cart.id) return;
   return axios
-    .get(`http://localhost:1337/api/user/cart`, {})
+    .get(`http://localhost:1337/api/orders/${cart.id}`)
     .then((res) => res.data)
-    .then((product) => dispatch(getProd(product)));
+    .then((products) => dispatch(getProds(products)));
+};
+
+// ver ruta
+export const addProductToCart = (product, user) => (dispatch) => {
+  console.log(user);
+  return axios
+    .post(`http://localhost:1337/api/orders/${product.id}`, { userId: user.id })
+    .then((res) => res.data)
+    .then((cart) => dispatch(setCart(cart)))
+    .catch((err) => console.log(err));
+};
+
+export const fetchCart = (user) => (dispatch) => {
+  console.log(("user en axios: ", user));
+  if (!user) return;
+
+  return axios
+    .get(`http://localhost:1337/api/orders/user/${user.id}`)
+    .then((res) => res.data)
+    .then((cart) => {
+      console.log("carrito actualizado: ", cart);
+      return dispatch(setCart(cart));
+    });
+};
+
+export const createCart = () => (dispatch) => {
+  return axios
+    .post(`http://localhost:1337/api/orders`, {
+      paymentMethod: "Efectivo",
+      shippingAdress: "hola",
+    })
+    .then((res) => res.data)
+    .then((cart) => dispatch(setCart(cart)));
+};
+
+// http://localhost:1337/api/orders/user  // POST (REGISTER)
+export const addCartToUser = (user) => (dispatch) => {
+  return axios
+    .put(`http://localhost:1337/api/orders/user`, { user })
+    .then((res) => res.data)
+    .then((cart) => dispatch(setCart(cart)));
 };
