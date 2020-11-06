@@ -2,6 +2,13 @@ import {IS_LOGGED, LOGIN} from "../constant"
 import axios from 'axios'
 axios.default.withCredentials= true
 
+/*const config = {
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};*/
+
 const loggUser = user =>({
      type: IS_LOGGED,
   payload: user
@@ -11,6 +18,7 @@ const login = boolean => ({
      type: LOGIN,
   payload: boolean
 })
+
 
  const fetchIsLogged = () => dispatch =>{
    return axios.get("http://localhost:1337/api/user/verificate")

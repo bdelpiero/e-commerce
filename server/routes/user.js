@@ -21,7 +21,7 @@ router.post("/register", (req, res, next) => {
     });
   });
 });
-router.post("/login", passport.authenticate("local"), (req, res, next) => {
+router.post("/login", passport.authenticate("local", { session: true }), (req, res, next) => {
   console.log(req.user);
   res.send(req.user);
 });
