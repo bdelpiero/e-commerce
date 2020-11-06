@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -38,6 +38,7 @@ const theme = createMuiTheme({
 
 function Navbar(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -78,7 +79,8 @@ function Navbar(props) {
       .post("http://localhost:1337/api/user/logout")
       .then((res) => res.data)
       .then(() => dispatch(loggUser({})))
-      .then(() => dispatch(login(false)));
+      .then(() => dispatch(login(false)))
+      .then(() => history.push("/"));
   };
 
   const menuId = "primary-search-account-menu";
