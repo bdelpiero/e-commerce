@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,7 +10,8 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
-
+import { delProductFromCart } from "../store/action-creators/cart";
+import { useDispatch, useSelector } from "react-redux";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -45,38 +46,54 @@ const useStyles = makeStyles({
 
 function Cart({ productsInCart }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.login.loggedUser);
+
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label='customized table'>
+        <Table className={classes.table} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align='left'>Producto</StyledTableCell>
-              <StyledTableCell align='center'>Precio unitario</StyledTableCell>
-              <StyledTableCell align='right'></StyledTableCell>
-              <StyledTableCell align='right'>Cantidad</StyledTableCell>
-              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align="left">Producto</StyledTableCell>
+              <StyledTableCell align="center">Precio unitario</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right">Cantidad</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {productsInCart.map((product) => (
               <StyledTableRow key={product.id}>
-                <StyledTableCell component='th' scope='row'>
+                <StyledTableCell component="th" scope="row">
                   <img
-                    className='imgSize'
+                    className="imgSize"
                     src={product.imageUrl}
                     style={{ height: "150px", width: "100px" }}
                   />
                 </StyledTableCell>
-                <StyledTableCell align='left'>{product.title}</StyledTableCell>
-                <StyledTableCell align='center'>
+                <StyledTableCell align="left">{product.title}</StyledTableCell>
+                <StyledTableCell align="center">
                   {product.price}
                 </StyledTableCell>
-                <StyledTableCell align='right'>edit</StyledTableCell>
-                <StyledTableCell align='right'>1</StyledTableCell>
-                <StyledTableCell align='right'>
-                  <Icon component={DeleteIcon} />
+                <StyledTableCell align="right">edit</StyledTableCell>
+                <StyledTableCell align="right">
+                  <button
+                    onClick={() => {
+                      /* addStock(); */
+                    }}
+                  >
+                    +
+                  </button>{" "}
+                  {`0`} <button>-</button>
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button
+                    onClick={() => dispatch(delProductFromCart(product, user))}
+                  >
+                    <Icon component={DeleteIcon} />
+                  </Button>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
@@ -84,17 +101,18 @@ function Cart({ productsInCart }) {
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
-        <Button variant='contained' color='primary'>
+        <Button variant="contained" color="primary">
           Seguir comprando
         </Button>
         <div className={classes.buttonsLeft}>
           <Button
-            variant='contained'
-            color='primary'
-            className={classes.firstButton}>
+            variant="contained"
+            color="primary"
+            className={classes.firstButton}
+          >
             Limpia pedido
           </Button>
-          <Button variant='contained' color='primary'>
+          <Button variant="contained" color="primary">
             Realizar pedido
           </Button>
         </div>
