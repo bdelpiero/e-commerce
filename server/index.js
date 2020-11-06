@@ -12,24 +12,21 @@ const { User } = require("./db/models");
 const app = express();
 const routes = require("./routes");
 
-app.use(cors({
-  methods:['GET','POST','PUT'],
-  credentials: true
-})) // esta librería es para poder trabajar front con back en localhost
-
+// app.use(cors()); // esta librería es para poder trabajar front con back en localhost
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(session({
-  store: new FileStore,
-   secret: "bootcamp",
-   resave: false,
-  saveUninitialized: false,
-  cookie:{secure:false}
- })); // popula req.session
+app.use(cors());
 app.use(cookieParser()); // popula req.cookie
-
+app.use(
+  session({
+    secret: "bootcamp",
+    cookie: { secure: true },
+    resave: false,
+    saveUninitialized: true,
+  })
+); // popula req.session
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -59,11 +56,13 @@ passport.use(
 
 // How we save the user
 passport.serializeUser(function (user, done) {
+  console.log("serialize");
   done(null, user.id);
 });
 
 // How we look for the user
 passport.deserializeUser(function (id, done) {
+  console.log("deserialize");
   User.findByPk(id).then((user) => done(null, user));
 });
 
