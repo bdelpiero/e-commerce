@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme) =>({
     },
     b:{
       marginTop:"5%"
+    },
+    p:{
+      marginTop:"50%",
+      marginLeft:"5%",
+      fontWeight:"bold"
     }
   }),
 );

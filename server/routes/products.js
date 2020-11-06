@@ -25,11 +25,6 @@ router.post("/", (req, res, next)=>{
         .then(()=>res.sendStatus(201));
 })
 
-router.post("/add",(req,res)=>{
-  Product.create(req.body)
-         .then((book)=> res.status(201).send(book))
-})
-
 
 router.put("/:productId", (req, res, next)=>{
     Product.update(req.body, {where: {id: req.params.productId}})

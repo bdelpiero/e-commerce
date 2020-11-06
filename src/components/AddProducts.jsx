@@ -19,6 +19,7 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    marginRight:"20%",
     marginTop:"5%",
     display: 'flex',
     flexWrap: 'wrap',
@@ -37,13 +38,14 @@ const useStyles = makeStyles((theme) => ({
   center:{
     marginTop:"2%",
     position:"fixed",
-    right:"50%",
+    right:"45%",
     fontWeight: "700"
   },
   b:{
     marginTop: "2%",
     paddingRight:"50%"
- }
+ },
+
 }));
 
 export default function AddProducts({ handleChange, handleSubmit }) {
@@ -51,7 +53,7 @@ export default function AddProducts({ handleChange, handleSubmit }) {
 
 
   return (
-    <div>
+    <div >
       <p className={classes.center}> Add a new product</p>
     <form onSubmit={handleSubmit} className={classes.root}>
 
@@ -75,7 +77,7 @@ export default function AddProducts({ handleChange, handleSubmit }) {
       type="text"
     />
 
-    
+
     <TextField
     onChange={handleChange}
       variant="outlined"

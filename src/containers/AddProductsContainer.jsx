@@ -29,7 +29,7 @@ if (name == "price")setAmount(e.target.value)
 const handleSubmit = (e) => {
 e.preventDefault()
 console.log("submit attempt");
-axios.post("http://localhost:1337/api/products/add",{
+axios.post("http://localhost:1337/api/products",{
   title: title,
   price: amount,
   description: description,

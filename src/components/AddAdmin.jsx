@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
     <div>
 
     <div className={classes.center}>
-    <p className="">Want to add a new admin?</p>
+    <p className={classes.p}>Want to add or remove an admin?</p>
     <form onSubmit={handleSubmit}>
       <FormControl className={classes.margin}>
 
@@ -36,7 +36,7 @@ import Button from '@material-ui/core/Button';
           }}
         />
         <Button type="submit" className={classes.b} variant="contained" color="secondary">
-        create admin
+        create or remove admin
       </Button>
       </FormControl>
       </form>
