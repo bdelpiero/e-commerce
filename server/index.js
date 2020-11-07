@@ -5,28 +5,37 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-const FileStore = require('session-file-store')(session)
+
 const db = require("./db/db");
 const { User } = require("./db/models");
 
 const app = express();
 const routes = require("./routes");
+// this.express.use(cors({
+//   origin: [
+//     'http://localhost:8080',
+//     'https://localhost:8080'
+//   ],
+//   credentials: true,
+//   exposedHeaders: ['set-cookie']
+// }));
 
-// app.use(cors()); // esta librería es para poder trabajar front con back en localhost
+// app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://localhost:3000"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  })
+);
+//
+// }));
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(cors());
 app.use(cookieParser()); // popula req.cookie
-app.use(
-  session({
-    secret: "bootcamp",
-    cookie: { secure: true },
-    resave: false,
-    saveUninitialized: true,
-  })
-); // popula req.session
+app.use(session({ secret: "bootcamp" })); // popula req.session
 app.use(passport.initialize());
 app.use(passport.session());
 
