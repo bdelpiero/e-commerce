@@ -1,30 +1,49 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import Image from 'material-ui-image'
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import "../styles/singleProductStyle.css";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import { addProductToCart } from "../store/action-creators/cart";
+import SingleProductInfo from "./SingleProductInfo";
 
-function SingleProduct({ product }) {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.login.loggedUser);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+function SingleProduct({ product, reviews }) {
+  // const dispatch = useDispatch();
+  // const user = useSelector((state) => state.login.loggedUser);
+  const classes = useStyles();
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  console.log("reviews en singleProduct: ", reviews);
   return (
-    <div className='container'>
-      <div className='imgDiv'>
-        <img className='imgSize' src={product.imageUrl} />
-      </div>
-      <div className='textDiv'>
-        <h1>Titulo: {product.title}</h1>
-        <h2>Autor: {product.author}</h2>
-        <h3>Descripcion: {product.description}</h3>
-        <h3>Precio: {product.price}</h3>
-        <p>Disponible: {product.stock}</p>
-
-        <AddShoppingCartIcon />
-        <button onClick={() => dispatch(addProductToCart(product, user))}>
-          Add To Cart
-        </button>
+    <div className={classes.root}>
+      <div className='container'>
+        <AppBar position='static'>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label='simple tabs example'>
+            <Tab label='Info' />
+            <Tab label='Reviews' />
+          </Tabs>
+        </AppBar>
+        <div role='tabpanel'>
+          <SingleProductInfo product={product} reviews={reviews} />
+        </div>
       </div>
     </div>
   );

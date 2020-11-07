@@ -1,10 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const { Review } = require("../db/models");
+const { Review, User, Product } = require("../db/models");
 
 router.get("/", (req, res, next) => {
   Review.findAll().then((reviews) => res.send(reviews));
+});
+
+router.get("/:productId", (req, res, next) => {
+  Review.findAll({
+    where: { productId: req.params.productId },
+    include: User,
+  }).then((reviews) => res.send(reviews));
 });
 
 router.post("/:productId", (req, res, next) => {

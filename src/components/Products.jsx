@@ -60,8 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 const reviewsAvg = (reviews, product) => {
   if (reviews.length == 0) return 0;
-  console.log("reviews in function: ", reviews);
-  console.log("product in function: ", product);
+
   return reviews
     .filter((review) => review.productId == product.id)
     .reduce((avg, current, _, array) => {
@@ -73,9 +72,7 @@ function Products({ products, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = useState(5);
-  // const [stars, setStars] = React.useState(0);
   const classes = useStyles();
-  console.log(("reviews: ", reviews));
 
   const handleChange = (event) => {
     setSpacing(Number(event.target.value));
