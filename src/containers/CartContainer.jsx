@@ -1,7 +1,11 @@
 import Cart from "../components/Cart";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchCartProducts, fetchCart } from "../store/action-creators/cart";
+import {
+  fetchCartProducts,
+  fetchCart,
+  getProds,
+} from "../store/action-creators/cart";
 
 // const productsInCart = {
 
@@ -20,10 +24,12 @@ function CartContainer() {
 
   useEffect(() => {
     // console.log("cart: ", cart);
+    if (!user.id) return;
     console.log("user: ", user.id);
     dispatch(fetchCart(user));
   }, []);
   useEffect(() => {
+    if (!user.id) return dispatch(getProds([]));
     if (cart.id) {
       console.log("pasó");
       console.log("cart en dispatch");
