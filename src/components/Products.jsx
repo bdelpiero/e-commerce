@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -20,6 +20,8 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { addProductToCart } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
+import Rating from "@material-ui/lab/Rating";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,15 +58,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Products({ products }) {
+const reviewsAvg = (reviews, product) => {
+  if (reviews.length == 0) return 0;
+  console.log("reviews in function: ", reviews);
+  console.log("product in function: ", product);
+  return reviews
+    .filter((review) => review.productId == product.id)
+    .reduce((avg, current, _, array) => {
+      return avg + current.rating / array.length;
+    }, 0);
+};
+
+function Products({ products, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  const [spacing, setSpacing] = React.useState(5);
+  const [spacing, setSpacing] = useState(5);
+  // const [stars, setStars] = React.useState(0);
   const classes = useStyles();
+  console.log(("reviews: ", reviews));
 
   const handleChange = (event) => {
     setSpacing(Number(event.target.value));
   };
+
+  // console.log("reviews: ", reviews);
 
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
@@ -105,6 +122,17 @@ function Products({ products }) {
                   className={classes.pricetypo}>
                   <span> {product.price}</span>
                 </Typography>
+                <Box
+                  component='fieldset'
+                  mb={3}
+                  borderColor='transparent'
+                  style={{ marginBottom: "0px" }}>
+                  <Rating
+                    name='read-only'
+                    value={reviewsAvg(reviews, product)}
+                    readOnly
+                  />
+                </Box>
                 <IconButton aria-label='show 4 new mails' color='inherit'>
                   {/* <Badge badgeContent={4} color='secondary'> */}
                   <Badge color='secondary'>

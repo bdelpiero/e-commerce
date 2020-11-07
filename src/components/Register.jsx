@@ -94,14 +94,16 @@ export default function SignUp({ handleChange, handleSubmit }) {
               />
             </Grid>
           </Grid>
-          <Button
-            fullWidth
-            variant='contained'
-            color='primary'
-            className={classes.facebook}
-            style={{ marginTop: "20px" }}>
-            <a href='http://localhost:1337/auth/facebook'>Login via Facebook</a>
-          </Button>
+          <a href='http://localhost:1337/auth/facebook'>
+            <Button
+              fullWidth
+              variant='contained'
+              color='primary'
+              className={classes.facebook}
+              style={{ marginTop: "20px" }}>
+              Login via Facebook
+            </Button>
+          </a>
           <Button
             type='submit'
             fullWidth

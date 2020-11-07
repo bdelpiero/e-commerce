@@ -81,15 +81,15 @@ export default function SignInSide({ handleChange, handleSubmit }) {
               id='password'
               autoComplete='current-password'
             />
-            <Button
-              fullWidth
-              variant='contained'
-              color='primary'
-              className={classes.facebook}>
-              <a href='http://localhost:1337/auth/facebook'>
+            <a href='http://localhost:1337/auth/facebook'>
+              <Button
+                fullWidth
+                variant='contained'
+                color='primary'
+                className={classes.facebook}>
                 Login via Facebook
-              </a>
-            </Button>
+              </Button>
+            </a>
             <Button
               type='submit'
               fullWidth
