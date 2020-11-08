@@ -101,7 +101,7 @@ export default function SignUp({ handleChange, handleSubmit }) {
               color='primary'
               className={classes.facebook}
               style={{ marginTop: "20px" }}>
-              Login via Facebook
+              Sign up via Facebook
             </Button>
           </a>
           <Button

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -9,6 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import "../styles/singleProductStyle.css";
 import SingleProductInfo from "./SingleProductInfo";
+import SingleProductReviews from "./SingleProductReviews";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,12 +18,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SingleProduct({ product, reviews }) {
+function a11yProps(index) {
+  return {
+    id: `wrapped-tab-${index}`,
+    "aria-controls": `wrapped-tabpanel-${index}`,
+  };
+}
+
+function SingleProduct({ product, reviews, path, url }) {
   // const dispatch = useDispatch();
   // const user = useSelector((state) => state.login.loggedUser);
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("one");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -36,13 +44,65 @@ function SingleProduct({ product, reviews }) {
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label='simple tabs example'>
-            <Tab label='Info' />
-            <Tab label='Reviews' />
+            indicatorColor='secondary'
+            textColor='secondary'>
+            <Tab
+              label='Info'
+              value='one'
+              {...a11yProps("one")}
+              component={Link}
+              to={`${url}/info`}
+            />
+            <Tab
+              label='Reviews'
+              value='twoe'
+              {...a11yProps("one")}
+              component={Link}
+              to={`${url}/reviews`}
+            />
           </Tabs>
         </AppBar>
         <div role='tabpanel'>
-          <SingleProductInfo product={product} reviews={reviews} />
+          <Route
+            exact
+            path={`${path}`}
+            render={() => (
+              <SingleProductInfo product={product} reviews={reviews} />
+            )}
+          />
+          <Route
+            exact
+            path={`${path}/info`}
+            render={() => (
+              <SingleProductInfo product={product} reviews={reviews} />
+            )}
+          />
+          <Route
+            exact
+            path={`${path}/reviews`}
+            render={() => <SingleProductReviews reviews={reviews} />}
+          />
+
+          {/* <Route
+          path={`${path}/info`}
+          render={() => <UserInfo user={user} removeUser={removeUser} isLoggedIn={isLoggedIn} />}
+        />
+        <Route
+          exact
+          path={`${path}`}
+          render={() => <UserInfo user={user} removeUser={removeUser} isLoggedIn={isLoggedIn} />}
+        />
+        <Route
+          path={`${path}/favs`}
+          render={() => (
+            <UserFavourites
+              favs={favs}
+              isLoggedIn={isLoggedIn}
+              removeFav={removeFav}
+              goToSearch={goToSearch}
+            />
+          )}
+        /> */}
         </div>
       </div>
     </div>
@@ -50,32 +110,3 @@ function SingleProduct({ product, reviews }) {
 }
 
 export default SingleProduct;
-
-{
-  /* <div>
-<div>
-    
-</div>
-<div>
-    <h1>{product.title}</h1>
-    <h2>{product.author}</h2>
-    <h3>{product.description}</h3>
-    <h3>{product.price}</h3>
-    <p>{product.stock}</p>
-</div>
-</div> */
-}
-
-{
-  /* <Link to="/user/cart/6">
-                    <AddShoppingCartIcon />
-                  </Link>
-
-<IconButton aria-label="show 4 new mails" color="inherit">
-<Badge badgeContent={4} color="secondary">
-  <Link to="/user/cart/6">
-    <AddShoppingCartIcon />
-  </Link>
-</Badge>
-</IconButton> */
-}

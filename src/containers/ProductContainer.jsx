@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import {Link} from "react-router-dom";
+import { useRouteMatch } from "react-router";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProduct } from "../store/action-creators/products";
@@ -12,6 +13,7 @@ function ProductContainer() {
   const product = useSelector((state) => {
     return state.products.selected;
   });
+  const { path, url } = useRouteMatch();
   const [reviews, setReviews] = useState([]);
   const dispatch = useDispatch();
 
@@ -20,7 +22,7 @@ function ProductContainer() {
   }, []);
   useEffect(() => {
     // pedido axios para buscar las reviews
-    // setearlas en el estado local (setReviews)
+    // (incluyendo la info de los usuarios que las hicieron)
     if (!productId) return;
     axios
       .get(`http://localhost:1337/api/reviews/${productId}`)
@@ -33,7 +35,12 @@ function ProductContainer() {
 
   return (
     <div>
-      <SingleProduct product={product} reviews={reviews} />
+      <SingleProduct
+        product={product}
+        reviews={reviews}
+        path={path}
+        url={url}
+      />
     </div>
   );
 }
