@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box";
 import "../styles/singleProductStyle.css";
 import SingleProductInfo from "./SingleProductInfo";
 import SingleProductReviews from "./SingleProductReviews";
+import AddReview from "./AddReview";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +26,7 @@ function a11yProps(index) {
   };
 }
 
-function SingleProduct({ product, reviews, path, url }) {
+function SingleProduct({ product, reviews, path, url, setReviews, user }) {
   // const dispatch = useDispatch();
   // const user = useSelector((state) => state.login.loggedUser);
   const classes = useStyles();
@@ -82,29 +83,22 @@ function SingleProduct({ product, reviews, path, url }) {
             path={`${path}/reviews`}
             render={() => <SingleProductReviews reviews={reviews} />}
           />
-
-          {/* <Route
-          path={`${path}/info`}
-          render={() => <UserInfo user={user} removeUser={removeUser} isLoggedIn={isLoggedIn} />}
-        />
-        <Route
-          exact
-          path={`${path}`}
-          render={() => <UserInfo user={user} removeUser={removeUser} isLoggedIn={isLoggedIn} />}
-        />
-        <Route
-          path={`${path}/favs`}
-          render={() => (
-            <UserFavourites
-              favs={favs}
-              isLoggedIn={isLoggedIn}
-              removeFav={removeFav}
-              goToSearch={goToSearch}
-            />
-          )}
-        /> */}
         </div>
       </div>
+      {user.id && (
+        <Route
+          exact
+          path={`${path}/reviews`}
+          render={() => (
+            <AddReview
+              productId={product.id}
+              setReviews={setReviews}
+              user={user}
+              reviews={reviews}
+            />
+          )}
+        />
+      )}
     </div>
   );
 }

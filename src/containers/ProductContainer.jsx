@@ -13,6 +13,7 @@ function ProductContainer() {
   const product = useSelector((state) => {
     return state.products.selected;
   });
+  const user = useSelector((state) => state.login.loggedUser);
   const { path, url } = useRouteMatch();
   const [reviews, setReviews] = useState([]);
   const dispatch = useDispatch();
@@ -40,6 +41,8 @@ function ProductContainer() {
         reviews={reviews}
         path={path}
         url={url}
+        setReviews={setReviews}
+        user={user}
       />
     </div>
   );

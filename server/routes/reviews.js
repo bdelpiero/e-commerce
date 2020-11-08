@@ -20,12 +20,19 @@ router.post("/:productId", (req, res, next) => {
 
   const { rating, comment } = req.body;
   // const userId = req.user.id;
-  const { userId } = req.body;
+  const userId = req.user.id;
   const { productId } = req.params;
+  console.log(userId);
+  console.log(productId);
 
-  Review.create({ rating, comment, userId, productId }).then(() =>
-    res.sendStatus(201)
-  );
+  return Review.create({ rating, comment, userId, productId })
+    .then((review) => {
+      return Review.findOne({
+        where: { id: review.id },
+        include: User,
+      });
+    })
+    .then((review) => res.send(review));
 });
 
 module.exports = router;
