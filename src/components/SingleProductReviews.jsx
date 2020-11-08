@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     marginLeft: 0,
   },
+  listItem: {
+    display: "flex",
+    flexDirection: "column",
+  },
 }));
 
 function SingleProductReviews({ reviews }) {
@@ -34,27 +38,21 @@ function SingleProductReviews({ reviews }) {
         {reviews.map((review) => {
           if (!review.user) return;
           return (
-            <div>
-              <ListItem alignItems='flex-start' key={review.id}>
-                <ListItemText
-                  primary={review.user.userName}
-                  secondary={
-                    <React.Fragment>
-                      <Box
-                        component='fieldset'
-                        borderColor='transparent'
-                        className={classes.starsContainter}>
-                        <Rating
-                          name='read-only'
-                          value={review.rating}
-                          readOnly
-                          className={classes.stars}
-                        />
-                      </Box>
-                      {review.comment}
-                    </React.Fragment>
-                  }
-                />
+            <div key={review.id}>
+              <ListItem alignItems='flex-start' className={classes.listItem}>
+                <ListItemText primary={review.user.userName} />
+                <Box
+                  component='fieldset'
+                  borderColor='transparent'
+                  className={classes.starsContainter}>
+                  <Rating
+                    name='read-only'
+                    value={review.rating}
+                    readOnly
+                    className={classes.stars}
+                  />
+                </Box>
+                <ListItemText secondary={review.comment} />
               </ListItem>
               <Divider variant='inset' component='li' />
             </div>

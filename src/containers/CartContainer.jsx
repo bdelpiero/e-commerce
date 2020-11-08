@@ -28,7 +28,7 @@ function CartContainer() {
     if (!user.id) return;
 
     dispatch(fetchCart(user));
-  }, []);
+  }, [user]);
   useEffect(() => {
     // si no hay usuario logeado. Habría que corregirlo cuando podamos
     // guardar en el localStorage
@@ -36,7 +36,7 @@ function CartContainer() {
 
     if (cart.id) {
       console.log("pasó");
-      console.log("cart en dispatch");
+      console.log("cart en dispatch", cart);
       dispatch(fetchCartProducts(cart));
     }
   }, [cart]);

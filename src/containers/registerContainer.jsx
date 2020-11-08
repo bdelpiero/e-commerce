@@ -7,6 +7,9 @@ function RegisterContainer() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [incorrect, setIncorrect] = useState(false);
+
   const history = useHistory();
 
   const handleChange = (e) => {
@@ -19,6 +22,9 @@ function RegisterContainer() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("register attempt...");
+    setIncorrect(false);
+    setLoading(true);
+
     axios
       .post("http://localhost:1337/api/user/register", {
         userName: username,
@@ -27,10 +33,21 @@ function RegisterContainer() {
       })
       .then((res) => res.data)
       .then(() => history.push("/login"))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+        setIncorrect(true);
+        setLoading(false);
+      });
   };
 
-  return <Register handleSubmit={handleSubmit} handleChange={handleChange} />;
+  return (
+    <Register
+      loading={loading}
+      handleSubmit={handleSubmit}
+      handleChange={handleChange}
+      incorrect={incorrect}
+    />
+  );
 }
 
 export default RegisterContainer;

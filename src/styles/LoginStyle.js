@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   facebook: {
     margin: theme.spacing(3, 0, 0),
   },
+  loader: {
+    display: "flex",
+    justifyContent: "center",
+    margin: 10,
+  },
 }));
 
 export default useStyles;

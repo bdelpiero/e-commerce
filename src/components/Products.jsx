@@ -130,15 +130,14 @@ function Products({ products, reviews }) {
                     readOnly
                   />
                 </Box>
-                <IconButton aria-label='show 4 new mails' color='inherit'>
-                  {/* <Badge badgeContent={4} color='secondary'> */}
-                  <Badge color='secondary'>
-                    <button
-                      onClick={() => dispatch(addProductToCart(product, user))}>
-                      <AddShoppingCartIcon />
-                    </button>
-                  </Badge>
-                </IconButton>
+
+                {/* <Badge badgeContent={4} color='secondary'> */}
+                <Badge color='secondary'>
+                  <button
+                    onClick={() => dispatch(addProductToCart(product, user))}>
+                    <AddShoppingCartIcon />
+                  </button>
+                </Badge>
               </CardContent>
             </Grid>
           ))}

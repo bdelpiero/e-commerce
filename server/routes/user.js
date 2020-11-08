@@ -16,16 +16,18 @@ router.post("/register", (req, res, next) => {
     if (data) {
       return res.sendStatus(400);
     }
-    User.create(req.body).then(() => {
-      res.sendStatus(201);
-    });
+    User.create(req.body)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch(() => res.sendStatus(400));
   });
 });
 router.post(
   "/login",
   passport.authenticate("local", { session: true }),
   (req, res, next) => {
-    console.log(req.user);
+    // console.log(req.user);
     res.send(req.user);
   }
 );

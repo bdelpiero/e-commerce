@@ -8,6 +8,8 @@ function LoginContainer() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [incorrect, setIncorrect] = useState(false);
   const history = useHistory();
 
   const handleChange = (e) => {
@@ -19,12 +21,27 @@ function LoginContainer() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("login attempt...");
+    setIncorrect(false);
+    setLoading(true);
+
     dispatch(fetchLogin(email, password))
       // .then(()=> dispatch(login(true)))
-      .then(() => history.push("/"));
+      .then(() => history.push("/"))
+      .catch((err) => {
+        // console.log(err);
+        setIncorrect(true);
+        setLoading(false);
+      });
   };
 
-  return <Login handleSubmit={handleSubmit} handleChange={handleChange} />;
+  return (
+    <Login
+      loading={loading}
+      handleSubmit={handleSubmit}
+      handleChange={handleChange}
+      incorrect={incorrect}
+    />
+  );
 }
 
 export default LoginContainer;

@@ -16,6 +16,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import green from "@material-ui/core/colors/green";
 import useStyles from "../styles/SignupStyle";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const theme = createMuiTheme({
   palette: {
@@ -41,7 +42,12 @@ function Copyright() {
   );
 }
 
-export default function SignUp({ handleChange, handleSubmit }) {
+export default function SignUp({
+  handleChange,
+  handleSubmit,
+  loading,
+  incorrect,
+}) {
   const classes = useStyles();
 
   return (
@@ -58,6 +64,7 @@ export default function SignUp({ handleChange, handleSubmit }) {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={incorrect}
                 onChange={handleChange}
                 variant='outlined'
                 required
@@ -70,6 +77,7 @@ export default function SignUp({ handleChange, handleSubmit }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={incorrect}
                 onChange={handleChange}
                 variant='outlined'
                 required
@@ -82,6 +90,7 @@ export default function SignUp({ handleChange, handleSubmit }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={incorrect}
                 onChange={handleChange}
                 variant='outlined'
                 required
@@ -94,6 +103,11 @@ export default function SignUp({ handleChange, handleSubmit }) {
               />
             </Grid>
           </Grid>
+          {loading && (
+            <div className={classes.root}>
+              <CircularProgress />
+            </div>
+          )}
           <a href='http://localhost:1337/auth/facebook'>
             <Button
               fullWidth

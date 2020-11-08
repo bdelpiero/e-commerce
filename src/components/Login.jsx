@@ -16,6 +16,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 import green from "@material-ui/core/colors/green";
 import useStyles from "../styles/LoginStyle";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const theme = createMuiTheme({
   palette: {
@@ -41,7 +42,12 @@ function Copyright() {
   );
 }
 
-export default function SignInSide({ handleChange, handleSubmit }) {
+export default function SignInSide({
+  handleChange,
+  handleSubmit,
+  loading,
+  incorrect,
+}) {
   const classes = useStyles();
 
   return (
@@ -58,6 +64,7 @@ export default function SignInSide({ handleChange, handleSubmit }) {
           </Typography>
           <form onSubmit={handleSubmit} className={classes.form} noValidate>
             <TextField
+              error={incorrect}
               onChange={handleChange}
               variant='outlined'
               margin='normal'
@@ -70,6 +77,7 @@ export default function SignInSide({ handleChange, handleSubmit }) {
               autoFocus
             />
             <TextField
+              error={incorrect}
               onChange={handleChange}
               variant='outlined'
               margin='normal'
@@ -81,6 +89,11 @@ export default function SignInSide({ handleChange, handleSubmit }) {
               id='password'
               autoComplete='current-password'
             />
+            {loading && (
+              <div className={classes.loader}>
+                <CircularProgress />
+              </div>
+            )}
             <a href='http://localhost:1337/auth/facebook'>
               <Button
                 fullWidth
