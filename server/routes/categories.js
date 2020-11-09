@@ -7,7 +7,7 @@ router.post("/", (req, res, next) => {
   Category.create(req.body).then(() => res.sendStatus(201));
 });
 
-router.post("/", (req, res, next) => {
+router.get("/", (req, res) => {
   Category.findAll().then((data) => res.send(data));
 });
 
