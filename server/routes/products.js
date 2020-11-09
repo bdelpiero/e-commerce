@@ -11,10 +11,11 @@ router.get("/", (req, res, next)=>{
 
 router.get("/:productId", (req, res, next)=>{
     Product.findByPk(req.params.productId)
-        .then(product => res.send(product));
+        .then(product => res.send(product))
+        .catch(err=> console.log(err))
 });
 
-//Revisar la relacion con categories para cuando setiemos mas de una categoria 
+//Revisar la relacion con categories para cuando setiemos mas de una categoria
 router.post("/", (req, res, next)=>{
     const product = Product.create(req.body);
     const category = Category.findOne({where:{name: req.body.category}});

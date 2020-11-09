@@ -1,62 +1,107 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import Image from 'material-ui-image'
+import { Link, Route } from "react-router-dom";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import "../styles/singleProductStyle.css";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import { addProductToCart } from "../store/action-creators/cart";
+import SingleProductInfo from "./SingleProductInfo";
+import SingleProductReviews from "./SingleProductReviews";
+import AddReview from "./AddReview";
 
-function SingleProduct({ product }) {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.login.loggedUser);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+
+function a11yProps(index) {
+  return {
+    id: `wrapped-tab-${index}`,
+    "aria-controls": `wrapped-tabpanel-${index}`,
+  };
+}
+
+function SingleProduct({ product, reviews, path, url, setReviews, user }) {
+  // const dispatch = useDispatch();
+  // const user = useSelector((state) => state.login.loggedUser);
+  const classes = useStyles();
+
+  const [value, setValue] = React.useState("one");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  console.log("reviews en singleProduct: ", reviews);
   return (
-    <div className='container'>
-      <div className='imgDiv'>
-        <img className='imgSize' src={product.imageUrl} />
+    <div className={classes.root}>
+      <div className='container'>
+        <AppBar position='static'>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor='secondary'
+            textColor='secondary'>
+            <Tab
+              label='Info'
+              value='one'
+              {...a11yProps("one")}
+              component={Link}
+              to={`${url}/info`}
+            />
+            <Tab
+              label='Reviews'
+              value='twoe'
+              {...a11yProps("one")}
+              component={Link}
+              to={`${url}/reviews`}
+            />
+          </Tabs>
+        </AppBar>
+        <div role='tabpanel'>
+          <Route
+            exact
+            path={`${path}`}
+            render={() => (
+              <SingleProductInfo product={product} reviews={reviews} />
+            )}
+          />
+          <Route
+            exact
+            path={`${path}/info`}
+            render={() => (
+              <SingleProductInfo product={product} reviews={reviews} />
+            )}
+          />
+          <Route
+            exact
+            path={`${path}/reviews`}
+            render={() => <SingleProductReviews reviews={reviews} />}
+          />
+        </div>
       </div>
-      <div className='textDiv'>
-        <h1>Titulo: {product.title}</h1>
-        <h2>Autor: {product.author}</h2>
-        <h3 className="description">Descripcion: {product.description}</h3>
-        <h3>Precio: {product.price}</h3>
-        <p>Disponible: {product.stock}</p>
-
-        <AddShoppingCartIcon />
-        <button onClick={() => dispatch(addProductToCart(product, user))}>
-          Add To Cart
-        </button>
-      </div>
+      {user.id && (
+        <Route
+          exact
+          path={`${path}/reviews`}
+          render={() => (
+            <AddReview
+              productId={product.id}
+              setReviews={setReviews}
+              user={user}
+              reviews={reviews}
+            />
+          )}
+        />
+      )}
     </div>
   );
 }
 
 export default SingleProduct;
-
-{
-  /* <div>
-<div>
-    
-</div>
-<div>
-    <h1>{product.title}</h1>
-    <h2>{product.author}</h2>
-    <h3>{product.description}</h3>
-    <h3>{product.price}</h3>
-    <p>{product.stock}</p>
-</div>
-</div> */
-}
-
-{
-  /* <Link to="/user/cart/6">
-                    <AddShoppingCartIcon />
-                  </Link>
-
-<IconButton aria-label="show 4 new mails" color="inherit">
-<Badge badgeContent={4} color="secondary">
-  <Link to="/user/cart/6">
-    <AddShoppingCartIcon />
-  </Link>
-</Badge>
-</IconButton> */
-}

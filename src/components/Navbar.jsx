@@ -48,9 +48,9 @@ function Navbar(props) {
   const user = useSelector((state) => {
     return state.login.loggedUser;
   });
-  const islogged = useSelector((state) => {
-    return state.login.logged;
-  });
+  // const islogged = useSelector((state) => {
+  //   return state.login.logged;
+  // });
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);

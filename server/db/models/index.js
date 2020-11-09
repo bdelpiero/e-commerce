@@ -16,6 +16,8 @@ Category.belongsToMany(Product, { through: "Product_Category" });
 
 User.belongsToMany(Product, { through: Review });
 Product.belongsToMany(User, { through: Review });
+Review.belongsTo(Product);
+Review.belongsTo(User);
 
 module.exports = {
   User,

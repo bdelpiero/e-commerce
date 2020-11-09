@@ -11,24 +11,27 @@ import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
 import ProductContainer from "../containers/ProductContainer";
 import { createCart } from "../store/action-creators/cart";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
-  const islogged = useSelector((state) => {
-    return state.login.logged;
-  });
+  // const islogged = useSelector((state) => {
+  //   return state.login.logged;
+  // });
 
   useEffect(() => {
     //axios.defaults.withCredentials = true;
 
     axios
-      .get("http://localhost:1337/api/user/verificate")
+      .get("http://localhost:1337/api/user/me")
       .then((res) => res.data)
       .then((user) => {
         console.log(user);
         return dispatch(loggUser(user));
       })
-      .catch((err) => console.log(err));
+      .catch(() => {
+        console.log("not logged in");
+      });
   }, []);
 
   return (

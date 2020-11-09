@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom'
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -39,9 +40,14 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  none:{
+    textDecoration:"none",
+    color:"black",
+    fontWeight:"700"
+  }
 }));
 
-export default function Sidebar({ products, reviews }) {
+export default function Sidebar({products}) {
   const classes = useStyles();
 
   return (
@@ -49,23 +55,29 @@ export default function Sidebar({ products, reviews }) {
       <CssBaseline />
       <Drawer
         className={classes.drawer}
-        variant='permanent'
+        variant="permanent"
         classes={{
           paper: classes.drawerPaper,
-        }}>
+        }}
+      >
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-            <ListItem>
-              <ListItemText primary={"Categories"} />
-            </ListItem>
+              <ListItem >
+                <ListItemText primary={"Options"} />
+              </ListItem>
           </List>
+
           <Divider />
+          <ListItem >
+            <Link to="/configs/addadmin" className={classes.none}><ListItemText primary={"Create/remove admin"} /></Link>
+          </ListItem>
+          <ListItem >
+            <Link to="/configs/addproducts" className={classes.none}><ListItemText primary={"Add product"} /></Link>
+          </ListItem>
         </div>
       </Drawer>
-      <main className={classes.content}>
-        <Products products={products} reviews={reviews} />
-      </main>
+
     </div>
   );
 }

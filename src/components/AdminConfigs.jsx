@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { Route, Redirect, Switch } from "react-router-dom";
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -9,38 +10,20 @@ import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import useStyles from '../styles/AdminConfigStyle'
 import Button from '@material-ui/core/Button';
+import SecondSideBar from './SecondSideBar'
+import AddAdmin from './AddAdmin'
+import AddProductsContainer from '../containers/AddProductsContainer'
 
-
- function AdminConfigs({handleChange, handleSubmit}) {
+ function AdminConfigs({ handleChange, handleSubmit }) {
   const classes = useStyles();
 
   return (
-    <div className={classes.center}>
-    <p className="">Want to add a new admin?</p>
-    <form onSubmit={handleSubmit}>
-      <FormControl className={classes.margin}>
-        
-        <TextField
-          className={classes.margin}
-          id="input-with-icon-textfield"
-          onChange={handleChange}
-          label="email"
-          name="email"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <Button type="submit" className={classes.b} variant="contained" color="secondary">
-        create admin
-      </Button>
-      </FormControl>
-      </form>
-
-
+    <div>
+    <SecondSideBar/>
+      <Switch>
+      <Route exact path='/configs/addadmin' render={()=> <AddAdmin handleChange={handleChange} handleSubmit={handleSubmit}/>} />
+      <Route exact path='/configs/addproducts' component={AddProductsContainer} />
+      </Switch>
     </div>
   );
 }

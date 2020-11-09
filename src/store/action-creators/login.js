@@ -1,30 +1,42 @@
-import {IS_LOGGED, LOGIN} from "../constant"
-import axios from 'axios'
-axios.default.withCredentials= true
+import { IS_LOGGED, LOGIN } from "../constant";
+import axios from "axios";
+axios.default.withCredentials = true;
 
-const loggUser = user =>({
-     type: IS_LOGGED,
-  payload: user
-})
+/*const config = {
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+};*/
 
-const login = boolean => ({
-     type: LOGIN,
-  payload: boolean
-})
+const loggUser = (user) => ({
+  type: IS_LOGGED,
+  payload: user,
+});
 
- const fetchIsLogged = () => dispatch =>{
-   return axios.get("http://localhost:1337/api/user/verificate")
-               .then(res => res.data)
-               .then((user) => dispatch(loggUser(user)))
- }
+const login = (boolean) => ({
+  type: LOGIN,
+  payload: boolean,
+});
 
- const fetchLogin = (email,password) =>dispatch=>{
-  return axios.post("http://localhost:1337/api/user/login",{
-    email,
-    password
-  })
-  .then(res=> res.data)
-  .then((user)=> dispatch(loggUser(user)))
-}
+const fetchIsLogged = () => (dispatch) => {
+  return axios
+    .get("http://localhost:1337/api/user/verificate")
+    .then((res) => res.data)
+    .then((user) => dispatch(loggUser(user)));
+};
 
-export { fetchLogin, fetchIsLogged, loggUser,login  }
+const fetchLogin = (email, password) => (dispatch) => {
+  return axios
+    .post("http://localhost:1337/api/user/login", {
+      email,
+      password,
+    })
+    .then((res) => res.data)
+    .then((user) => {
+      console.log("user logged: ", user);
+      dispatch(loggUser(user));
+    });
+};
+
+export { fetchLogin, fetchIsLogged, loggUser, login };

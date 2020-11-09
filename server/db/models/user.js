@@ -40,6 +40,9 @@ User.init(
 );
 
 User.beforeCreate((user) => {
+  // para que pase el logeo con facebook
+  if (!user.password) return;
+
   return bcrypt
     .genSalt(16)
     .then((salt) => {

@@ -1,7 +1,7 @@
 import { GET_PRODUCTS, SET_PRODUCT, SET_CART, GET_CART } from "../constant";
 import axios from "axios";
 
-const getProds = (products) => ({
+export const getProds = (products) => ({
   type: GET_PRODUCTS,
   products,
 });
@@ -33,6 +33,13 @@ export const addProductToCart = (product, user) => (dispatch) => {
     .post(`http://localhost:1337/api/orders/${product.id}`, { userId: user.id })
     .then((res) => res.data)
     .then((cart) => dispatch(setCart(cart)))
+    .catch((err) => console.log(err));
+};
+export const delProductFromCart = (product, user, cart) => (dispatch) => {
+  console.log("ACA ESTA EL USER", user);
+  return axios
+    .delete(`http://localhost:1337/api/orders/${user.id}/${product.id}`)
+    .then(() => fetchCartProducts(cart)) // HACER FETCH CART DE NUEVO
     .catch((err) => console.log(err));
 };
 
