@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 345,
   },
   media: {
-    height: 200,
+    height: 275,
+    width: 200
   },
   cardinfo: {
     height: 50,
@@ -53,6 +54,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 7,
     color: "red",
     fontWeight: "bold",
+  },
+  content: {
+  maxWidth: 200,
+  
+
+
   },
 }));
 
@@ -83,7 +90,7 @@ function Products({ products }) {
                   </Link>
                 </CardActionArea>
               </Card>
-              <CardContent>
+              <CardContent className={classes.content}>
                 <Typography
                   gutterBottom
                   variant='h5'

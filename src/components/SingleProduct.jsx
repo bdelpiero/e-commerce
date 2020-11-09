@@ -17,7 +17,7 @@ function SingleProduct({ product }) {
       <div className='textDiv'>
         <h1>Titulo: {product.title}</h1>
         <h2>Autor: {product.author}</h2>
-        <h3>Descripcion: {product.description}</h3>
+        <h3 className="description">Descripcion: {product.description}</h3>
         <h3>Precio: {product.price}</h3>
         <p>Disponible: {product.stock}</p>
 

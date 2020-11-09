@@ -93,7 +93,7 @@ function Navbar(props) {
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>Profile{console.log(user)}</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       {user.rol == "admin" ? (
         <Link to='/configs' className={classes.noneTwo}>
           <MenuItem onClick={handleMenuClose}>Admin settings</MenuItem>
@@ -193,7 +193,7 @@ function Navbar(props) {
                       color='inherit'
                       className={classes.none}
                       title='login'>
-                      login{console.log(logged)}
+                      Login
                     </Button>
                   </Link>
                   <Link to='/register' className={classes.noneTwo}>

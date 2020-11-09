@@ -20,13 +20,13 @@ function CartContainer() {
 
   useEffect(() => {
     // console.log("cart: ", cart);
-    console.log("user: ", user.id);
+    // console.log("user: ", user.id);
     dispatch(fetchCart(user));
   }, []);
   useEffect(() => {
     if (cart.id) {
-      console.log("pasó");
-      console.log("cart en dispatch");
+      // console.log("pasó");
+      // console.log("cart en dispatch");
       dispatch(fetchCartProducts(cart));
     }
   }, [cart]);
