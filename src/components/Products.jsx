@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import GridList from "@material-ui/core/GridList";
@@ -20,6 +20,8 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { addProductToCart } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
+import Rating from "@material-ui/lab/Rating";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,15 +58,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Products({ products }) {
+const reviewsAvg = (reviews, product) => {
+  if (reviews.length == 0) return 0;
+
+  return reviews
+    .filter((review) => review.productId == product.id)
+    .reduce((avg, current, _, array) => {
+      return avg + current.rating / array.length;
+    }, 0);
+};
+
+function Products({ products, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  const [spacing, setSpacing] = React.useState(5);
+  const [spacing, setSpacing] = useState(5);
   const classes = useStyles();
 
   const handleChange = (event) => {
     setSpacing(Number(event.target.value));
   };
+
+  // console.log("reviews: ", reviews);
 
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
@@ -105,15 +119,25 @@ function Products({ products }) {
                   className={classes.pricetypo}>
                   <span> {product.price}</span>
                 </Typography>
-                <IconButton aria-label='show 4 new mails' color='inherit'>
-                  {/* <Badge badgeContent={4} color='secondary'> */}
-                  <Badge color='secondary'>
-                    <button
-                      onClick={() => dispatch(addProductToCart(product, user))}>
-                      <AddShoppingCartIcon />
-                    </button>
-                  </Badge>
-                </IconButton>
+                <Box
+                  component='fieldset'
+                  mb={3}
+                  borderColor='transparent'
+                  style={{ marginBottom: "0px" }}>
+                  <Rating
+                    name='read-only'
+                    value={reviewsAvg(reviews, product)}
+                    readOnly
+                  />
+                </Box>
+
+                {/* <Badge badgeContent={4} color='secondary'> */}
+                <Badge color='secondary'>
+                  <button
+                    onClick={() => dispatch(addProductToCart(product, user))}>
+                    <AddShoppingCartIcon />
+                  </button>
+                </Badge>
               </CardContent>
             </Grid>
           ))}

@@ -1,7 +1,7 @@
 import { GET_PRODUCTS, SET_PRODUCT, SET_CART, GET_CART } from "../constant";
 import axios from "axios";
 
-const getProds = (products) => ({
+export const getProds = (products) => ({
   type: GET_PRODUCTS,
   products,
 });

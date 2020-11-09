@@ -16,25 +16,38 @@ router.post("/register", (req, res, next) => {
     if (data) {
       return res.sendStatus(400);
     }
-    User.create(req.body).then(() => {
-      res.sendStatus(201);
-    });
+    User.create(req.body)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch(() => res.sendStatus(400));
   });
 });
-router.post("/login", passport.authenticate("local", { session: true }), (req, res, next) => {
-  console.log(req.user);
-  res.send(req.user);
-});
+router.post(
+  "/login",
+  passport.authenticate("local", { session: true }),
+  (req, res, next) => {
+    // console.log(req.user);
+    res.send(req.user);
+  }
+);
 router.post("/logout", function (req, res) {
   req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
 
-router.get("/verificate", (req, res, next) => {
+router.get("/me", function (req, res) {
   console.log(req.user);
-  if (req.user) return res.send(req.user);
-  res.send({});
+  if (!req.user) {
+    return res.sendStatus(401);
+  }
+  res.send(req.user);
 });
+// router.get("/verificate", (req, res, next) => {
+//   console.log(req.user);
+//   if (req.user) return res.send(req.user);
+//   res.send({});
+// });
 
 router.put("/admin", (req, res, next) => {
   //  if (req.user.rol !== "admin") res.sendStatus(401);

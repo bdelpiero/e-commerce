@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({products}) {
+export default function Sidebar({ products, reviews }) {
   const classes = useStyles();
 
   return (
@@ -49,24 +49,22 @@ export default function Sidebar({products}) {
       <CssBaseline />
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
-        }}
-      >
+        }}>
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-              <ListItem >
-                <ListItemText primary={"Categories"} />
-              </ListItem>
+            <ListItem>
+              <ListItemText primary={"Categories"} />
+            </ListItem>
           </List>
           <Divider />
-          
         </div>
       </Drawer>
       <main className={classes.content}>
-        <Products products={products} />
+        <Products products={products} reviews={reviews} />
       </main>
     </div>
   );
