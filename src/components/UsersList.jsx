@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { FixedSizeList } from 'react-window';
+import Button from '@material-ui/core/Button';
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -12,16 +13,19 @@ const useStyles = makeStyles((theme) => ({
     height: 400,
     maxWidth: 300,
     position:'fixed',
-    bottom:"15%",
+    bottom:"10%",
     right: "39%",
     backgroundColor: theme.palette.background.paper,
   },
   position:{
  position: "fixed",
- bottom: "55%",
+ bottom: "50%",
  right:"50%",
  fontWeight:"bold"
-  }
+},
+toLower:{
+  textTransform: "lowercase"
+}
 }));
 
 
@@ -31,22 +35,22 @@ export default function VirtualizedList({users}) {
   const classes = useStyles();
   let count = 0
   function renderRow(props) {
-    if(count <= users.length){
+
     const { index, style } = props;
     count++
 
     return (
-
-    <div>
+      <div>
       {users.map((user,i)=>(
         count == users.length?
-        <ListItemText key={i} primary={`${[i+1]} | ${user.email}`} />
-        :null
-          ))}
-    </div>
+    <ListItem button key={i}>
+      <ListItemText primary={`${i+1} | ${user.email} | ${user.rol}`} />
+    </ListItem>
+    :null
+  ))}
+  </div>
+  )
 
-    );
-   }
   }
 
   renderRow.propTypes = {

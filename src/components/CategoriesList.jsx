@@ -16,6 +16,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import ClassOutlinedIcon from '@material-ui/icons/ClassOutlined';
+import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios'
 
 const useStylsheets = makeStyles((theme) => ({
@@ -24,7 +25,7 @@ const useStylsheets = makeStyles((theme) => ({
     maxWidth: 752,
     position: "fixed",
     bottom: "10%",
-    right:"40%"
+    right:"70%"
 
 
   },
@@ -43,18 +44,20 @@ function generate(element) {
   );
 }
 function InteractiveList() {
+  const counter = useSelector((state) => {
+    return state.categories.count
+  })
  const classes = useStylsheets();
  const [dense, setDense] = React.useState(false);
  const [secondary, setSecondary] = React.useState(false);
  const [categories, setCategories] = React.useState([])
-
 
  React.useEffect(()=>{
   axios.get('http://localhost:1337/api/categories')
   .then(res => res.data)
   .then(data=> setCategories(data))
   .then((da)=> console.log(da))
-},[])
+},[counter])
 
  return (
 

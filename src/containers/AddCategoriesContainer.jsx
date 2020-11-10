@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import AddCategories from '../components/AddCategories'
+import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios'
 
 function AddCategoriesContainer(){
-
+const dispatch = useDispatch();
 const [category, setCategory] = useState("")
-
+const counter = useSelector((state) => {
+  return state.categories.count
+})
+const [count,setCount] = useState(counter)
 
 const handleChange = (e) => {
   setCategory(e.target.value)
@@ -19,6 +23,7 @@ const handleSubmit = (e) => {
   .then(res => res.data)
   .then(data => console.log(data, " created successfully"))
   .then(()=> setCategory(""))
+  .then(()=>dispatch(setCount(count+1)),console.log(count))
   .catch(() => setCategory(""))
 }
 

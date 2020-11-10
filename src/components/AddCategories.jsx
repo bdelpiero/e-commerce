@@ -30,6 +30,7 @@ const classes = useStyles();
           InputProps={{
 
           }}
+
         />
         <Button type="submit" className={classes.b} variant="contained" color="secondary">
         add or remove category
