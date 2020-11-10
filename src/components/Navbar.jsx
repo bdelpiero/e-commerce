@@ -23,8 +23,7 @@ import useStyles from "../styles/NavbarStyle";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { fetchIsLogged, loggUser, login } from "../store/action-creators/login";
-import { searchProduct } from "../store/action-creators/products"
-
+import { searchProduct } from "../store/action-creators/products";
 
 const theme = createMuiTheme({
   palette: {
@@ -36,8 +35,6 @@ const theme = createMuiTheme({
     },
   },
 });
-
-
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -75,22 +72,18 @@ function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
- const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState("");
 
- const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
-
-const handleSubmit = (event) => {
-  event.preventDefault();
-  // history.push({pathname:"/products/busqueda/", search: `?search=${event.target[0].value}`});
-  // event.target[0].value= " ";
-  dispatch(searchProduct(searchInput.trim()))
-  .then(() => {
-  history.push("/search");
-  })
-
-};
-
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // history.push({pathname:"/products/busqueda/", search: `?search=${event.target[0].value}`});
+    // event.target[0].value= " ";
+    dispatch(searchProduct(searchInput.trim())).then(() => {
+      history.push("/search");
+    });
+  };
 
   const handleLogout = () => {
     console.log("logout attempt...");
@@ -100,7 +93,7 @@ const handleSubmit = (event) => {
       .then((res) => res.data)
       .then(() => dispatch(loggUser({})))
       .then(() => dispatch(login(false)))
-      .then(() => history.push("/"));
+      .then(() => history.push("/login"));
   };
 
   const menuId = "primary-search-account-menu";
@@ -246,25 +239,19 @@ const handleSubmit = (event) => {
                   </Link>
                 </Badge>
               </IconButton>
-              <IconButton
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+
+              {logged ? (
+                <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              ) : null}
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
@@ -287,7 +274,3 @@ const handleSubmit = (event) => {
 }
 
 export default Navbar;
-
-
-
- 

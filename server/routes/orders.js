@@ -3,6 +3,14 @@ const router = express.Router();
 
 const { Product, Order, Order_Product } = require("../db/models");
 
+//GET COMPLETED ORDERS
+
+router.get("/completed", (req, res, next) => {
+  console.log("ACA ESTA EL USER LOG", req.user.id);
+  Order.findAll({
+    where: { userId: req.user.id, status: "Completado" },
+  }).then((orders) => res.send(orders));
+});
 // http://localhost:1337/api/orders    //  POST
 router.post("/", (req, res, next) => {
   Order.create(req.body)
@@ -13,10 +21,11 @@ router.post("/", (req, res, next) => {
 // busca todos los productos asociados a una orden
 //http://localhost:1337/api/orders/:orderId   // GET
 router.get("/:orderId", (req, res, next) => {
-  Order.findByPk(req.params.orderId)
-    .then((order) => {
-      return order.getProducts();
-    })
+  Order_Product.findAll({
+    where: { orderId: req.params.orderId },
+    include: Product,
+    order: [["id", "DESC"]],
+  })
     .then((products) => res.send(products))
     .catch((err) => next(err));
 });
@@ -33,6 +42,7 @@ router.get("/user/:userId", (req, res, next) => {
       paymentMethod: "Efectivo",
       shippingAdress: "cualquiera",
     },
+    // include: Order_Product,
   }).then((order) => res.send(order[0]));
   // Order.findByPk(orderId)
   //   .then((order) => {
@@ -109,6 +119,62 @@ router.delete("/:orderId", (req, res, next) => {
   Order.destroy({
     where: { userId: req.user.id, status: "Pendiente" },
   }).then(() => res.sendStatus(200));
+});
+// UPDATE ORDER
+router.put("/cartId", (req, res, next) => {
+  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
+    (order) => {
+      order.update({ status: "Completado" });
+    }
+  );
+});
+
+// MODIFIES THE AMOUNT OF BOOKS OF AN ITEM
+router.put("/:orderId/:productId", (req, res, next) => {
+  Order_Product.findOne({
+    where: {
+      orderId: req.params.orderId,
+      productId: req.params.productId,
+    },
+  })
+    .then((orderProduct) => {
+      const product = Product.findByPk(req.params.productId);
+      return product.then((product) => {
+        if (req.body.op === "suma") {
+          return product
+            .update({ stock: product.stock - 1 })
+            .then(() => orderProduct.update({ total: orderProduct.total + 1 }));
+        } else {
+          return product
+            .update({ stock: product.stock + 1 })
+            .then(() => orderProduct.update({ total: orderProduct.total - 1 }));
+          /* .then(() => Order.findOne({ where: { id: orderProduct.orderId } }))
+            .then((order) => order.update({total: })); */
+        }
+      });
+    })
+    .then(() => res.sendStatus(200));
+});
+
+router.post("/newOrder/:userId", (req, res, next) => {
+  console.log("BODY EN NEW ORDER", req.body);
+  return Order.findOrCreate({
+    where: {
+      userId: req.params.userId,
+      status: "Pendiente",
+      paymentMethod: "Efectivo",
+      shippingAdress: "cualquiera",
+    },
+  }).then((foundOrder) => {
+    if (foundOrder[1]) {
+      res.send(foundOrder);
+    } else {
+      foundOrder[0].setProducts(req.body).then((orderWithProducts) => {
+        console.log("LA NUEVA ORDEN", orderWithProducts);
+        res.sendStatus(201);
+      });
+    }
+  });
 });
 
 module.exports = router;

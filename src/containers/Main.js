@@ -10,15 +10,14 @@ import CartContainer from "./CartContainer";
 import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
 import ProductContainer from "../containers/ProductContainer";
 import { createCart } from "../store/action-creators/cart";
+import CompletedOrdersContainer from "../containers/CompletedOrdersContainer";
+import CompletedOrderDetailContainer from "../containers/CompletedOrderDetailsContainer";
 import axios from "axios";
 import { fetchProducts } from "../store/action-creators/products";
-import ResultsProductContainer from "../containers/ResultsProductContainer"
+import ResultsProductContainer from "../containers/ResultsProductContainer";
 axios.defaults.withCredentials = true;
 
-
 //use effect q busca libros, pasa libros a products container. renderizar products filtrados y no filtrados con el com. ProductsContainer
-
-
 
 function App() {
   const dispatch = useDispatch();
@@ -43,7 +42,21 @@ function App() {
       .then((res) => res.data)
       .then((user) => {
         console.log(user);
-        return dispatch(loggUser(user));
+        dispatch(loggUser(user));
+        return user;
+      })
+      .then((user) => {
+        console.log("USUARIO ANTES DE SALIR", user);
+        const productsArray = [];
+        for (const key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            productsArray.push(JSON.parse(localStorage.getItem(key)));
+          }
+        }
+        return axios.post(
+          `http://localhost:1337/api/orders/newOrder/${user.id}`,
+          { productsArray }
+        );
       })
       .catch(() => {
         console.log("not logged in");
@@ -57,6 +70,13 @@ function App() {
         <Switch>
           <Route path="/register" component={RegisterContainer} />
           <Route path="/login" component={LoginContainer} />
+          <Route exact path="/completed" component={CompletedOrdersContainer} />
+          <Route
+            exact
+            path="/details"
+            component={CompletedOrderDetailContainer}
+          />
+
           <Route
             exact
             path="/"
@@ -72,7 +92,7 @@ function App() {
             path="/search"
             render={() => <ResultsProductContainer search={search} />}
           />
-          {/* <Route exact path="/searchProducts" render = { () => <ProductsContainer products={filterProducts} />  } /> */}
+
           <Route path="/cart" component={CartContainer} />
           <Route path="/configs" component={AdminConfigsContainer} />
           <Route path="/products/:productId" component={ProductContainer} />
@@ -80,8 +100,6 @@ function App() {
       </div>
     </div>
   );
-
-  
 }
 
 export default App;

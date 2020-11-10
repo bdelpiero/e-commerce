@@ -85,6 +85,14 @@ function Products({ products, reviews }) {
     setSpacing(Number(event.target.value));
   };
 
+  const addToCart = (product)=>{
+    if(user.id) {
+      dispatch(addProductToCart(product, user))
+    } else{
+      localStorage.setItem(`${product.id}`, JSON.stringify(product))
+    }
+  }
+
   // console.log("reviews: ", reviews);
    console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products)
   return (
@@ -141,7 +149,7 @@ function Products({ products, reviews }) {
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
                   <button
-                    onClick={() => dispatch(addProductToCart(product, user))}>
+                    onClick={() => addToCart(product)}>
                     <AddShoppingCartIcon />
                   </button>
                 </Badge>
