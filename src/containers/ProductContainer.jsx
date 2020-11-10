@@ -9,6 +9,7 @@ import SingleProduct from "../components/SingleProduct";
 import axios from "axios";
 
 function ProductContainer() {
+
   const { productId } = useParams();
   const product = useSelector((state) => {
     return state.products.selected;

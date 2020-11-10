@@ -86,11 +86,11 @@ function Products({ products, reviews }) {
   };
 
   // console.log("reviews: ", reviews);
-
+   console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products)
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
       <Grid container justify='center' spacing={spacing}>
-        {products &&
+        {products.length != 0 &&
           products.map((product) => (
             <Grid key={product.id} item>
               <Card className={classes.cardroot}>
