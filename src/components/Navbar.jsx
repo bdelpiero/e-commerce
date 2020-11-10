@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -24,6 +23,8 @@ import useStyles from "../styles/NavbarStyle";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { fetchIsLogged, loggUser, login } from "../store/action-creators/login";
+import { searchProduct } from "../store/action-creators/products"
+
 
 const theme = createMuiTheme({
   palette: {
@@ -36,7 +37,9 @@ const theme = createMuiTheme({
   },
 });
 
-function Navbar(props) {
+
+
+function Navbar() {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -72,6 +75,23 @@ function Navbar(props) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+ const [searchInput, setSearchInput] = useState("");
+
+ const [searchResults, setSearchResults] = useState([]);
+
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+  // history.push({pathname:"/products/busqueda/", search: `?search=${event.target[0].value}`});
+  // event.target[0].value= " ";
+  dispatch(searchProduct(searchInput.trim()))
+  .then(() => {
+  history.push("/search");
+  })
+
+};
+
+
   const handleLogout = () => {
     console.log("logout attempt...");
 
@@ -92,10 +112,11 @@ function Navbar(props) {
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
-      onClose={handleMenuClose}>
+      onClose={handleMenuClose}
+    >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       {user.rol == "admin" ? (
-        <Link to='/configs' className={classes.noneTwo}>
+        <Link to="/configs" className={classes.noneTwo}>
           <MenuItem onClick={handleMenuClose}>Admin settings</MenuItem>
         </Link>
       ) : (
@@ -113,20 +134,21 @@ function Navbar(props) {
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}>
+      onClose={handleMobileMenuClose}
+    >
       <MenuItem>
-        <IconButton aria-label='show 4 new mails' color='inherit'>
+        <IconButton aria-label="show 4 new mails" color="inherit">
           {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color='secondary'>
+          <Badge color="secondary">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label='show 11 new notifications' color='inherit'>
+        <IconButton aria-label="show 11 new notifications" color="inherit">
           {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color='secondary'>
+          <Badge color="secondary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -134,10 +156,11 @@ function Navbar(props) {
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          aria-label='account of current user'
-          aria-controls='primary-search-account-menu'
-          aria-haspopup='true'
-          color='inherit'>
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
@@ -148,17 +171,18 @@ function Navbar(props) {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.grow}>
-        <AppBar position='static'>
+        <AppBar position="static">
           <Toolbar>
             <IconButton
-              edge='start'
+              edge="start"
               className={classes.menuButton}
-              color='inherit'
-              aria-label='open drawer'>
+              color="inherit"
+              aria-label="open drawer"
+            >
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant='h6' noWrap>
-              <Link to='/' className={classes.none}>
+            <Typography className={classes.title} variant="h6" noWrap>
+              <Link to="/" className={classes.none}>
                 {" "}
                 Bookstore
               </Link>
@@ -167,78 +191,89 @@ function Navbar(props) {
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
-              <InputBase
-                placeholder='Search…'
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
+              <form onSubmit={handleSubmit}>
+                <InputBase
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                  value={searchInput}
+                  // onSubmit={handleSubmit}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </form>
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               {logged ? (
                 <Button
-                  color='inherit'
+                  color="inherit"
                   onClick={handleLogout}
                   className={classes.none}
-                  title='register'>
+                  title="register"
+                >
                   Logout
                 </Button>
               ) : (
                 <div>
-                  <Link to='/login' className={classes.noneTwo}>
+                  <Link to="/login" className={classes.noneTwo}>
                     <Button
-                      color='inherit'
+                      color="inherit"
                       className={classes.none}
-                      title='login'>
+                      title="login"
+                    >
                       Login
                     </Button>
                   </Link>
-                  <Link to='/register' className={classes.noneTwo}>
+                  <Link to="/register" className={classes.noneTwo}>
                     <Button
-                      color='inherit'
+                      color="inherit"
                       className={classes.none}
-                      title='register'>
+                      title="register"
+                    >
                       Sign up
                     </Button>
                   </Link>
                 </div>
               )}
-              <IconButton aria-label='show 4 new mails' color='inherit'>
+              <IconButton aria-label="show 4 new mails" color="inherit">
                 {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color='secondary'>
-                  <Link to='/cart'>
+                <Badge color="secondary">
+                  <Link to="/cart">
                     <AddShoppingCartIcon />
                   </Link>
                 </Badge>
               </IconButton>
               <IconButton
-                aria-label='show 17 new notifications'
-                color='inherit'>
+                aria-label="show 17 new notifications"
+                color="inherit"
+              >
                 {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color='secondary'>
+                <Badge color="secondary">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
               <IconButton
-                edge='end'
-                aria-label='account of current user'
+                edge="end"
+                aria-label="account of current user"
                 aria-controls={menuId}
-                aria-haspopup='true'
+                aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
-                color='inherit'>
+                color="inherit"
+              >
                 <AccountCircle />
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
-                aria-label='show more'
+                aria-label="show more"
                 aria-controls={mobileMenuId}
-                aria-haspopup='true'
+                aria-haspopup="true"
                 onClick={handleMobileMenuOpen}
-                color='inherit'>
+                color="inherit"
+              >
                 <MoreIcon />
               </IconButton>
             </div>
@@ -252,3 +287,7 @@ function Navbar(props) {
 }
 
 export default Navbar;
+
+
+
+ 

@@ -22,7 +22,7 @@ const reviewsAvg = (reviews, product) => {
 function SingleProductInfo({ product, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  //console.log("reviews en singleProduct: ", reviews);
+  console.log("reviews en singleProduct: ", product);
   return (
     <div className='info-container'>
       <div className='imgDiv'>
