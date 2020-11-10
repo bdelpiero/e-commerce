@@ -20,9 +20,8 @@ Category.findOne({
 })
 });
 
-router.get("/", (req,res)=>{
-  Category.findAll()
-          .then(data => res.send(data))
-})
+router.get("/", (req, res) => {
+  Category.findAll().then((data) => res.send(data));
+});
 
-module.exports = router
+module.exports = router;

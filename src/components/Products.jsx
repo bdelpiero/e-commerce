@@ -1,28 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
-import GridListTileBar from "@material-ui/core/GridListTileBar";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import IconButton from "@material-ui/core/IconButton";
-import InfoIcon from "@material-ui/icons/Info";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { addProductToCart } from "../store/action-creators/cart";
+import { fetchProducts } from "../store/action-creators/products"
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
 import '../styles/ProductsStyle.css'
+import axios from "axios"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,6 +68,7 @@ const reviewsAvg = (reviews, product) => {
 };
 
 function Products({ products, reviews }) {
+  console.log("LOS PRODUCTOS", products)
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = useState(5);
@@ -84,12 +78,25 @@ function Products({ products, reviews }) {
     setSpacing(Number(event.target.value));
   };
 
-  // console.log("reviews: ", reviews);
+  const addToCart = (product)=>{
+    if(user.id) {
+      dispatch(addProductToCart(product, user))
+    } else{
+      const newProduct = JSON.parse(localStorage.getItem(product.id));
+      product.total = newProduct ? newProduct.total + 1 : 1
+      localStorage.setItem(`${product.id}`, JSON.stringify(product))
 
+      axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op : "suma"})
+    .then(()=> dispatch(fetchProducts()))
+    }
+  }
+
+  // console.log("reviews: ", reviews);
+   console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products)
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
       <Grid container justify='center' spacing={spacing}>
-        {products &&
+        {products.length != 0 &&
           products.map((product) => (
             <Grid key={product.id} item>
               <Card className={classes.cardroot}>
@@ -139,10 +146,10 @@ function Products({ products, reviews }) {
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
-                  <Link className="bw"
-                    onClick={() => dispatch(addProductToCart(product, user))}>
+                  <button className="bw"
+                    onClick={() => addToCart(product)}>
                     <AddShoppingCartIcon />
-                  </Link>
+                  </button>
                 </Badge>
               </CardContent>
             </Grid>

@@ -1,15 +1,13 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import Image from 'material-ui-image'
 import "../styles/singleProductStyle.css";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { addProductToCart } from "../store/action-creators/cart";
+import {fetchProducts} from "../store/action-creators/products"
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
-import axios from 'axios'
-
-
+import axios from "axios"
 // es la misma función que para todos los productos. Tendŕia que estar en /utils
 const reviewsAvg = (reviews, product) => {
   if (reviews.length == 0) return 0;
@@ -25,15 +23,28 @@ function SingleProductInfo({ product, reviews }) {
   const history = useHistory()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  //console.log("reviews en singleProduct: ", reviews);
-
-const handleRemove = () => {
-  axios.delete(`http://localhost:1337/api/products/${product.id}`)
-       .then(res=>res.data)
-       .then(history.push("/"))
-}
+  const handleRemove = () => {
+    axios.delete(`http://localhost:1337/api/products/${product.id}`)
+         .then(res=>res.data)
+         .then(history.push("/"))
+  }
 
 
+  const addToCart = (product)=>{
+    if(user.id) {
+      dispatch(addProductToCart(product, user))
+    } else{
+      const newProduct = JSON.parse(localStorage.getItem(product.id));
+      product.total = newProduct ? newProduct.total + 1 : 1
+      localStorage.setItem(`${product.id}`, JSON.stringify(product))
+
+      axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op : "suma"})
+    .then(()=> dispatch(fetchProducts()))
+    }
+  }
+
+
+  console.log("reviews en singleProduct: ", product);
 
   return (
     <div className='info-container'>
@@ -59,7 +70,11 @@ const handleRemove = () => {
         <p>Disponible: {product.stock}</p>
 
         <AddShoppingCartIcon />
+<<<<<<< HEAD
         <button className="" onClick={() => dispatch(addProductToCart(product, user))}>
+=======
+        <button onClick={() => addToCart(product)}>
+>>>>>>> 319da97fcc221dfbb3b6a61145d9f65b6781c806
           Add To Cart
         </button>
         {user.rol == "admin"?

@@ -39,6 +39,7 @@ router.post(
   }
 );
 router.post("/logout", function (req, res) {
+  console.log("deslogueado")
   req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });

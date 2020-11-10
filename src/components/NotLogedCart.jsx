@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -11,16 +10,11 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
-
-import {
-  delProductFromCart,
-  completeOrder,
-  wipeCart,
-  addOneItem,
-} from "../store/action-creators/cart";
-
+import {fetchProducts} from "../store/action-creators/products"
+import { delProductFromCart, wipeCart } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
-
+import { Link } from "react-router-dom";
+import axios from "axios";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -53,23 +47,25 @@ const useStyles = makeStyles({
   },
 });
 
-function Cart({
-  productsInCart,
-  cart,
-  showCompletedHandler,
-  completeOrderHandler,
-}) {
+
+
+function NotLogedCart({ productsInCart, cart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  const cartProducts = useSelector((state) => state.cart.productsInCart);
-  const order = useSelector((state) => {
-    return state.cart.selected;
-  });
-  const history = useHistory();
-  let subtotal = 0;
-  let total = 0;
+  const products = useSelector((state) => state.products.list);
 
+  const addOrRemoveItem = (product, op) => {
+    if(op === "suma"){
+      product.total = product.total + 1;
+    }else {
+      product.total = product.total - 1;
+    }
+    localStorage.setItem(`${product.id}`, JSON.stringify(product))
+    axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op})
+    .then(()=> dispatch(fetchProducts()))
+  }
+  
   return (
     <div>
       <TableContainer component={Paper}>
@@ -81,40 +77,35 @@ function Cart({
               <StyledTableCell align="center">Precio unitario</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
               <StyledTableCell align="right">Cantidad</StyledTableCell>
-              <StyledTableCell align="right">Subtotal</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {productsInCart.length !== 0 && productsInCart[0].product ? productsInCart.map((product) => (
-              <StyledTableRow key={product.product.id}>
+            {productsInCart.length !== 0 ? productsInCart.map((product) => (
+              <StyledTableRow key={product.id}>
                 <StyledTableCell component="th" scope="row">
                   <img
                     className="imgSize"
-                    src={product.product.imageUrl}
+                    src={product.imageUrl}
                     style={{ height: "150px", width: "100px" }}
                   />
                 </StyledTableCell>
-                <StyledTableCell align="left">{product.product.title}</StyledTableCell>
+                <StyledTableCell align="left">{product.title}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {product.product.price}
+                  {product.price}
                 </StyledTableCell>
                 <StyledTableCell align="right">edit</StyledTableCell>
                 <StyledTableCell align="right">
                   <button
-                    onClick={()=> dispatch(addOneItem(cart, product.product, "resta"))}
+                    onClick={()=> addOrRemoveItem(product, "resta")}
                   >
                     -
                   </button>
                   {` ${product.total} `} 
-                  <button onClick={()=> dispatch(addOneItem(cart, product.product, "suma"))}>
+                  <button onClick={()=> addOrRemoveItem(product, "suma")}>
                     +
                   </button>
                 </StyledTableCell>
-                <StyledTableCell align="right">
-                    {`$  ${(subtotal =
-                      product.product.price.substring(1) * product.total)}`}
-                  </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
                     onClick={() =>
@@ -127,71 +118,36 @@ function Cart({
               </StyledTableRow>
             )): <h1 >Tu carrito esta vacio.</h1>}
           </TableBody>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left"></StyledTableCell>
-              <StyledTableCell align="center"></StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">Total</StyledTableCell>
-              <StyledTableCell align="right">{`${total}`}</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-            </TableRow>
-          </TableHead>
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
-        <Button variant="contained" color="primary">
-          Seguir comprando
-        </Button>
-
-        <div className={classes.buttonsLeft}>
-          <Link to={`/completed`}>
-            <Button
-              onClick={() => {
-                showCompletedHandler();
-              }}
-              variant="contained"
-              color="primary"
-              className={classes.firstButton}
-            >
-              Mis Compras
-            </Button>
-          </Link>
-          <Link to={`/`}>
-            <Button
-              onClick={() => {
-                completeOrderHandler(order);
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Completar pedido
-            </Button>
-          </Link>
-          <Link to="/products">
+        <Link to="/products">
+          <Button variant="contained" color="primary">
+            Seguir comprando
+          </Button>
+        </Link> 
+        {productsInCart.length !== 0 ?
+          <div className={classes.buttonsLeft}>
+            <Link to="/products">
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.firstButton}
+                onClick={() => dispatch(wipeCart(cart))}
+              >
+                Vaciar Carrito
+              </Button>
+            </Link>
             <Button variant="contained" color="primary">
-              Seguir comprando
+              Realizar pedido
             </Button>
-          </Link>
-          {productsInCart.length !== 0 ? (
-            <div className={classes.buttonsLeft}>
-              <Link to="/products">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.firstButton}
-                  onClick={() => dispatch(wipeCart(cart))}
-                >
-                  Vaciar Carrito
-                </Button>
-              </Link>
-            </div>
-          ) : null}
-        </div>
+          </div>
+          : null
+        }
+        
       </div>
     </div>
   );
 }
 
-export default Cart;
+export default NotLogedCart;

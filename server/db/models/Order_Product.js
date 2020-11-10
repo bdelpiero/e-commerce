@@ -13,7 +13,10 @@ Order_Product.init(
     },
     total: {
       type: S.INTEGER,
-      defaultValue: 1,
+      defaultValue: 0,
+      validate:{
+        min: 0
+      }
     },
   },
   { sequelize: db, modelName: "Order_Product", tableName: "Order_Product" }

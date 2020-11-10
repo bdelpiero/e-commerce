@@ -8,5 +8,6 @@ export const SET_PRODUCT = "SET_PRODUCT";
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const SET_CART = "SET_CART";
 export const GET_CART = "GET_CART";
-
+export const SET_COMPLETED_ORDER = "SET_COMPLETED_ORDER";
+export const GET_PRODUCTS_COMPLETED_ORDER = "GET_PRODUCTS_COMPLETED_ORDER";
 export const LOGIN = "LOGIN";
