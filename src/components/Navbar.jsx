@@ -80,7 +80,7 @@ function Navbar(props) {
       .then((res) => res.data)
       .then(() => dispatch(loggUser({})))
       .then(() => dispatch(login(false)))
-      .then(() => history.push("/"));
+      .then(() => history.push("/login"));
   };
 
   const menuId = "primary-search-account-menu";
@@ -214,15 +214,8 @@ function Navbar(props) {
                   </Link>
                 </Badge>
               </IconButton>
-              <IconButton
-                aria-label='show 17 new notifications'
-                color='inherit'>
-                {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color='secondary'>
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
+              {logged ?
+                <IconButton
                 edge='end'
                 aria-label='account of current user'
                 aria-controls={menuId}
@@ -231,6 +224,9 @@ function Navbar(props) {
                 color='inherit'>
                 <AccountCircle />
               </IconButton>
+                : null
+              }
+              
             </div>
             <div className={classes.sectionMobile}>
               <IconButton

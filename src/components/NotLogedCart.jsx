@@ -45,7 +45,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Cart({ productsInCart, cart }) {
+function NotLogedCart({ productsInCart, cart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
@@ -65,17 +65,17 @@ function Cart({ productsInCart, cart }) {
           </TableHead>
           <TableBody>
             {productsInCart.length !== 0 ? productsInCart.map((product) => (
-              <StyledTableRow key={product.product.id}>
+              <StyledTableRow key={product.id}>
                 <StyledTableCell component="th" scope="row">
                   <img
                     className="imgSize"
-                    src={product.product.imageUrl}
+                    src={product.imageUrl}
                     style={{ height: "150px", width: "100px" }}
                   />
                 </StyledTableCell>
-                <StyledTableCell align="left">{product.product.title}</StyledTableCell>
+                <StyledTableCell align="left">{product.title}</StyledTableCell>
                 <StyledTableCell align="center">
-                  {product.product.price}
+                  {product.price}
                 </StyledTableCell>
                 <StyledTableCell align="right">edit</StyledTableCell>
                 <StyledTableCell align="right">
@@ -133,4 +133,4 @@ function Cart({ productsInCart, cart }) {
   );
 }
 
-export default Cart;
+export default NotLogedCart;
