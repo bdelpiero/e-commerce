@@ -1,4 +1,5 @@
 import Cart from "../components/Cart";
+import NotLogedCart from "../components/NotLogedCart"
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -7,6 +8,15 @@ import {
   getProds,
 } from "../store/action-creators/cart";
 
+function localProducts(){
+  let productsArray = []
+  for (const key in localStorage) {
+    if (localStorage.hasOwnProperty(key)) {
+      productsArray.push(JSON.parse(localStorage.getItem(key)))
+    }
+  }
+  return productsArray
+}
 // const productsInCart = {
 
 // }
@@ -23,33 +33,30 @@ function CartContainer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    // console.log("cart: ", cart);
-    // console.log("user: ", user.id);
-
     // si no hay usuario logeado. Habría que corregirlo cuando podamos
     // guardar en el localStorage
     if (!user.id) return;
-
     dispatch(fetchCart(user));
   }, [user]);
   useEffect(() => {
     // si no hay usuario logeado. Habría que corregirlo cuando podamos
     // guardar en el localStorage
-    if (!user.id) return dispatch(getProds([]));
-
+    // dispatch(getProds([]))
+    
+    if (!user.id) return dispatch(getProds(localProducts()));
     if (cart.id) {
-
-      console.log("pasó");
-      console.log("cart en dispatch", cart);
-
       dispatch(fetchCartProducts(cart));
     }
   }, [cart]);
 
+
   return (
     <div>
-      <Cart productsInCart={productsInCart} />
+      {user.id ? 
+        <Cart productsInCart={productsInCart} cart={cart} />
+          :
+        <NotLogedCart productsInCart={productsInCart}/>
+      }
     </div>
   );
 }

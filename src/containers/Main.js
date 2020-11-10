@@ -28,11 +28,22 @@ function App() {
       .then((res) => res.data)
       .then((user) => {
         console.log(user);
-        return dispatch(loggUser(user));
+        dispatch(loggUser(user));
+        return user
       })
+      .then(user => {
+        console.log("USUARIO ANTES DE SALIR", user)
+        const productsArray = [];
+        for (const key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            productsArray.push(JSON.parse(localStorage.getItem(key)))
+          }
+        }
+        return axios.post(`http://localhost:1337/api/orders/newOrder/${user.id}`, {productsArray})})
       .catch(() => {
         console.log("not logged in");
       });
+    
   }, []);
 
   return (
