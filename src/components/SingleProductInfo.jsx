@@ -1,13 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import Image from 'material-ui-image'
 import "../styles/singleProductStyle.css";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { addProductToCart } from "../store/action-creators/cart";
+import {fetchProducts} from "../store/action-creators/products"
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
-
+import axios from "axios"
 // es la misma función que para todos los productos. Tendŕia que estar en /utils
 const reviewsAvg = (reviews, product) => {
   if (reviews.length == 0) return 0;
@@ -22,7 +21,25 @@ const reviewsAvg = (reviews, product) => {
 function SingleProductInfo({ product, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
+<<<<<<< HEAD
+  //console.log("reviews en singleProduct: ", reviews);
+
+  const addToCart = (product)=>{
+    if(user.id) {
+      dispatch(addProductToCart(product, user))
+    } else{
+      const newProduct = JSON.parse(localStorage.getItem(product.id));
+      product.total = newProduct ? newProduct.total + 1 : 1
+      localStorage.setItem(`${product.id}`, JSON.stringify(product))
+
+      axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op : "suma"})
+    .then(()=> dispatch(fetchProducts()))
+    }
+  }
+
+=======
   console.log("reviews en singleProduct: ", product);
+>>>>>>> 42e9c6d42e469a474472c0d9523c386e3e70c291
   return (
     <div className='info-container'>
       <div className='imgDiv'>
@@ -47,7 +64,7 @@ function SingleProductInfo({ product, reviews }) {
         <p>Disponible: {product.stock}</p>
 
         <AddShoppingCartIcon />
-        <button onClick={() => dispatch(addProductToCart(product, user))}>
+        <button onClick={() => addToCart(product)}>
           Add To Cart
         </button>
       </div>

@@ -153,29 +153,50 @@ router.put("/:orderId/:productId", (req, res, next) => {
         }
       });
     })
-    .then(() => res.sendStatus(200));
-});
+    .then(()=> res.sendStatus(200))
+})
 
-router.post("/newOrder/:userId", (req, res, next) => {
-  console.log("BODY EN NEW ORDER", req.body);
-  return Order.findOrCreate({
-    where: {
-      userId: req.params.userId,
-      status: "Pendiente",
-      paymentMethod: "Efectivo",
-      shippingAdress: "cualquiera",
-    },
-  }).then((foundOrder) => {
-    if (foundOrder[1]) {
-      res.send(foundOrder);
+router.post("/newOrder/:userId", (req, res, next)=>{
+  if(!req.user) return;
+  console.log("BODY EN NEW ORDER",req.body)
+  return Order.findOrCreate({where: {
+    userId: req.params.userId,
+    status: "Pendiente",
+    paymentMethod: "Efectivo",
+    shippingAdress: "cualquiera",
+  }})
+  .then(foundOrder => {
+    console.log("FOUNDORDER",foundOrder)
+    if(!foundOrder[1]) {
+      return res.send(foundOrder[0])
     } else {
-      foundOrder[0].setProducts(req.body).then((orderWithProducts) => {
-        console.log("LA NUEVA ORDEN", orderWithProducts);
-        res.sendStatus(201);
-      });
+      const newArray = req.body.productsArray.map(product=>{
+        return {
+          productId: product.id, 
+          orderId: foundOrder[0].id, 
+          total: product.total
+        }
+      })
+      Order_Product.bulkCreate(newArray)
+      .then(orderWithProducts => {
+        console.log("LA NUEVA ORDEN",orderWithProducts)
+        res.sendStatus(201)
+      })
     }
   });
 });
+
+router.put("/newOrder/product/:productId", (req, res, next)=>{
+  Product.findByPk(req.params.productId)
+  .then(product => {
+    if(req.body.op === "suma"){
+      return product.update({stock:product.stock - 1})
+    }else {
+      return product.update({stock:product.stock + 1})
+    }
+  })
+  .then(()=> res.sendStatus(200))
+})
 
 module.exports = router;
 

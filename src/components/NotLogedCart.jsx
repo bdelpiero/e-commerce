@@ -10,9 +10,11 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
-import { delProductFromCart, wipeCart, addOneItem } from "../store/action-creators/cart";
+import {fetchProducts} from "../store/action-creators/products"
+import { delProductFromCart, wipeCart } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -45,10 +47,25 @@ const useStyles = makeStyles({
   },
 });
 
+
+
 function NotLogedCart({ productsInCart, cart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
+  const products = useSelector((state) => state.products.list);
+
+  const addOrRemoveItem = (product, op) => {
+    if(op === "suma"){
+      product.total = product.total + 1;
+    }else {
+      product.total = product.total - 1;
+    }
+    localStorage.setItem(`${product.id}`, JSON.stringify(product))
+    axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op})
+    .then(()=> dispatch(fetchProducts()))
+  }
+  
   return (
     <div>
       <TableContainer component={Paper}>
@@ -80,12 +97,12 @@ function NotLogedCart({ productsInCart, cart }) {
                 <StyledTableCell align="right">edit</StyledTableCell>
                 <StyledTableCell align="right">
                   <button
-                    onClick={()=> dispatch(addOneItem(cart, product.product, "resta"))}
+                    onClick={()=> addOrRemoveItem(product, "resta")}
                   >
                     -
                   </button>
                   {` ${product.total} `} 
-                  <button onClick={()=> dispatch(addOneItem(cart, product.product, "suma"))}>
+                  <button onClick={()=> addOrRemoveItem(product, "suma")}>
                     +
                   </button>
                 </StyledTableCell>
