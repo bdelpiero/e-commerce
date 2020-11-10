@@ -49,6 +49,7 @@ function Cart({ productsInCart, cart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
+  console.log(productsInCart)
   return (
     <div>
       <TableContainer component={Paper}>
@@ -64,7 +65,7 @@ function Cart({ productsInCart, cart }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {productsInCart.length !== 0 ? productsInCart.map((product) => (
+            {productsInCart.length !== 0 && productsInCart[0].product ? productsInCart.map((product) => (
               <StyledTableRow key={product.product.id}>
                 <StyledTableCell component="th" scope="row">
                   <img
