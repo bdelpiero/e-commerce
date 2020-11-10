@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "../styles/singleProductStyle.css";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -19,10 +20,15 @@ const reviewsAvg = (reviews, product) => {
 };
 
 function SingleProductInfo({ product, reviews }) {
+  const history = useHistory()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-<<<<<<< HEAD
-  //console.log("reviews en singleProduct: ", reviews);
+  const handleRemove = () => {
+    axios.delete(`http://localhost:1337/api/products/${product.id}`)
+         .then(res=>res.data)
+         .then(history.push("/"))
+  }
+
 
   const addToCart = (product)=>{
     if(user.id) {
@@ -37,9 +43,9 @@ function SingleProductInfo({ product, reviews }) {
     }
   }
 
-=======
+
   console.log("reviews en singleProduct: ", product);
->>>>>>> 42e9c6d42e469a474472c0d9523c386e3e70c291
+
   return (
     <div className='info-container'>
       <div className='imgDiv'>
@@ -64,10 +70,21 @@ function SingleProductInfo({ product, reviews }) {
         <p>Disponible: {product.stock}</p>
 
         <AddShoppingCartIcon />
+<<<<<<< HEAD
+        <button className="" onClick={() => dispatch(addProductToCart(product, user))}>
+=======
         <button onClick={() => addToCart(product)}>
+>>>>>>> 319da97fcc221dfbb3b6a61145d9f65b6781c806
           Add To Cart
         </button>
-      </div>
+        {user.rol == "admin"?
+        <button className="b" onClick={handleRemove}>
+          Remove
+        </button>
+        :
+        null
+        }
+      </div >
     </div>
   );
 }

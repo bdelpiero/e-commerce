@@ -6,6 +6,13 @@ const User = require("../db/models/user");
 const router = express.Router();
 const { Op } = require("sequelize");
 
+
+router.get("/",(req,res)=>{
+  User.findAll()
+      .then(users=> res.send(users))
+})
+
+
 /* -------User Register, Login, LogOut--------- */
 router.post("/register", (req, res, next) => {
   User.findOne({
@@ -51,7 +58,7 @@ router.get("/me", function (req, res) {
 // });
 
 router.put("/admin", (req, res, next) => {
-  //  if (req.user.rol !== "admin") res.sendStatus(401);
+    if (req.user.rol !== "admin") res.sendStatus(401);
   User.findOne({
     where: {
       email: req.body.email,
