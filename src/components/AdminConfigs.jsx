@@ -15,14 +15,14 @@ import AddAdmin from './AddAdmin'
 import AddProductsContainer from '../containers/AddProductsContainer'
 import AddCategoriesContainer from "../containers/AddCategoriesContainer"
 
- function AdminConfigs({ handleChange, handleSubmit }) {
+ function AdminConfigs({ handleChange, handleSubmit, message }) {
   const classes = useStyles();
 
   return (
     <div>
     <SecondSideBar/>
       <Switch>
-      <Route exact path='/configs/addadmin' render={()=> <AddAdmin handleChange={handleChange} handleSubmit={handleSubmit}/>} />
+      <Route exact path='/configs/addadmin' render={()=> <AddAdmin handleChange={handleChange} handleSubmit={handleSubmit} message={message}/>} />
       <Route exact path='/configs/addproducts' component={AddProductsContainer} />
       <Route exact path='/configs/addcategories' component={AddCategoriesContainer} />
       <Redirect from='/configs' to='/configs/addadmin'/>

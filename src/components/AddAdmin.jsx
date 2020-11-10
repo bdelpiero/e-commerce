@@ -11,7 +11,7 @@ import useStyles from '../styles/AdminConfigStyle'
 import Button from '@material-ui/core/Button';
 import UsersListContainer from '../containers/UserListContainer'
 
- function AddAdmin({handleChange, handleSubmit}) {
+ function AddAdmin({handleChange, handleSubmit,message}) {
   const classes = useStyles();
 
   return (
@@ -36,6 +36,7 @@ import UsersListContainer from '../containers/UserListContainer'
             ),
           }}
         />
+        <div className={classes.alert}>{message}</div>
         <Button type="submit" className={classes.b} variant="contained" color="secondary">
         create or remove admin
       </Button>

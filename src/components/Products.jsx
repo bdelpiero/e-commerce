@@ -22,6 +22,7 @@ import { addProductToCart } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
+import '../styles/ProductsStyle.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,10 +60,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
   maxWidth: 200,
-  
-
-
   },
+
 }));
 
 const reviewsAvg = (reviews, product) => {
@@ -140,10 +139,10 @@ function Products({ products, reviews }) {
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
-                  <button
+                  <Link className="bw"
                     onClick={() => dispatch(addProductToCart(product, user))}>
                     <AddShoppingCartIcon />
-                  </button>
+                  </Link>
                 </Badge>
               </CardContent>
             </Grid>

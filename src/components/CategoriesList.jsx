@@ -24,7 +24,7 @@ const useStylsheets = makeStyles((theme) => ({
     flexGrow: 1,
     maxWidth: 752,
     position: "fixed",
-    bottom: "10%",
+    bottom: "4%",
     right:"70%"
 
 
@@ -44,9 +44,7 @@ function generate(element) {
   );
 }
 function InteractiveList() {
-  const counter = useSelector((state) => {
-    return state.categories.count
-  })
+
  const classes = useStylsheets();
  const [dense, setDense] = React.useState(false);
  const [secondary, setSecondary] = React.useState(false);
@@ -57,7 +55,7 @@ function InteractiveList() {
   .then(res => res.data)
   .then(data=> setCategories(data))
   .then((da)=> console.log(da))
-},[counter])
+},[])
 
  return (
 

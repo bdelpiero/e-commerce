@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import CategoriesList from './CategoriesList'
 
 
-function AddCategories({handleChange, handleSubmit,value}){
+function AddCategories({handleChange, handleSubmit,value,message}){
 const classes = useStyles();
 
   return(
@@ -32,6 +32,7 @@ const classes = useStyles();
           }}
 
         />
+        <div className={classes.alert}>{message}</div>
         <Button type="submit" className={classes.b} variant="contained" color="secondary">
         add or remove category
       </Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import Image from 'material-ui-image'
 import "../styles/singleProductStyle.css";
@@ -7,6 +7,8 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { addProductToCart } from "../store/action-creators/cart";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
+import axios from 'axios'
+
 
 // es la misma función que para todos los productos. Tendŕia que estar en /utils
 const reviewsAvg = (reviews, product) => {
@@ -20,9 +22,19 @@ const reviewsAvg = (reviews, product) => {
 };
 
 function SingleProductInfo({ product, reviews }) {
+  const history = useHistory()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   //console.log("reviews en singleProduct: ", reviews);
+
+const handleRemove = () => {
+  axios.delete(`http://localhost:1337/api/products/${product.id}`)
+       .then(res=>res.data)
+       .then(history.push("/"))
+}
+
+
+
   return (
     <div className='info-container'>
       <div className='imgDiv'>
@@ -47,10 +59,17 @@ function SingleProductInfo({ product, reviews }) {
         <p>Disponible: {product.stock}</p>
 
         <AddShoppingCartIcon />
-        <button onClick={() => dispatch(addProductToCart(product, user))}>
+        <button className="" onClick={() => dispatch(addProductToCart(product, user))}>
           Add To Cart
         </button>
-      </div>
+        {user.rol == "admin"?
+        <button className="b" onClick={handleRemove}>
+          Remove
+        </button>
+        :
+        null
+        }
+      </div >
     </div>
   );
 }

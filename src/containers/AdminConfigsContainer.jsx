@@ -4,6 +4,7 @@ import axios from 'axios'
 
 function AdminConfigsContainer(){
 const [email,setEmail] = useState("")
+const [message, setMessage] = useState("")
 
 const handleChange = (e) => {
 setEmail(e.target.value)
@@ -14,12 +15,13 @@ const handleSubmit = (e) => {
   axios.put('http://localhost:1337/api/user/admin',{
     email:email
   }).then(res=> res.data)
+    .then(()=> setMessage("Please refresh the page to see changes"))
     .catch(err=> console.log(err))
 
 }
 
   return(
-    <AdminConfigs handleSubmit={handleSubmit} handleChange={handleChange}/>
+    <AdminConfigs message={message} handleSubmit={handleSubmit} handleChange={handleChange}/>
   )
 }
 

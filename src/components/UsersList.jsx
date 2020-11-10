@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { FixedSizeList } from 'react-window';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
@@ -61,7 +62,7 @@ export default function VirtualizedList({users}) {
 
   return (
     <div >
-    <p className={classes.position}>Usuarios</p>
+    <Typography variant="h6" className={classes.position}>Usuarios</Typography>
     <div className={classes.root}>
       <FixedSizeList height={400} width={300} itemSize={46} itemCount={users.length}>
         {renderRow}

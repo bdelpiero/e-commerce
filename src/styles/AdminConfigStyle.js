@@ -17,6 +17,10 @@ const useStyles = makeStyles((theme) =>({
       marginTop:"50%",
       marginLeft:"5%",
       fontWeight:"bold"
+    },
+    alert:{
+      color:"green",
+      fontWeight:"600"
     }
   }),
 );
