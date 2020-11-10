@@ -75,6 +75,9 @@ export default function Sidebar({products}) {
           <ListItem >
             <Link to="/configs/addproducts" className={classes.none}><ListItemText primary={"Add product"} /></Link>
           </ListItem>
+          <ListItem >
+            <Link to='/configs/addcategories' className={classes.none}><ListItemText primary={"Add categories"} /></Link>
+          </ListItem>
         </div>
       </Drawer>
 
