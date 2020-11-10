@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -15,13 +15,12 @@ import Icon from "@material-ui/core/Icon";
 import {
   delProductFromCart,
   completeOrder,
-  showCompletedOrders,
   wipeCart,
   addOneItem,
 } from "../store/action-creators/cart";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.common.black,
@@ -54,16 +53,23 @@ const useStyles = makeStyles({
   },
 });
 
-function Cart({ productsInCart, cart }) {
+function Cart({
+  productsInCart,
+  cart,
+  showCompletedHandler,
+  completeOrderHandler,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const cartProducts = useSelector((state) => state.cart.productsInCart);
-  const cart = useSelector((state) => {
+  const order = useSelector((state) => {
     console.log("ACA ESTA EL ESTADO", state);
     return state.cart.selected;
   });
-
+  const history = useHistory();
+  let subtotal = 0;
+  let total = 0;
   return (
     <div>
       <TableContainer component={Paper}>
@@ -75,6 +81,7 @@ function Cart({ productsInCart, cart }) {
               <StyledTableCell align="center">Precio unitario</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
               <StyledTableCell align="right">Cantidad</StyledTableCell>
+              <StyledTableCell align="right">Subtotal</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -114,6 +121,10 @@ function Cart({ productsInCart, cart }) {
                     </button>
                   </StyledTableCell>
                   <StyledTableCell align="right">
+                    {`$  ${(subtotal =
+                      product.product.price.substring(1) * product.total)}`}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
                     <Button
                       onClick={() =>
                         dispatch(
@@ -130,6 +141,17 @@ function Cart({ productsInCart, cart }) {
               <h1>Tu carrito esta vacio.</h1>
             )}
           </TableBody>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell></StyledTableCell>
+              <StyledTableCell align="left"></StyledTableCell>
+              <StyledTableCell align="center"></StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align="right">Total</StyledTableCell>
+              <StyledTableCell align="right">{`${total}`}</StyledTableCell>
+              <StyledTableCell align="right"></StyledTableCell>
+            </TableRow>
+          </TableHead>
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
@@ -138,17 +160,10 @@ function Cart({ productsInCart, cart }) {
         </Button>
 
         <div className={classes.buttonsLeft}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.firstButton}
-          >
-            Limpiar pedido
-          </Button>
           <Link to={`/completed`}>
             <Button
               onClick={() => {
-                dispatch(showCompletedOrders());
+                showCompletedHandler();
               }}
               variant="contained"
               color="primary"
@@ -157,15 +172,17 @@ function Cart({ productsInCart, cart }) {
               Mis Compras
             </Button>
           </Link>
-          <Button
-            onClick={() => {
-              dispatch(completeOrder(cart));
-            }}
-            variant="contained"
-            color="primary"
-          >
-            Completar pedido
-          </Button>
+          <Link to={`/`}>
+            <Button
+              onClick={() => {
+                completeOrderHandler(order);
+              }}
+              variant="contained"
+              color="primary"
+            >
+              Completar pedido
+            </Button>
+          </Link>
           <Link to="/products">
             <Button variant="contained" color="primary">
               Seguir comprando
@@ -183,9 +200,6 @@ function Cart({ productsInCart, cart }) {
                   Vaciar Carrito
                 </Button>
               </Link>
-              <Button variant="contained" color="primary">
-                Realizar pedido
-              </Button>
             </div>
           ) : null}
         </div>

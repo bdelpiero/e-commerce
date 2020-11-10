@@ -4,6 +4,7 @@ import {
   SET_CART,
   GET_CART,
   SET_COMPLETED_ORDER,
+  GET_PRODUCTS_COMPLETED_ORDER,
 } from "../constant";
 import axios from "axios";
 
@@ -11,7 +12,10 @@ export const getProds = (products) => ({
   type: GET_PRODUCTS,
   products,
 });
-
+export const getProdsCompletedOrder = (products) => ({
+  type: GET_PRODUCTS_COMPLETED_ORDER,
+  products,
+});
 // Products.jsx y Product.jsx
 const setProd = (product) => ({
   type: SET_PRODUCT,
@@ -35,6 +39,13 @@ export const fetchCartProducts = (cart) => (dispatch) => {
     .then((res) => res.data)
     .then((products) => dispatch(getProds(products)));
 };
+export const fetchProductsCompletedOrder = (cart) => (dispatch) => {
+  if (!cart.id) return;
+  return axios
+    .get(`http://localhost:1337/api/orders/${cart.id}`)
+    .then((res) => res.data)
+    .then((products) => dispatch(getProdsCompletedOrder(products)));
+};
 
 // AGREGA UN PRODUCTO AL CARRITO
 export const addProductToCart = (product, user) => (dispatch) => {
@@ -45,13 +56,6 @@ export const addProductToCart = (product, user) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
-export const delProductFromCart = (product, user, cart) => (dispatch) => {
-  console.log("ACA ESTA EL USER", cart);
-  return axios
-    .delete(`http://localhost:1337/api/orders/${user.id}/${product.id}`)
-    .then(() => fetchCartProducts(cart)) // HACER FETCH CART DE NUEVO
-    .catch((err) => console.log(err));
-};
 //COMPLETE ORDER
 export const completeOrder = () => (dispatch) => {
   return axios

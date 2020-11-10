@@ -45,12 +45,7 @@ const useStyles = makeStyles({
   },
 });
 
-function CompletedOrders() {
-  const user = useSelector((state) => state.login.loggedUser);
-  const completedOrders = useSelector((state) => {
-    console.log("ACA ESTA EL ESTADO", state);
-    return state.orders.completedOrders;
-  });
+function CompletedOrders({ completedOrders, handleClick }) {
   return (
     <div>
       <TableContainer component={Paper}>
@@ -58,7 +53,7 @@ function CompletedOrders() {
           <TableHead>
             <TableRow>
               <StyledTableCell align="left">Orden Nº</StyledTableCell>
-              <StyledTableCell align="center">Precio unitario</StyledTableCell>
+              <StyledTableCell align="center">Importe Total</StyledTableCell>
               <StyledTableCell align="right">Fecha</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
@@ -73,7 +68,15 @@ function CompletedOrders() {
                     {orden.createdAt}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    <Button>Ver más</Button>
+                    <Link to={`/details`}>
+                      <Button
+                        onClick={() => {
+                          handleClick(orden);
+                        }}
+                      >
+                        Ver más
+                      </Button>
+                    </Link>
                   </StyledTableCell>
                 </StyledTableRow>
               );
