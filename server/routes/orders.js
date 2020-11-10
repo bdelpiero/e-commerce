@@ -3,6 +3,14 @@ const router = express.Router();
 
 const { Product, Order, Order_Product } = require("../db/models");
 
+//GET COMPLETED ORDERS
+
+router.get("/completed", (req, res, next) => {
+  console.log("ACA ESTA EL USER LOG", req.user.id);
+  Order.findAll({
+    where: { userId: req.user.id, status: "Completado" },
+  }).then((orders) => res.send(orders));
+});
 // http://localhost:1337/api/orders    //  POST
 router.post("/", (req, res, next) => {
   Order.create(req.body)
@@ -13,9 +21,11 @@ router.post("/", (req, res, next) => {
 // busca todos los productos asociados a una orden
 //http://localhost:1337/api/orders/:orderId   // GET
 router.get("/:orderId", (req, res, next) => {
-  Order_Product.findAll({where: {orderId:req.params.orderId}, include: Product,  order: [
-    ['id', 'DESC']
-  ],})
+  Order_Product.findAll({
+    where: { orderId: req.params.orderId },
+    include: Product,
+    order: [["id", "DESC"]],
+  })
     .then((products) => res.send(products))
     .catch((err) => next(err));
 });
@@ -73,7 +83,7 @@ router.post("/:productId", (req, res, next) => {
             where: { productId: product.id, orderId: order[0].id },
           })
         )
-        .then((orderProduct) => 
+        .then((orderProduct) =>
           orderProduct[0].update({ total: orderProduct[0].total + 1 })
         )
         .then(() => res.send(order[0]));
@@ -110,27 +120,38 @@ router.delete("/:orderId", (req, res, next) => {
     where: { userId: req.user.id, status: "Pendiente" },
   }).then(() => res.sendStatus(200));
 });
+// UPDATE ORDER
+router.put("/cartId", (req, res, next) => {
+  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
+    (order) => {
+      order.update({ status: "Completado" });
+    }
+  );
+});
 
 // MODIFIES THE AMOUNT OF BOOKS OF AN ITEM
-router.put("/:orderId/:productId", (req,res,next)=>{
+router.put("/:orderId/:productId", (req, res, next) => {
   Order_Product.findOne({
-    where:{
-      orderId:req.params.orderId, 
-      productId:req.params.productId
-    }})
-    .then(orderProduct => {
+    where: {
+      orderId: req.params.orderId,
+      productId: req.params.productId,
+    },
+  })
+    .then((orderProduct) => {
       const product = Product.findByPk(req.params.productId);
-      return product.then((product)=>{
-        if(req.body.op === "suma"){
+      return product.then((product) => {
+        if (req.body.op === "suma") {
           return product
-            .update({stock:product.stock - 1})
-            .then(()=>orderProduct.update({total: orderProduct.total+1}))
-        }else {
+            .update({ stock: product.stock - 1 })
+            .then(() => orderProduct.update({ total: orderProduct.total + 1 }));
+        } else {
           return product
-          .update({stock:product.stock + 1})
-          .then(()=>orderProduct.update({total: orderProduct.total-1}))
+            .update({ stock: product.stock + 1 })
+            .then(() => orderProduct.update({ total: orderProduct.total - 1 }));
+          /* .then(() => Order.findOne({ where: { id: orderProduct.orderId } }))
+            .then((order) => order.update({total: })); */
         }
-      })
+      });
     })
     .then(()=> res.sendStatus(200))
 })
@@ -162,8 +183,8 @@ router.post("/newOrder/:userId", (req, res, next)=>{
         res.sendStatus(201)
       })
     }
-  })
-})
+  });
+});
 
 router.put("/newOrder/product/:productId", (req, res, next)=>{
   Product.findByPk(req.params.productId)

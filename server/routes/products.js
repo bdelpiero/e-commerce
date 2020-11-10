@@ -1,13 +1,29 @@
+const Sequelize = require("sequelize");
 const express = require("express");
 const router = express.Router();
-
+const Op= Sequelize.Op
 const {Product, Category} = require("../db/models");
 
 
-router.get("/", (req, res, next)=>{
-    Product.findAll()
-        .then(products => res.send(products));
-});
+
+router.get("/", (req, res, next) => {
+  console.log("holssss", req.query)
+  if (Object.keys(req.query).length !== 0) {
+    const filter = {
+      title: { [Op.iLike]: `%${req.query.searchTerm}%` },
+    };
+    Product.findAll({ where: filter }).then((filtered) => res.send(filtered));
+  } else {
+    Product.findAll().then((products) => res.send(products));
+  }
+}); 
+
+
+// router.get("/", (req, res, next) => {
+//   Product.findAll().then((products) => res.send(products));
+// });
+
+
 
 router.get("/:productId", (req, res, next)=>{
     Product.findByPk(req.params.productId)

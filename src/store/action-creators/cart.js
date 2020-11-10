@@ -1,11 +1,21 @@
-import { GET_PRODUCTS, SET_PRODUCT, SET_CART, GET_CART } from "../constant";
+import {
+  GET_PRODUCTS,
+  SET_PRODUCT,
+  SET_CART,
+  GET_CART,
+  SET_COMPLETED_ORDER,
+  GET_PRODUCTS_COMPLETED_ORDER,
+} from "../constant";
 import axios from "axios";
 
 export const getProds = (products) => ({
   type: GET_PRODUCTS,
   products,
 });
-
+export const getProdsCompletedOrder = (products) => ({
+  type: GET_PRODUCTS_COMPLETED_ORDER,
+  products,
+});
 // Products.jsx y Product.jsx
 const setProd = (product) => ({
   type: SET_PRODUCT,
@@ -16,6 +26,10 @@ const setCart = (cart) => ({
   type: SET_CART,
   cart,
 });
+const completedOrders = (orders) => ({
+  type: SET_COMPLETED_ORDER,
+  orders,
+});
 
 // TRAE LOS PRODUCTOS DEL CARRO
 export const fetchCartProducts = (cart) => (dispatch) => {
@@ -24,6 +38,13 @@ export const fetchCartProducts = (cart) => (dispatch) => {
     .get(`http://localhost:1337/api/orders/${cart.id}`)
     .then((res) => res.data)
     .then((products) => dispatch(getProds(products)));
+};
+export const fetchProductsCompletedOrder = (cart) => (dispatch) => {
+  if (!cart.id) return;
+  return axios
+    .get(`http://localhost:1337/api/orders/${cart.id}`)
+    .then((res) => res.data)
+    .then((products) => dispatch(getProdsCompletedOrder(products)));
 };
 
 // AGREGA UN PRODUCTO AL CARRITO
@@ -35,6 +56,29 @@ export const addProductToCart = (product, user) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 
+//COMPLETE ORDER
+export const completeOrder = () => (dispatch) => {
+  return axios
+    .put(`http://localhost:1337/api/orders/cartId`)
+    .then(() => createCart())
+
+    .then((cart) => {
+      console.log("ESTE ES EL CART", cart);
+      return fetchCartProducts(cart);
+    });
+};
+
+//SHOW COMPLETED ORDERS
+export const showCompletedOrders = (cart) => (dispatch) => {
+  console.log("SE EJECUTO SHOW");
+  return axios
+    .get(`http://localhost:1337/api/orders/completed`)
+    .then((res) => res.data)
+    .then((data) => {
+      dispatch(completedOrders(data));
+    })
+    .catch((err) => console.log(err));
+};
 
 // TRAE EL CARRITO
 export const fetchCart = (user) => (dispatch) => {
@@ -75,13 +119,13 @@ export const delProductFromCart = (product, user, cart) => (dispatch) => {
 export const wipeCart = (cart) => (dispatch) => {
   return axios
     .delete(`http://localhost:1337/api/orders/${cart.id}`)
-    .then( ()=> dispatch(setCart({})))
+    .then(() => dispatch(setCart({})))
     .catch((err) => console.log(err));
 };
 
-export const addOneItem = (cart, product, op) => dispatch => {
+export const addOneItem = (cart, product, op) => (dispatch) => {
   return axios
-    .put(`http://localhost:1337/api/orders/${cart.id}/${product.id}`, {op})
+    .put(`http://localhost:1337/api/orders/${cart.id}/${product.id}`, { op })
     .then(() => dispatch(fetchCartProducts(cart)))
     .catch((err) => console.log(err));
-}
+};

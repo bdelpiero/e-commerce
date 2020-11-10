@@ -9,9 +9,14 @@ import ProductsContainer from "../containers/ProductsContainer";
 import CartContainer from "./CartContainer";
 import { loggUser } from "../store/action-creators/login";
 import ProductContainer from "../containers/ProductContainer";
-
+import CompletedOrdersContainer from "../containers/CompletedOrdersContainer";
+import CompletedOrderDetailContainer from "../containers/CompletedOrderDetailsContainer";
 import axios from "axios";
+import { fetchProducts } from "../store/action-creators/products";
+import ResultsProductContainer from "../containers/ResultsProductContainer";
 axios.defaults.withCredentials = true;
+
+//use effect q busca libros, pasa libros a products container. renderizar products filtrados y no filtrados con el com. ProductsContainer
 
 function App() {
   const dispatch = useDispatch();
@@ -19,6 +24,15 @@ function App() {
   // const islogged = useSelector((state) => {
   //   return state.login.logged;
   // });
+  const products = useSelector((state) => {
+    return state.products.list;
+  });
+  const search = useSelector((state) => {
+    return state.products.list;
+  });
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   useEffect(() => {
     //axios.defaults.withCredentials = true;
@@ -27,7 +41,19 @@ function App() {
       .then((res) => res.data)
       .then((user) => {
         dispatch(loggUser(user));
-        return user
+        return user;
+      })
+      .then((user) => {
+        const productsArray = [];
+        for (const key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            productsArray.push(JSON.parse(localStorage.getItem(key)));
+          }
+        }
+        return axios.post(
+          `http://localhost:1337/api/orders/newOrder/${user.id}`,
+          { productsArray }
+        );
       })
       .catch(() => {
         console.log("not logged in");
@@ -50,13 +76,34 @@ function App() {
       <Navbar />
       <div>
         <Switch>
-          <Route path='/register' component={RegisterContainer} />
-          <Route path='/login' component={LoginContainer} />
-          <Route exact path='/' component={ProductsContainer} />
-          <Route exact path='/products' component={ProductsContainer} />
-          <Route path='/cart' component={CartContainer} />
-          <Route path='/configs' component={AdminConfigsContainer} />
-          <Route path='/products/:productId' component={ProductContainer} />
+          <Route path="/register" component={RegisterContainer} />
+          <Route path="/login" component={LoginContainer} />
+          <Route exact path="/completed" component={CompletedOrdersContainer} />
+          <Route
+            exact
+            path="/details"
+            component={CompletedOrderDetailContainer}
+          />
+
+          <Route
+            exact
+            path="/"
+            render={() => <ProductsContainer products={products} />}
+          />
+          <Route
+            exact
+            path="/products"
+            render={() => <ProductsContainer products={products} />}
+          />
+          <Route
+            exact
+            path="/search"
+            render={() => <ResultsProductContainer search={search} />}
+          />
+
+          <Route path="/cart" component={CartContainer} />
+          <Route path="/configs" component={AdminConfigsContainer} />
+          <Route path="/products/:productId" component={ProductContainer} />
         </Switch>
       </div>
     </div>

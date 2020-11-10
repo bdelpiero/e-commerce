@@ -20,3 +20,13 @@ export const fetchProduct = (productID) => dispatch =>
     axios.get(`http://localhost:1337/api/products/${productID}`)
         .then(res => res.data)
         .then(product => dispatch(reciveProduct(product)))
+
+export const searchProduct = (search) => dispatch => 
+ axios
+      .get("http://localhost:1337/api/products", {
+        params: { searchTerm: search },
+      })
+      .then((res) => res.data)
+     .then(product => dispatch(reciveProducts(product)))
+      .catch((err) => console.log(err));
+    

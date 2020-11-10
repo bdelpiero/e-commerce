@@ -2,7 +2,8 @@ import {RECEIVE_PRODUCTS, RECEIVE_PRODUCT, ADD_TO_PRODUCTS} from "../constant";
 
 const initialState = {
     list : [],
-    selected: {}
+    selected: {},
+    
 }
 
 export default (state = initialState, action) => {

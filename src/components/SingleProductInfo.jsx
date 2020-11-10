@@ -21,6 +21,7 @@ const reviewsAvg = (reviews, product) => {
 function SingleProductInfo({ product, reviews }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
+<<<<<<< HEAD
   //console.log("reviews en singleProduct: ", reviews);
 
   const addToCart = (product)=>{
@@ -36,6 +37,9 @@ function SingleProductInfo({ product, reviews }) {
     }
   }
 
+=======
+  console.log("reviews en singleProduct: ", product);
+>>>>>>> 42e9c6d42e469a474472c0d9523c386e3e70c291
   return (
     <div className='info-container'>
       <div className='imgDiv'>
