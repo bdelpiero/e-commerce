@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,7 +11,11 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
-import { delProductFromCart } from "../store/action-creators/cart";
+import {
+  delProductFromCart,
+  completeOrder,
+  showCompletedOrders,
+} from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -48,7 +53,12 @@ function Cart({ productsInCart }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
-  const cart = useSelector((state) => state.cart.productsInCart);
+  const cartProducts = useSelector((state) => state.cart.productsInCart);
+  const cart = useSelector((state) => {
+    console.log("ACA ESTA EL ESTADO", state);
+    return state.cart.selected;
+  });
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -91,7 +101,7 @@ function Cart({ productsInCart }) {
                 <StyledTableCell align="right">
                   <Button
                     onClick={() =>
-                      dispatch(delProductFromCart(product, user, cart))
+                      dispatch(delProductFromCart(product, user, cartProducts))
                     }
                   >
                     <Icon component={DeleteIcon} />
@@ -106,16 +116,35 @@ function Cart({ productsInCart }) {
         <Button variant="contained" color="primary">
           Seguir comprando
         </Button>
+
         <div className={classes.buttonsLeft}>
           <Button
             variant="contained"
             color="primary"
             className={classes.firstButton}
           >
-            Limpia pedido
+            Limpiar pedido
           </Button>
-          <Button variant="contained" color="primary">
-            Realizar pedido
+          <Link to={`/completed`}>
+            <Button
+              onClick={() => {
+                dispatch(showCompletedOrders());
+              }}
+              variant="contained"
+              color="primary"
+              className={classes.firstButton}
+            >
+              Mis Compras
+            </Button>
+          </Link>
+          <Button
+            onClick={() => {
+              dispatch(completeOrder(cart));
+            }}
+            variant="contained"
+            color="primary"
+          >
+            Completar pedido
           </Button>
         </div>
       </div>

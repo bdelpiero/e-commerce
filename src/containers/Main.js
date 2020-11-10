@@ -10,6 +10,7 @@ import CartContainer from "./CartContainer";
 import { fetchIsLogged, login, loggUser } from "../store/action-creators/login";
 import ProductContainer from "../containers/ProductContainer";
 import { createCart } from "../store/action-creators/cart";
+import CompletedOrders from "../components/completedOrders";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
@@ -39,13 +40,14 @@ function App() {
       <Navbar />
       <div>
         <Switch>
-          <Route path='/register' component={RegisterContainer} />
-          <Route path='/login' component={LoginContainer} />
-          <Route exact path='/' component={ProductsContainer} />
-          <Route exact path='/products' component={ProductsContainer} />
-          <Route path='/cart' component={CartContainer} />
-          <Route path='/configs' component={AdminConfigsContainer} />
-          <Route path='/products/:productId' component={ProductContainer} />
+          <Route path="/register" component={RegisterContainer} />
+          <Route path="/login" component={LoginContainer} />
+          <Route exact path="/" component={ProductsContainer} />
+          <Route exact path="/products" component={ProductsContainer} />
+          <Route exact path="/completed" component={CompletedOrders} />
+          <Route path="/cart" component={CartContainer} />
+          <Route path="/configs" component={AdminConfigsContainer} />
+          <Route path="/products/:productId" component={ProductContainer} />
         </Switch>
       </div>
     </div>

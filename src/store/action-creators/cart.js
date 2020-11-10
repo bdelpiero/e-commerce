@@ -1,4 +1,10 @@
-import { GET_PRODUCTS, SET_PRODUCT, SET_CART, GET_CART } from "../constant";
+import {
+  GET_PRODUCTS,
+  SET_PRODUCT,
+  SET_CART,
+  GET_CART,
+  SET_COMPLETED_ORDER,
+} from "../constant";
 import axios from "axios";
 
 export const getProds = (products) => ({
@@ -15,6 +21,10 @@ const setProd = (product) => ({
 const setCart = (cart) => ({
   type: SET_CART,
   cart,
+});
+const completedOrders = (orders) => ({
+  type: SET_COMPLETED_ORDER,
+  orders,
 });
 
 export const fetchCartProducts = (cart) => (dispatch) => {
@@ -36,10 +46,33 @@ export const addProductToCart = (product, user) => (dispatch) => {
     .catch((err) => console.log(err));
 };
 export const delProductFromCart = (product, user, cart) => (dispatch) => {
-  console.log("ACA ESTA EL USER", user);
+  console.log("ACA ESTA EL USER", cart);
   return axios
     .delete(`http://localhost:1337/api/orders/${user.id}/${product.id}`)
     .then(() => fetchCartProducts(cart)) // HACER FETCH CART DE NUEVO
+    .catch((err) => console.log(err));
+};
+//COMPLETE ORDER
+export const completeOrder = () => (dispatch) => {
+  return axios
+    .put(`http://localhost:1337/api/orders/cartId`)
+    .then(() => createCart())
+
+    .then((cart) => {
+      console.log("ESTE ES EL CART", cart);
+      return fetchCartProducts(cart);
+    });
+};
+
+//SHOW COMPLETED ORDERS
+export const showCompletedOrders = (cart) => (dispatch) => {
+  console.log("SE EJECUTO SHOW");
+  return axios
+    .get(`http://localhost:1337/api/orders/completed`)
+    .then((res) => res.data)
+    .then((data) => {
+      dispatch(completedOrders(data));
+    })
     .catch((err) => console.log(err));
 };
 

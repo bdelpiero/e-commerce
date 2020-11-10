@@ -3,6 +3,14 @@ const router = express.Router();
 
 const { Product, Order, Order_Product } = require("../db/models");
 
+//GET COMPLETED ORDERS
+
+router.get("/completed", (req, res, next) => {
+  console.log("ACA ESTA EL USER LOG", req.user.id);
+  Order.findAll({
+    where: { userId: req.user.id, status: "Completado" },
+  }).then((orders) => res.send(orders));
+});
 // http://localhost:1337/api/orders    //  POST
 router.post("/", (req, res, next) => {
   Order.create(req.body)
@@ -109,6 +117,14 @@ router.delete("/:orderId", (req, res, next) => {
   Order.destroy({
     where: { userId: req.user.id, status: "Pendiente" },
   }).then(() => res.sendStatus(200));
+});
+// UPDATE ORDER
+router.put("/cartId", (req, res, next) => {
+  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
+    (order) => {
+      order.update({ status: "Completado" });
+    }
+  );
 });
 
 module.exports = router;
