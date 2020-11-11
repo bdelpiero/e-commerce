@@ -16,14 +16,29 @@ Order.init(
       ),
       defaultValue: "Pendiente",
     },
+    firstName:{
+      type:S.STRING
+    },
+    lastName:{
+      type:S.STRING
+    },
+    city:{
+      type:S.STRING
+    },
     total: {
       type: S.REAL,
     },
     paymentMethod: {
       type: S.ENUM("Efectivo", "Tarjeta de Credito", "Transferencia Bancaria"),
-      // allowNull: false
+      defaultValue: "Tarjeta de Credito"
     },
-    shippingAdress: {
+    cardNumber:{
+      type: S.STRING,
+      set(data){
+        this.setDataValue("cardNumber", `**** - ${data.substr(data.length-4)}`)
+      }
+    },
+    address: {
       type: S.STRING,
       // allowNull: false,
       // defaultValue: "la direccion al crear la cuenta"
