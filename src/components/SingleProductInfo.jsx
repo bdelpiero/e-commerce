@@ -70,11 +70,9 @@ function SingleProductInfo({ product, reviews }) {
         <p>Disponible: {product.stock}</p>
 
         <AddShoppingCartIcon />
-<<<<<<< HEAD
-        <button className="" onClick={() => dispatch(addProductToCart(product, user))}>
-=======
+
         <button onClick={() => addToCart(product)}>
->>>>>>> 319da97fcc221dfbb3b6a61145d9f65b6781c806
+
           Add To Cart
         </button>
         {user.rol == "admin"?
