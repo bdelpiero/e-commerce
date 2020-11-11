@@ -12,7 +12,7 @@ function RemoveProductsContainer(){
   useEffect(()=>{
   axios.get("http://localhost:1337/api/products")
        .then(res => res.data)
-       .then(products => setProducts(products))
+       .then(products => setProducts([...products]))
        .then(()=> console.log(products))
   },[])
 
