@@ -57,7 +57,7 @@ function Cart({
   productsInCart,
   cart,
   showCompletedHandler,
-  completeOrderHandler,
+  checkoutOrder,
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -178,17 +178,15 @@ function Cart({
               Mis Compras
             </Button>
           </Link>
-          <Link to={`/`}>
             <Button
               onClick={() => {
-                completeOrderHandler(total);
+                checkoutOrder(total);  
               }}
               variant="contained"
               color="primary"
             >
               Completar pedido
             </Button>
-          </Link>
           <Link to="/products">
             <Button variant="contained" color="primary">
               Seguir comprando

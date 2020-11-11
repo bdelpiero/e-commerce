@@ -36,16 +36,19 @@ export default function Orders({ orders }) {
         </TableHead>
         <TableBody>
           {orders.length !== 0 &&
-            orders.slice(0, 6).map((order) => (
-              <TableRow key={order.id}>
-                <TableCell>{order.updatedAt}</TableCell>
-                <TableCell>{order.name || "hardcodeado"}</TableCell>
-                <TableCell>{order.shippingAdress}</TableCell>
-                <TableCell>{order.paymentMethod}</TableCell>
-                <TableCell>{order.status}</TableCell>
-                <TableCell align='right'>{order.total || 0}</TableCell>
-              </TableRow>
-            ))}
+            orders
+              .reverse()
+              .slice(0, 5)
+              .map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell>{order.updatedAt.substring(0, 10)}</TableCell>
+                  <TableCell>{order.name || "hardcodeado"}</TableCell>
+                  <TableCell>{order.shippingAdress}</TableCell>
+                  <TableCell>{order.paymentMethod}</TableCell>
+                  <TableCell>{order.status}</TableCell>
+                  <TableCell align='right'>{order.total || 0}</TableCell>
+                </TableRow>
+              ))}
         </TableBody>
       </Table>
       <div className={classes.seeMore}>

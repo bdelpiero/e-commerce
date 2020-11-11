@@ -31,6 +31,7 @@ export default function Chart({ orders }) {
   const theme = useTheme();
 
   const data = orders.map((order) => {
+    console.log(order.createdAt);
     const time = order.createdAt.substring(11, 16);
     console.log("time: ", time);
     return createData(time, order.total | 600);
