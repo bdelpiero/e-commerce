@@ -63,7 +63,9 @@ function CompletedOrders({ completedOrders, handleClick }) {
               return (
                 <StyledTableRow key={orden.id}>
                   <StyledTableCell align="left">{orden.id}</StyledTableCell>
-                  <StyledTableCell align="center">PRECIO</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {`$ ${orden.total}`}
+                  </StyledTableCell>
                   <StyledTableCell align="right">
                     {orden.createdAt}
                   </StyledTableCell>

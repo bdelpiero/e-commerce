@@ -57,9 +57,9 @@ export const addProductToCart = (product, user) => (dispatch) => {
 };
 
 //COMPLETE ORDER
-export const completeOrder = () => (dispatch) => {
+export const completeOrder = (total) => (dispatch) => {
   return axios
-    .put(`http://localhost:1337/api/orders/cartId`)
+    .put(`http://localhost:1337/api/orders/cartId`, { total })
     .then(() => createCart())
 
     .then((cart) => {
