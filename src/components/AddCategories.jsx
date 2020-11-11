@@ -19,30 +19,28 @@ function AddCategories({
   const classes = useStyles();
 
   return (
-    <div>
-      <div className={classes.center}>
-        <p className={classes.p}>Want to add or remove a Category?</p>
-        <form onSubmit={handleSubmit}>
-          <FormControl className={classes.margin}>
-            <TextField
-              onChange={handleChange}
-              className={classes.margin}
-              label='Category'
-              name='name'
-              value={value}
-              InputProps={{}}
-            />
-            <div className={classes.alert}>{message}</div>
-            <Button
-              type='submit'
-              className={classes.b}
-              variant='contained'
-              color='secondary'>
-              add or remove category
-            </Button>
-          </FormControl>
-        </form>
-      </div>
+    <div className={classes.container}>
+      <form onSubmit={handleSubmit}>
+        <FormControl className={classes.formContainer}>
+          <p className={classes.p}>Want to add or remove a Category?</p>
+          <TextField
+            onChange={handleChange}
+            className={classes.margin}
+            label='Category'
+            name='name'
+            value={value}
+            InputProps={{}}
+          />
+          <div className={classes.alert}>{message}</div>
+          <Button
+            type='submit'
+            className={classes.b}
+            variant='contained'
+            color='secondary'>
+            add or remove category
+          </Button>
+        </FormControl>
+      </form>
       <CategoriesList categories={categories} />
     </div>
   );

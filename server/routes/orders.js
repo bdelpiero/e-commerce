@@ -122,9 +122,16 @@ router.delete("/:orderId", (req, res, next) => {
 
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
-  const { firstName, lastName, city, paymentMethod, cardNumber, address } = req.body.data
-  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
-    (order) => {
+  const {
+    firstName,
+    lastName,
+    city,
+    paymentMethod,
+    cardNumber,
+    address,
+  } = req.body.data;
+  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } })
+    .then((order) => {
       order.update({
         status: "Completado",
         firstName,
@@ -134,10 +141,9 @@ router.put("/cartId", (req, res, next) => {
         cardNumber,
         address,
       });
-    }
-  )
-  .then(()=> mailConfirmation(req.user.email))
-  .then(()=> res.sendStatus(200)) /*.then(aca manda mail)*/
+    })
+    .then(() => mailConfirmation(req.user.email))
+    .then(() => res.sendStatus(200)); /*.then(aca manda mail)*/
 });
 
 // // SEND CONFIRMATION EMAIL
@@ -167,56 +173,39 @@ router.put("/:orderId/:productId", (req, res, next) => {
         }
       });
     })
-<<<<<<< HEAD
     .then(() => res.sendStatus(200));
 });
 
 router.post("/newOrder/:userId", (req, res, next) => {
   if (!req.user) return;
-  console.log("BODY EN NEW ORDER", req.body);
+  if (!req.params.userId) return;
   return Order.findOrCreate({
     where: {
-      userId: req.params.userId,
+      userId: req.user.id,
       status: "Pendiente",
       paymentMethod: "Efectivo",
-      shippingAdress: "cualquiera",
+      address: "cualquiera",
     },
-  }).then((foundOrder) => {
-    console.log("FOUNDORDER", foundOrder);
-    if (!foundOrder[1]) {
-      return res.send(foundOrder[0]);
-=======
-    .then(()=> res.sendStatus(200))
-})
-
-router.post("/newOrder/:userId", (req, res, next)=>{
-  if(!req.user) return;
-  if(!req.params.userId) return;
-  return Order.findOrCreate({where: {
-    userId: req.user.id,
-    status: "Pendiente",
-    paymentMethod: "Efectivo",
-    address: "cualquiera",
-  }})
-  .then(foundOrder => {
-    if(!foundOrder[1]) {
-      return res.send(foundOrder[0])
->>>>>>> bcb8b957e0d9dd71839d48e55783ef60b48464e9
-    } else {
-      if(req.body.productsArray.length === 0) return; 
-      const newArray = req.body.productsArray.map((product) => {
-        return {
-          productId: product.id,
-          orderId: foundOrder[0].id,
-          total: product.total,
-        };
-      });
-      Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
-        console.log("LA NUEVA ORDEN", orderWithProducts);
-        res.sendStatus(201);
-      });
-    }
-  }).catch(err=> console.log(err));
+  })
+    .then((foundOrder) => {
+      if (!foundOrder[1]) {
+        return res.send(foundOrder[0]);
+      } else {
+        if (req.body.productsArray.length === 0) return;
+        const newArray = req.body.productsArray.map((product) => {
+          return {
+            productId: product.id,
+            orderId: foundOrder[0].id,
+            total: product.total,
+          };
+        });
+        Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
+          console.log("LA NUEVA ORDEN", orderWithProducts);
+          res.sendStatus(201);
+        });
+      }
+    })
+    .catch((err) => console.log(err));
 });
 
 router.put("/newOrder/product/:productId", (req, res, next) => {
