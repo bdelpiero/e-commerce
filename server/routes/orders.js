@@ -120,6 +120,7 @@ router.delete("/:orderId", (req, res, next) => {
     where: { userId: req.user.id, status: "Pendiente" },
   }).then(() => res.sendStatus(200));
 });
+
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
   Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
@@ -158,7 +159,6 @@ router.put("/:orderId/:productId", (req, res, next) => {
 
 router.post("/newOrder/:userId", (req, res, next)=>{
   if(!req.user) return;
-  console.log("BODY EN NEW ORDER",req.body)
   return Order.findOrCreate({where: {
     userId: req.params.userId,
     status: "Pendiente",
@@ -166,7 +166,6 @@ router.post("/newOrder/:userId", (req, res, next)=>{
     shippingAdress: "cualquiera",
   }})
   .then(foundOrder => {
-    console.log("FOUNDORDER",foundOrder)
     if(!foundOrder[1]) {
       return res.send(foundOrder[0])
     } else {
@@ -187,6 +186,7 @@ router.post("/newOrder/:userId", (req, res, next)=>{
 });
 
 router.put("/newOrder/product/:productId", (req, res, next)=>{
+  console.log("EL BODY DE MODIFICAR", req.body)
   Product.findByPk(req.params.productId)
   .then(product => {
     if(req.body.op === "suma"){
@@ -198,38 +198,20 @@ router.put("/newOrder/product/:productId", (req, res, next)=>{
   .then(()=> res.sendStatus(200))
 })
 
+router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
+  console.log("EL RECO BODYU", req.body)
+  Product.findByPk(req.params.productId)
+    .then(product => product.update({stock: req.body.quantity + product.stock}))
+})
+
 module.exports = router;
 
-// restar al product la cantidad que viene en el body, sumarlo a la order
-// y actualizar la entrada en ambas tablas (Order_Product y Product).
-// if (order.hasProduct(product)) modificar la entrada en la tabla pivot
-// else: (hacer lo que sigue)
-
-// VERSION VIEJA, FUNCIONABA ASI
-
-// router.post("/:productId", (req, res, next) => {
-//   const { productId } = req.params;
-//   const { userId } = req.body;
-//   Order.findOrCreate({
-//     where: {
-//       userId,
-//       status: "Pendiente",
-//       paymentMethod: "Efectivo",
-//       shippingAdress: "cualquiera",
-//     },
-//   })
-//     .then((order) => {
-//       const product = Product.findByPk(productId);
-//       return product.then((product) => {
-//         // restar al product la cantidad que viene en el bosumarlo a la order
-//         // y actualizar la entrada en ambas tablas (Order_ProducProduct).
-//         // if (order.hasProduct(product)) modificar la entradala tabla pivot
-//         // else: (hacer lo que sigue)
-//         product.addOrder(order[0].id);
-//         return order[0];
+// Product.findByPk(productId).then((product) =>
+//           product.update({ stock: orderProduct.total + product.stock })
+//         )
+//       );
+//       return Order_Product.destroy({
+//         where: { orderId: order.id, productId: productId },
 //       });
 //     })
-//     .then((order) => {
-//       res.send(order);
-//     });
-// });
+//     .then(() => res.sendStatus(200));
