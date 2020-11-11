@@ -153,50 +153,56 @@ router.put("/:orderId/:productId", (req, res, next) => {
         }
       });
     })
-    .then(()=> res.sendStatus(200))
-})
+    .then(() => res.sendStatus(200));
+});
 
-router.post("/newOrder/:userId", (req, res, next)=>{
-  if(!req.user) return;
-  console.log("BODY EN NEW ORDER",req.body)
-  return Order.findOrCreate({where: {
-    userId: req.params.userId,
-    status: "Pendiente",
-    paymentMethod: "Efectivo",
-    shippingAdress: "cualquiera",
-  }})
-  .then(foundOrder => {
-    console.log("FOUNDORDER",foundOrder)
-    if(!foundOrder[1]) {
-      return res.send(foundOrder[0])
+router.post("/newOrder/:userId", (req, res, next) => {
+  if (!req.user) return;
+  console.log("BODY EN NEW ORDER", req.body);
+  return Order.findOrCreate({
+    where: {
+      userId: req.params.userId,
+      status: "Pendiente",
+      paymentMethod: "Efectivo",
+      shippingAdress: "cualquiera",
+    },
+  }).then((foundOrder) => {
+    console.log("FOUNDORDER", foundOrder);
+    if (!foundOrder[1]) {
+      return res.send(foundOrder[0]);
     } else {
-      const newArray = req.body.productsArray.map(product=>{
+      const newArray = req.body.productsArray.map((product) => {
         return {
-          productId: product.id, 
-          orderId: foundOrder[0].id, 
-          total: product.total
-        }
-      })
-      Order_Product.bulkCreate(newArray)
-      .then(orderWithProducts => {
-        console.log("LA NUEVA ORDEN",orderWithProducts)
-        res.sendStatus(201)
-      })
+          productId: product.id,
+          orderId: foundOrder[0].id,
+          total: product.total,
+        };
+      });
+      Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
+        console.log("LA NUEVA ORDEN", orderWithProducts);
+        res.sendStatus(201);
+      });
     }
   });
 });
 
-router.put("/newOrder/product/:productId", (req, res, next)=>{
+router.put("/newOrder/product/:productId", (req, res, next) => {
   Product.findByPk(req.params.productId)
-  .then(product => {
-    if(req.body.op === "suma"){
-      return product.update({stock:product.stock - 1})
-    }else {
-      return product.update({stock:product.stock + 1})
-    }
-  })
-  .then(()=> res.sendStatus(200))
-})
+    .then((product) => {
+      if (req.body.op === "suma") {
+        return product.update({ stock: product.stock - 1 });
+      } else {
+        return product.update({ stock: product.stock + 1 });
+      }
+    })
+    .then(() => res.sendStatus(200));
+});
+
+router.get("/", (req, res, next) => {
+  Order.findAll({})
+    .then((orders) => res.send(orders))
+    .catch((err) => console.log(err));
+});
 
 module.exports = router;
 

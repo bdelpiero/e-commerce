@@ -14,16 +14,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Deposits() {
+export default function Deposits({ orders }) {
   const classes = useStyles();
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const yyyy = today.getFullYear();
+
+  const formateDate = mm + "/" + dd + "/" + yyyy;
   return (
     <React.Fragment>
       <Title>Recent Deposits</Title>
       <Typography component='p' variant='h4'>
-        $3,024.00
+        ${" "}
+        {orders.reduce((acc, current) => {
+          return (acc += current.total);
+        }, 0)}
       </Typography>
       <Typography color='textSecondary' className={classes.depositContext}>
-        on 15 March, 2019
+        {`on ${formateDate}`}
       </Typography>
       <div>
         <Link color='primary' href='#' onClick={preventDefault}>
