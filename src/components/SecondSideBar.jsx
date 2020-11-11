@@ -14,6 +14,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Products from "./Products";
+import '../styles/ProductsStyle.css'
 
 const drawerWidth = 240;
 
@@ -52,6 +53,8 @@ export default function Sidebar({ products }) {
   const classes = useStyles();
 
   return (
+    
+<div className="absolute">
     <div className={classes.root}>
       <CssBaseline />
       <Drawer
@@ -71,12 +74,17 @@ export default function Sidebar({ products }) {
           <Divider />
           <ListItem>
             <Link to='/configs/addadmin' className={classes.none}>
-              <ListItemText primary={"Create/remove admin"} />
+              <ListItemText primary={"Create / Remove admin"} />
             </Link>
           </ListItem>
           <ListItem>
             <Link to='/configs/addproducts' className={classes.none}>
               <ListItemText primary={"Add product"} />
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link to='/configs/removeproducts' className={classes.none}>
+              <ListItemText primary={"Edit / Remove products"} />
             </Link>
           </ListItem>
           <ListItem>
@@ -91,6 +99,7 @@ export default function Sidebar({ products }) {
           </ListItem>
         </div>
       </Drawer>
+    </div>
     </div>
   );
 }

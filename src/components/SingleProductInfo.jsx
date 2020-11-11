@@ -75,11 +75,7 @@ function SingleProductInfo({ product, reviews }) {
 
         <AddShoppingCartIcon />
         <button onClick={() => addToCart(product)}>Add To Cart</button>
-        {user.rol == "admin" ? (
-          <button className="b" onClick={handleRemove}>
-            Remove
-          </button>
-        ) : null}
+
       </div>
     </div>
   );

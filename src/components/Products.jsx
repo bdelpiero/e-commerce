@@ -146,10 +146,10 @@ function Products({ products, reviews }) {
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
-                  <button className="bw"
+                  <Link className="bw"
                     onClick={() => addToCart(product)}>
                     <AddShoppingCartIcon />
-                  </button>
+                  </Link>
                 </Badge>
               </CardContent>
             </Grid>
