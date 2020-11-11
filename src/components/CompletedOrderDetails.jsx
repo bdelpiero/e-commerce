@@ -58,7 +58,12 @@ function CompletedOrderDetails({
     return state.cart.selected;
   });
   const history = useHistory();
-
+  let total = 0;
+  const updateTotal = (product) => {
+    const subtotal = product.product.price.substring(1) * product.total;
+    total += subtotal;
+    return subtotal;
+  };
   return (
     <div>
       <TableContainer component={Paper}>
@@ -87,7 +92,7 @@ function CompletedOrderDetails({
                   {product.product.title}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {product.product.price}
+                  {`$ ${updateTotal(product)}`}
                 </StyledTableCell>
                 <StyledTableCell align="right">edit</StyledTableCell>
                 <StyledTableCell align="right">{product.total}</StyledTableCell>
@@ -99,7 +104,7 @@ function CompletedOrderDetails({
             <TableRow>
               <StyledTableCell></StyledTableCell>
               <StyledTableCell align="left">Total:</StyledTableCell>
-              <StyledTableCell align="center">$800</StyledTableCell>
+              <StyledTableCell align="center">{`$ ${total}`}</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>

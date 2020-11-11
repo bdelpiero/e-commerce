@@ -57,7 +57,7 @@ function Cart({
   productsInCart,
   cart,
   showCompletedHandler,
-  completeOrderHandler,
+  checkoutOrder,
 }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -69,7 +69,11 @@ function Cart({
   const history = useHistory();
   let subtotal = 0;
   let total = 0;
-
+  const updateTotal = (product) => {
+    const subtotal = product.product.price.substring(1) * product.total;
+    total += subtotal;
+    return subtotal;
+  };
   return (
     <div>
       <TableContainer component={Paper}>
@@ -86,46 +90,62 @@ function Cart({
             </TableRow>
           </TableHead>
           <TableBody>
-            {productsInCart.length !== 0 && productsInCart[0].product ? productsInCart.map((product) => (
-              <StyledTableRow key={product.product.id}>
-                <StyledTableCell component="th" scope="row">
-                  <img
-                    className="imgSize"
-                    src={product.product.imageUrl}
-                    style={{ height: "150px", width: "100px" }}
-                  />
-                </StyledTableCell>
-                <StyledTableCell align="left">{product.product.title}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {product.product.price}
-                </StyledTableCell>
-                <StyledTableCell align="right">edit</StyledTableCell>
-                <StyledTableCell align="right">
-                  <button
-                    onClick={()=> dispatch(addOneItem(cart, product.product, "resta"))}
-                  >
-                    -
-                  </button>
-                  {` ${product.total} `} 
-                  <button onClick={()=> dispatch(addOneItem(cart, product.product, "suma"))}>
-                    +
-                  </button>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                    {`$  ${(subtotal =
-                      product.product.price.substring(1) * product.total)}`}
-                  </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    onClick={() =>
-                      dispatch(delProductFromCart(product.product, user, cart))
-                    }
-                  >
-                    <Icon component={DeleteIcon} />
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            )): <h1 >Tu carrito esta vacio.</h1>}
+            {productsInCart.length !== 0 && productsInCart[0].product ? (
+              productsInCart.map((product) => {
+                return (
+                  <StyledTableRow key={product.product.id}>
+                    <StyledTableCell component="th" scope="row">
+                      <img
+                        className="imgSize"
+                        src={product.product.imageUrl}
+                        style={{ height: "150px", width: "100px" }}
+                      />
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {product.product.title}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {product.product.price}
+                    </StyledTableCell>
+                    <StyledTableCell align="right">edit</StyledTableCell>
+                    <StyledTableCell align="right">
+                      <button
+                        onClick={() =>
+                          dispatch(addOneItem(cart, product.product, "resta"))
+                        }
+                      >
+                        -
+                      </button>
+                      {` ${product.total} `}
+                      <button
+                        onClick={() =>
+                          dispatch(addOneItem(cart, product.product, "suma"))
+                        }
+                      >
+                        +
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {updateTotal(product)}
+                    </StyledTableCell>
+
+                    <StyledTableCell align="right">
+                      <Button
+                        onClick={() =>
+                          dispatch(
+                            delProductFromCart(product.product, user, cart)
+                          )
+                        }
+                      >
+                        <Icon component={DeleteIcon} />
+                      </Button>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                );
+              })
+            ) : (
+              <h1>Tu carrito esta vacio.</h1>
+            )}
           </TableBody>
           <TableHead>
             <TableRow>
@@ -134,7 +154,7 @@ function Cart({
               <StyledTableCell align="center"></StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
               <StyledTableCell align="right">Total</StyledTableCell>
-              <StyledTableCell align="right">{`${total}`}</StyledTableCell>
+              <StyledTableCell align="right">{`$ ${total}`}</StyledTableCell>
               <StyledTableCell align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
@@ -158,17 +178,15 @@ function Cart({
               Mis Compras
             </Button>
           </Link>
-          <Link to={`/`}>
             <Button
               onClick={() => {
-                completeOrderHandler(order);
+                checkoutOrder(total);  
               }}
               variant="contained"
               color="primary"
             >
               Completar pedido
             </Button>
-          </Link>
           <Link to="/products">
             <Button variant="contained" color="primary">
               Seguir comprando
