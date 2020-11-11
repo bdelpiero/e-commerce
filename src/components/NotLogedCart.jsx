@@ -65,6 +65,13 @@ function NotLogedCart({ productsInCart, cart }) {
     axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op})
     .then(()=> dispatch(fetchProducts()))
   }
+
+  const deleteItemFromCart = (product, quantity) => {
+    console.log("LA CANTIDAD", quantity)
+    localStorage.removeItem(`${product.id}`)
+    axios.put(`http://localhost:1337/api/orders/newOrder/deleteProduct/${product.id}`, {quantity})
+    .then(()=> dispatch(fetchProducts()))
+  }
   
   return (
     <div>
@@ -109,7 +116,7 @@ function NotLogedCart({ productsInCart, cart }) {
                 <StyledTableCell align="right">
                   <Button
                     onClick={() =>
-                      dispatch(delProductFromCart(product.product, user, cart))
+                      deleteItemFromCart(product, product.total)
                     }
                   >
                     <Icon component={DeleteIcon} />
@@ -133,7 +140,7 @@ function NotLogedCart({ productsInCart, cart }) {
                 variant="contained"
                 color="primary"
                 className={classes.firstButton}
-                onClick={() => dispatch(wipeCart(cart))}
+                onClick={() => localStorage.clear()}
               >
                 Vaciar Carrito
               </Button>
