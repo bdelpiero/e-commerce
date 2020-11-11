@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mailConfirmation = require("../mailService");
 
 const { Product, Order, Order_Product } = require("../db/models");
 
@@ -40,7 +41,7 @@ router.get("/user/:userId", (req, res, next) => {
       userId,
       status: "Pendiente",
       paymentMethod: "Efectivo",
-      shippingAdress: "cualquiera",
+      address: "cualquiera",
     },
     // include: Order_Product,
   }).then((order) => res.send(order[0]));
@@ -71,7 +72,7 @@ router.post("/:productId", (req, res, next) => {
       userId,
       status: "Pendiente",
       paymentMethod: "Efectivo",
-      shippingAdress: "cualquiera",
+      address: "cualquiera",
     },
   }).then((order) => {
     const product = Product.findByPk(productId);
@@ -121,15 +122,28 @@ router.delete("/:orderId", (req, res, next) => {
 
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
+  const { firstName, lastName, city, paymentMethod, cardNumber, address } = req.body.data
   Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
     (order) => {
       order.update({
         status: "Completado",
+        firstName,
+        lastName,
+        city,
         total: Number(req.body.total),
+        cardNumber,
+        address,
       });
     }
-  );
+  )
+  .then(()=> mailConfirmation(req.user.email))
+  .then(()=> res.sendStatus(200)) /*.then(aca manda mail)*/
 });
+
+// // SEND CONFIRMATION EMAIL
+// router.post("/completedOrderMail", (req, res, next) => {
+//   const transporter = nodemailer.createTransport({service: })
+// })
 
 // MODIFIES THE AMOUNT OF BOOKS OF AN ITEM
 router.put("/:orderId/:productId", (req, res, next) => {
@@ -158,16 +172,18 @@ router.put("/:orderId/:productId", (req, res, next) => {
 
 router.post("/newOrder/:userId", (req, res, next)=>{
   if(!req.user) return;
+  if(!req.params.userId) return;
   return Order.findOrCreate({where: {
-    userId: req.params.userId,
+    userId: req.user.id,
     status: "Pendiente",
     paymentMethod: "Efectivo",
-    shippingAdress: "cualquiera",
+    address: "cualquiera",
   }})
   .then(foundOrder => {
     if(!foundOrder[1]) {
       return res.send(foundOrder[0])
     } else {
+      if(req.body.productsArray.length === 0) return; 
       const newArray = req.body.productsArray.map((product) => {
         return {
           productId: product.id,
@@ -180,7 +196,7 @@ router.post("/newOrder/:userId", (req, res, next)=>{
         res.sendStatus(201);
       });
     }
-  });
+  }).catch(err=> console.log(err));
 });
 
 router.put("/newOrder/product/:productId", (req, res, next) => {
