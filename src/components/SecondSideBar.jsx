@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -14,12 +14,14 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Products from "./Products";
+import '../styles/ProductsStyle.css'
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    zIndex: 1000,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -40,47 +42,64 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  none:{
-    textDecoration:"none",
-    color:"black",
-    fontWeight:"700"
-  }
+  none: {
+    textDecoration: "none",
+    color: "black",
+    fontWeight: "700",
+  },
 }));
 
-export default function Sidebar({products}) {
+export default function Sidebar({ products }) {
   const classes = useStyles();
 
   return (
+    
+<div className="absolute">
     <div className={classes.root}>
       <CssBaseline />
       <Drawer
         className={classes.drawer}
-        variant="permanent"
+        variant='permanent'
         classes={{
           paper: classes.drawerPaper,
-        }}
-      >
+        }}>
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
-              <ListItem >
-                <ListItemText primary={"Options"} />
-              </ListItem>
+            <ListItem>
+              <ListItemText primary={"Options"} />
+            </ListItem>
           </List>
 
           <Divider />
-          <ListItem >
-            <Link to="/configs/addadmin" className={classes.none}><ListItemText primary={"Create/remove admin"} /></Link>
+          <ListItem>
+            <Link to='/configs/addadmin' className={classes.none}>
+              <ListItemText primary={"Create / Remove admin"} />
+            </Link>
           </ListItem>
-          <ListItem >
-            <Link to="/configs/addproducts" className={classes.none}><ListItemText primary={"Add product"} /></Link>
+          <ListItem>
+            <Link to='/configs/addproducts' className={classes.none}>
+              <ListItemText primary={"Add product"} />
+            </Link>
           </ListItem>
-          <ListItem >
-            <Link to='/configs/addcategories' className={classes.none}><ListItemText primary={"Add categories"} /></Link>
+          <ListItem>
+            <Link to='/configs/removeproducts' className={classes.none}>
+              <ListItemText primary={"Edit / Remove products"} />
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link to='/configs/addcategories' className={classes.none}>
+              <ListItemText primary={"Add categories"} />
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link to='/configs/dashboard' className={classes.none}>
+              <ListItemText primary={"Dashboard"} />
+            </Link>
           </ListItem>
         </div>
       </Drawer>
-
+    </div>
     </div>
   );
 }

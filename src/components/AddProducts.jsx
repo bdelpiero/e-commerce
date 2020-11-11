@@ -47,9 +47,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2%",
     paddingRight: "50%",
   },
-  formControl: {
+  select: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    width: "25ch",
+    margin: 0,
   },
 }));
 
@@ -154,7 +155,7 @@ export default function AddProducts({
             <option value={30}>Thirty</option>
           </Select>
         </FormControl> */}
-        <FormControl variant='outlined' className={classes.formControl}>
+        <FormControl variant='outlined' margin='normal'>
           <InputLabel id='demo-simple-select-outlined-label'>
             Category
           </InputLabel>
@@ -162,6 +163,10 @@ export default function AddProducts({
             labelId='demo-controlled-open-select-label'
             id='demo-simple-select-outlined'
             name='category'
+            margin='normal'
+            required
+            fullWidth
+            className={classes.select}
             open={open}
             onClose={handleClose}
             onOpen={handleOpen}
@@ -171,17 +176,12 @@ export default function AddProducts({
             <MenuItem value=''>
               <em>None</em>
             </MenuItem>
-            {
-              categories.length !== 0 &&
-                categories.map((current) => (
-                  <MenuItem key={current.id} value={current.name}>
-                    {current.name}
-                  </MenuItem>
-                ))
-
-              // <MenuItem value={20}>Test2</MenuItem>
-              // <MenuItem value={30}>Test3</MenuItem>
-            }
+            {categories.length !== 0 &&
+              categories.map((current) => (
+                <MenuItem key={current.id} value={current.name}>
+                  {current.name}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
 
