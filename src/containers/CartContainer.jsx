@@ -34,8 +34,8 @@ function CartContainer() {
 
   const dispatch = useDispatch();
 
-  const completeOrderHandler = (order) => {
-    dispatch(completeOrder(order));
+  const completeOrderHandler = (total) => {
+    dispatch(completeOrder(total));
   };
   const showCompletedHandler = () => {
     dispatch(showCompletedOrders());

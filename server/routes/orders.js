@@ -94,8 +94,6 @@ router.post("/:productId", (req, res, next) => {
 // DELETE ITEM FROM CART
 router.delete("/:userId/:productId", (req, res, next) => {
   const { productId, userId } = req.params;
-  console.log("ACA EL REQ USER", req.body);
-  /* const { userId } = req.body; */
 
   Order.findOne({ where: { userId: userId, status: "Pendiente" } })
     .then((order) => {
@@ -125,7 +123,10 @@ router.delete("/:orderId", (req, res, next) => {
 router.put("/cartId", (req, res, next) => {
   Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
     (order) => {
-      order.update({ status: "Completado" });
+      order.update({
+        status: "Completado",
+        total: Number(req.body.total),
+      });
     }
   );
 });
@@ -149,8 +150,6 @@ router.put("/:orderId/:productId", (req, res, next) => {
           return product
             .update({ stock: product.stock + 1 })
             .then(() => orderProduct.update({ total: orderProduct.total - 1 }));
-          /* .then(() => Order.findOne({ where: { id: orderProduct.orderId } }))
-            .then((order) => order.update({total: })); */
         }
       });
     })
@@ -169,34 +168,32 @@ router.post("/newOrder/:userId", (req, res, next)=>{
     if(!foundOrder[1]) {
       return res.send(foundOrder[0])
     } else {
-      const newArray = req.body.productsArray.map(product=>{
+      const newArray = req.body.productsArray.map((product) => {
         return {
-          productId: product.id, 
-          orderId: foundOrder[0].id, 
-          total: product.total
-        }
-      })
-      Order_Product.bulkCreate(newArray)
-      .then(orderWithProducts => {
-        console.log("LA NUEVA ORDEN",orderWithProducts)
-        res.sendStatus(201)
-      })
+          productId: product.id,
+          orderId: foundOrder[0].id,
+          total: product.total,
+        };
+      });
+      Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
+        console.log("LA NUEVA ORDEN", orderWithProducts);
+        res.sendStatus(201);
+      });
     }
   });
 });
 
-router.put("/newOrder/product/:productId", (req, res, next)=>{
-  console.log("EL BODY DE MODIFICAR", req.body)
+router.put("/newOrder/product/:productId", (req, res, next) => {
   Product.findByPk(req.params.productId)
-  .then(product => {
-    if(req.body.op === "suma"){
-      return product.update({stock:product.stock - 1})
-    }else {
-      return product.update({stock:product.stock + 1})
-    }
-  })
-  .then(()=> res.sendStatus(200))
-})
+    .then((product) => {
+      if (req.body.op === "suma") {
+        return product.update({ stock: product.stock - 1 });
+      } else {
+        return product.update({ stock: product.stock + 1 });
+      }
+    })
+    .then(() => res.sendStatus(200));
+});
 
 router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
   console.log("EL RECO BODYU", req.body)
