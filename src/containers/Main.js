@@ -14,7 +14,10 @@ import CompletedOrderDetailContainer from "../containers/CompletedOrderDetailsCo
 import axios from "axios";
 import { fetchProducts } from "../store/action-creators/products";
 import ResultsProductContainer from "../containers/ResultsProductContainer";
+import BookCategoriesContainer from "../containers/BookCategoriesContainer";
+import Products from "../components/Products";
 import Checkout from "../components/Checkout/Checkout"
+
 axios.defaults.withCredentials = true;
 
 //use effect q busca libros, pasa libros a products container. renderizar products filtrados y no filtrados con el com. ProductsContainer
@@ -105,7 +108,11 @@ function App() {
           <Route path="/cart" component={CartContainer} />
           <Route path="/configs" component={AdminConfigsContainer} />
           <Route path="/products/:productId" component={ProductContainer} />
+          
+          <Route exact path="/categories" component={ProductsContainer} />
+
           <Route path="/checkout" component={Checkout} />
+
         </Switch>
       </div>
     </div>

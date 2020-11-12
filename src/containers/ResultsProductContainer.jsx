@@ -4,7 +4,7 @@ import { useRouteMatch } from "react-router";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProduct } from "../store/action-creators/products";
-import Products from "../components/Products"
+import Sidebar from "../components/Sidebar"
 
 import SingleProduct from "../components/SingleProduct";
 import axios from "axios";
@@ -15,9 +15,10 @@ function ResultsProductContainer({search}) {
   // console.log("los prods", product)
   return (
     <div>
-        <h1>resultados de busqueda!</h1>
-      <Products products={search} reviews={reviews}
-      />
+      <div>
+        <Sidebar search={search} reviews={reviews} />
+      </div>
+      
     </div>
   );
 }
