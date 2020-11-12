@@ -11,22 +11,22 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
-import '../styles/ProductsStyle.css'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import EditIcon from '@material-ui/icons/Edit';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import "../styles/ProductsStyle.css";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import EditIcon from "@material-ui/icons/Edit";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import { useHistory } from 'react-router-dom'
-import axios from "axios"
+import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 275,
-    width: 200
+    width: 200,
   },
   cardinfo: {
     height: 50,
@@ -63,137 +63,155 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
   },
   content: {
-  maxWidth: 200,
+    maxWidth: 200,
   },
-  d:{
-    position:"relative"
-  }
-
+  d: {
+    position: "relative",
+  },
 }));
 
 //------------------------------------------------------------------------------
-function RemoveProducts({ products, handleRemove }){
+function RemoveProducts({ products, handleRemove, setProducts }) {
   const classes = useStyles();
   const [spacing, setSpacing] = useState(5);
 
-  return(
-    <div  className="absoluteTwo">
-    <Grid item xs={12} style={{ marginTop: "50px" }}>
-      <Grid container justify='center' spacing={spacing}>
-        {products.length != 0 &&
-          products.map((product) => (
-            <Grid key={product.id} item>
-              <Card className={classes.cardroot}>
-                <CardActionArea>
-                  <Link to={`/products/${product.id}`}>
-                    <CardMedia
-                      className={classes.media}
-                      image={product.imageUrl}
-                      title='Contemplative Reptile'
+  return (
+    <div
+      className='absoluteTwo'
+      style={{ position: "absolute", left: "300px" }}>
+      <Grid item xs={12} style={{ marginTop: "50px" }}>
+        <Grid
+          container
+          justify='center'
+          spacing={spacing}
+          style={{ marginTop: "50px" }}>
+          {products.length != 0 &&
+            products.map((product) => (
+              <Grid key={product.id} item>
+                <Card className={classes.cardroot}>
+                  <CardActionArea>
+                    <Link to={`/products/${product.id}`}>
+                      <CardMedia
+                        className={classes.media}
+                        image={product.imageUrl}
+                        title='Contemplative Reptile'
+                      />
+                    </Link>
+                  </CardActionArea>
+                </Card>
+                <CardContent className={classes.content}>
+                  <Typography
+                    gutterBottom
+                    variant='h5'
+                    component='h2'
+                    className={classes.titletypo}>
+                    {product.title}
+                  </Typography>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    component='p'
+                    className={classes.authortypo}>
+                    <span>by: {product.author}</span>
+                  </Typography>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    component='p'
+                    className={classes.pricetypo}>
+                    <span> {product.price}</span>
+                  </Typography>
+
+                  <Badge className='link' color='secondary'>
+                    <AlertDialog id={product.id} setProducts={setProducts} />
+                    <FormDialog
+                      product={product}
+                      id={product.id}
+                      setProducts={setProducts}
                     />
-                  </Link>
-                </CardActionArea>
-              </Card>
-              <CardContent className={classes.content}>
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='h2'
-                  className={classes.titletypo}>
-                  {product.title}
-                </Typography>
-                <Typography
-                  variant='body2'
-                  color='textSecondary'
-                  component='p'
-                  className={classes.authortypo}>
-                  <span>by: {product.author}</span>
-                </Typography>
-                <Typography
-                  variant='body2'
-                  color='textSecondary'
-                  component='p'
-                  className={classes.pricetypo}>
-                  <span> {product.price}</span>
-                </Typography>
-
-                <Badge  className="link" color='secondary'>
-                 <AlertDialog  id={product.id}/>
-                 <FormDialog product={product} id={product.id}/>
-                </Badge>
-              </CardContent>
-            </Grid>
-          ))}
+                  </Badge>
+                </CardContent>
+              </Grid>
+            ))}
+        </Grid>
       </Grid>
-    </Grid>
     </div>
-  )
+  );
 }
 
 //------------------------------------------------------------------------------
-function AlertDialog({id}) {
- const [open, setOpen] = useState(false);
- const history = useHistory();
+function AlertDialog({ id, setProducts }) {
+  const [open, setOpen] = useState(false);
+  const history = useHistory();
 
- const handleClickOpen = () => {
-   setOpen(true);
- };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
- const handleClose = () => {
-   setOpen(false);
- };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
- const handleRemove = (e) => {
- console.log(id);
-   axios.delete(`http://localhost:1337/api/products/${id}`)
-     .then((res) => res.data)
-     .then(()=> setOpen(false))
-     .catch(err=>console.log(err))
- };
+  const handleRemove = (e) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:1337/api/products/${id}`)
+      .then(() =>
+        axios
+          .get("http://localhost:1337/api/products")
+          .then((res) => res.data)
+          .then((products) => {
+            console.log("products después de remove: ", products);
+            return products;
+          })
+          .then((products) => setProducts([...products]))
+          .catch((err) => console.log(err))
+      )
+      .then(() => setOpen(false))
+      .catch((err) => console.log(err));
+  };
 
- return (
-   <div>
-     <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        <DeleteForeverIcon/> delete
-     </Button>
-     <Dialog
-       open={open}
-       onClose={handleClose}
-       aria-labelledby="alert-dialog-title"
-       aria-describedby="alert-dialog-description"
-     >
-       <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
-       <DialogContent>
-         <DialogContentText id="alert-dialog-description">
-         if you delete this product it will be deleted permanently from
-          our database
-         </DialogContentText>
-       </DialogContent>
-       <DialogActions>
-         <Button onClick={handleClose} color="primary">
-           Disagree
-         </Button>
-         <Button onClick={handleRemove} color="primary" autoFocus>
-           Agree
-         </Button>
-       </DialogActions>
-     </Dialog>
-   </div>
- );
+  return (
+    <div>
+      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
+        <DeleteForeverIcon /> delete
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title'>{"Are you sure?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            if you delete this product it will be deleted permanently from our
+            database
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color='primary'>
+            Disagree
+          </Button>
+          <Button onClick={handleRemove} color='primary' autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
 //------------------------------------------------------------------------------
-function FormDialog({id, product}) {
+function FormDialog({ id, product, setProducts }) {
   console.log(product);
-//const [product,setProduct] = useState({})
+  //const [product,setProduct] = useState({})
 
-/*useEffect(()=>{
+  /*useEffect(()=>{
   axios.get(`http://localhost:1337/api/products/${id}`)
        .then(res => res.data)
        .then(data => setProduct([data]))
        .then(()=> console.log(product))
        .catch(err=> console.log(err))
 },[])*/
-
 
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(product.title);
@@ -203,9 +221,10 @@ function FormDialog({id, product}) {
   const [description, setDescription] = useState(product.description);
   const [imageUrl, setImageUrl] = useState(product.imageUrl);
   const [stock, setStock] = useState(product.stock);
-  const [amount, setAmount] = useState(product.price);
-  const [category, setCategory] = useState("");
-
+  const [amount, setAmount] = useState(product.price.substring(1));
+  // const [category, setCategory] = useState(
+  //   product.categories.length != 0 && product.categories[0].name
+  // );
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -225,125 +244,136 @@ function FormDialog({id, product}) {
     if (name == "imageUrl") setImageUrl(e.target.value);
     if (name == "stock") setStock(e.target.value);
     if (name == "price") setAmount(e.target.value);
-    if (name == "category") setCategory(e.target.value);
-  }
+    // if (name == "category") setCategory(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     console.log("submit attempt");
-    axios.put(`http://localhost:1337/api/products/${id}`,{
-      title: title,
-      price: amount,
-      description: description,
-      stock: stock,
-      imageUrl: imageUrl,
-      ISBN: isbn,
-      author: author,
-      publisher: publisher,
-      category: category,
-    })
-     .then(res => res.data)
-     .then(data => console.log(data))
-     .then(()=> setOpen(false))
-     .catch(err => console.log(err))
-  }
-
+    axios
+      .put(`http://localhost:1337/api/products/${id}`, {
+        title: title,
+        price: amount,
+        description: description,
+        stock: stock,
+        imageUrl: imageUrl,
+        ISBN: isbn,
+        author: author,
+        publisher: publisher,
+        // category: category,
+      })
+      .then((res) => res.data)
+      .then(() =>
+        axios
+          .get("http://localhost:1337/api/products")
+          .then((res) => res.data)
+          .then((products) => setProducts([...products]))
+          .catch((err) => console.log(err))
+      )
+      .then(() => setOpen(false))
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        <EditIcon />edit
+      <Button variant='outlined' color='primary' onClick={handleClickOpen}>
+        <EditIcon />
+        edit
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title"><EditIcon /></DialogTitle>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'>
+        <DialogTitle id='form-dialog-title'>
+          <EditIcon />
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-          </DialogContentText>
+          <DialogContentText></DialogContentText>
           <TextField
             onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='title'
-            label="Title"
-            type="text"
-            value= {title}
+            label='Title'
+            type='text'
+            value={title}
           />
           <TextField
             autoFocus
-            margin="dense"
+            margin='dense'
             name='author'
-            label="Author"
-            type="text"
+            label='Author'
+            type='text'
             onChange={handleChange}
-            value = {author}
+            value={author}
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='isbn'
-            label="ISBN"
-            type="text"
-            value= {isbn}
+            label='ISBN'
+            type='text'
+            value={isbn}
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='publisher'
-            label="Publisher"
-            type="text"
-            value= {publisher}
+            label='Publisher'
+            type='text'
+            value={publisher}
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='description'
-            label="Description"
-            type="text"
-            value= {description}
+            label='Description'
+            type='text'
+            value={description}
             fullWidth
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='imageUrl'
-            label="ImageUrl"
-            type="text"
-            value= {imageUrl}
+            label='ImageUrl'
+            type='text'
+            value={imageUrl}
             fullWidth
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='stock'
-            label="Stock"
-            value= {stock}
+            label='Stock'
+            value={stock}
           />
           <TextField
-          onChange={handleChange}
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='price'
-            label="Amount"
-            value= {amount}
+            label='Amount'
+            value={amount}
           />
-          <TextField
-          onChange={handleChange}
+          {/* <TextField
+            onChange={handleChange}
             autoFocus
-            margin="dense"
+            margin='dense'
             name='category'
-            label="Category"
-          />
-
+            label='Category'
+            value={category}
+          /> */}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} color='primary'>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button onClick={handleSubmit} color='primary'>
             update
           </Button>
         </DialogActions>
@@ -352,5 +382,4 @@ function FormDialog({id, product}) {
   );
 }
 
-
-export default RemoveProducts
+export default RemoveProducts;

@@ -117,9 +117,16 @@ router.delete("/:userId/:productId", (req, res, next) => {
 
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
-  const { firstName, lastName, city, paymentMethod, cardNumber, address } = req.body.data
-  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } }).then(
-    (order) => {
+  const {
+    firstName,
+    lastName,
+    city,
+    paymentMethod,
+    cardNumber,
+    address,
+  } = req.body.data;
+  Order.findOne({ where: { userId: req.user.id, status: "Pendiente" } })
+    .then((order) => {
       order.update({
         status: "Completado",
         firstName,
@@ -129,12 +136,19 @@ router.put("/cartId", (req, res, next) => {
         cardNumber,
         address,
       });
+<<<<<<< HEAD
+    })
+    .then(() => mailConfirmation(req.user.email))
+    .then(() => res.sendStatus(200))
+    .catch(() => res.sendStatus(400));
+=======
       return order
     }
   )
   .then((order)=> mailConfirmation(req.user.email, req.body.data, req.body.total, order.id))
   .then(()=> res.sendStatus(200))
   .catch(err=> console.log(err)) /*.then(aca manda mail)*/
+>>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
 });
 
 // // SEND CONFIRMATION EMAIL
@@ -164,36 +178,39 @@ router.put("/:orderId/:productId", (req, res, next) => {
         }
       });
     })
-    .then(()=> res.sendStatus(200))
-})
+    .then(() => res.sendStatus(200));
+});
 
-router.post("/newOrder/:userId", (req, res, next)=>{
-  if(!req.user) return;
-  if(!req.params.userId) return;
-  return Order.findOrCreate({where: {
-    userId: req.user.id,
-    status: "Pendiente",
-    paymentMethod: "Efectivo",
-    address: "cualquiera",
-  }})
-  .then(foundOrder => {
-    if(!foundOrder[1]) {
-      return res.send(foundOrder[0])
-    } else {
-      if(req.body.productsArray.length === 0) return;
-      const newArray = req.body.productsArray.map((product) => {
-        return {
-          productId: product.id,
-          orderId: foundOrder[0].id,
-          total: product.total,
-        };
-      });
-      Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
-        console.log("LA NUEVA ORDEN", orderWithProducts);
-        res.sendStatus(201);
-      });
-    }
-  }).catch(err=> console.log(err));
+router.post("/newOrder/:userId", (req, res, next) => {
+  if (!req.user) return;
+  if (!req.params.userId) return;
+  return Order.findOrCreate({
+    where: {
+      userId: req.user.id,
+      status: "Pendiente",
+      paymentMethod: "Efectivo",
+      address: "cualquiera",
+    },
+  })
+    .then((foundOrder) => {
+      if (!foundOrder[1]) {
+        return res.send(foundOrder[0]);
+      } else {
+        if (req.body.productsArray.length === 0) return;
+        const newArray = req.body.productsArray.map((product) => {
+          return {
+            productId: product.id,
+            orderId: foundOrder[0].id,
+            total: product.total,
+          };
+        });
+        Order_Product.bulkCreate(newArray).then((orderWithProducts) => {
+          console.log("LA NUEVA ORDEN", orderWithProducts);
+          res.sendStatus(201);
+        });
+      }
+    })
+    .catch((err) => console.log(err));
 });
 
 router.put("/newOrder/product/:productId", (req, res, next) => {
@@ -208,12 +225,26 @@ router.put("/newOrder/product/:productId", (req, res, next) => {
     .then(() => res.sendStatus(200));
 });
 
+<<<<<<< HEAD
+router.get("/", (req, res, next) => {
+  Order.findAll({})
+    .then((orders) => res.send(orders))
+    .catch((err) => console.log(err));
+});
+router.put("/newOrder/deleteProduct/:productId", (req, res, next) => {
+  console.log("EL RECO BODYU", req.body);
+  Product.findByPk(req.params.productId).then((product) =>
+    product.update({ stock: req.body.quantity + product.stock })
+  );
+});
+=======
 
 router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
   Product.findByPk(req.params.productId)
     .then(product => product.update({stock: req.body.quantity + product.stock}))
     .then(()=> res.sendStatus(200))
 })
+>>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
 
 router.put("/logged/wipe/:orderId", (req,res,next)=>{
   Order_Product.findAll({where: {orderId: req.params.orderId}, include:Product})

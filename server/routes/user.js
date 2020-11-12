@@ -6,12 +6,11 @@ const User = require("../db/models/user");
 const router = express.Router();
 const { Op } = require("sequelize");
 
-
-router.get("/",(req,res)=>{
-  User.findAll()
-      .then(users=> res.send(users))
-})
-
+router.get("/", (req, res) => {
+  User.findAll({ order: [["id", "ASC"]] })
+    .then((users) => res.send(users))
+    .catch(() => res.sendStatus(400));
+});
 
 /* -------User Register, Login, LogOut--------- */
 router.post("/register", (req, res, next) => {
@@ -39,7 +38,7 @@ router.post(
   }
 );
 router.post("/logout", function (req, res) {
-  console.log("deslogueado")
+  console.log("deslogueado");
   req.logOut();
   res.status(200).send("Deslogueado correctamente");
 });
@@ -51,14 +50,9 @@ router.get("/me", function (req, res) {
   }
   res.send(req.user);
 });
-// router.get("/verificate", (req, res, next) => {
-//   console.log(req.user);
-//   if (req.user) return res.send(req.user);
-//   res.send({});
-// });
 
 router.put("/admin", (req, res, next) => {
-    if (req.user.rol !== "admin") res.sendStatus(401);
+  if (!req.user && req.user.rol !== "admin") res.sendStatus(401);
   User.findOne({
     where: {
       email: req.body.email,

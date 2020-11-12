@@ -14,9 +14,9 @@ import CompletedOrderDetailContainer from "../containers/CompletedOrderDetailsCo
 import axios from "axios";
 import { fetchProducts } from "../store/action-creators/products";
 import ResultsProductContainer from "../containers/ResultsProductContainer";
+import Checkout from "../components/Checkout/Checkout";
 import BookCategoriesContainer from "../containers/BookCategoriesContainer";
 import Products from "../components/Products";
-import Checkout from "../components/Checkout/Checkout"
 
 axios.defaults.withCredentials = true;
 
@@ -24,7 +24,7 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector(state=> state.login.loggedUser)
+  const user = useSelector((state) => state.login.loggedUser);
   // const islogged = useSelector((state) => {
   //   return state.login.logged;
   // });
@@ -48,71 +48,73 @@ function App() {
         return user;
       })
       .then((user) => {
+        if (!user.id) return;
         const productsArray = [];
         for (const key in localStorage) {
           if (localStorage.hasOwnProperty(key)) {
             productsArray.push(JSON.parse(localStorage.getItem(key)));
           }
         }
-        return axios.post(
-          `http://localhost:1337/api/orders/newOrder/${user.id}`,
-          { productsArray }
-        );
+        if (productsArray.length === 0) return;
+        axios.post(`http://localhost:1337/api/orders/newOrder/${user.id}`, {
+          productsArray,
+        });
       })
       .catch(() => {
         console.log("not logged in");
       });
   }, []);
 
-  useEffect(()=>{
-      const productsArray = [];
-      for (const key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          productsArray.push(JSON.parse(localStorage.getItem(key)))
-        }
+  useEffect(() => {
+    const productsArray = [];
+    for (const key in localStorage) {
+      if (localStorage.hasOwnProperty(key)) {
+        productsArray.push(JSON.parse(localStorage.getItem(key)));
       }
-      axios.post(`http://localhost:1337/api/orders/newOrder/${user.id}`, {productsArray})
-      .then(()=> localStorage.clear())
-  }, [user])
+    }
+    if (productsArray.length === 0) return;
+    axios
+      .post(`http://localhost:1337/api/orders/newOrder/${user.id}`, {
+        productsArray,
+      })
+      .then(() => localStorage.clear());
+  }, [user]);
 
   return (
     <div>
       <Navbar />
       <div>
         <Switch>
-          <Route path="/register" component={RegisterContainer} />
-          <Route path="/login" component={LoginContainer} />
-          <Route exact path="/completed" component={CompletedOrdersContainer} />
+          <Route path='/register' component={RegisterContainer} />
+          <Route path='/login' component={LoginContainer} />
+          <Route exact path='/completed' component={CompletedOrdersContainer} />
           <Route
             exact
-            path="/details"
+            path='/details'
             component={CompletedOrderDetailContainer}
           />
 
           <Route
             exact
-            path="/"
+            path='/'
             render={() => <ProductsContainer products={products} />}
           />
           <Route
             exact
-            path="/products"
+            path='/products'
             render={() => <ProductsContainer products={products} />}
           />
           <Route
             exact
-            path="/search"
+            path='/search'
             render={() => <ResultsProductContainer search={search} />}
           />
 
-          <Route path="/cart" component={CartContainer} />
-          <Route path="/configs" component={AdminConfigsContainer} />
-          <Route path="/products/:productId" component={ProductContainer} />
-          
-          <Route exact path="/categories" component={ProductsContainer} />
-
-          <Route path="/checkout" component={Checkout} />
-
+          <Route path='/cart' component={CartContainer} />
+          <Route path='/configs' component={AdminConfigsContainer} />
+          <Route path='/products/:productId' component={ProductContainer} />
+          <Route exact path='/categories' component={ProductsContainer} />
+          <Route path='/checkout' component={Checkout} />
         </Switch>
       </div>
     </div>

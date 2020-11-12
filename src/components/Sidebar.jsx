@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, useLocation, Route } from "react-router-dom"
+import { Link, useLocation, Route } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import  Button  from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,8 +15,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Products from "./Products";
-import axios from "axios"
-
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     // width: drawerWidth,
     flexShrink: 0,
- 
+
     position: "zIndex",
   },
   content: {
@@ -54,54 +53,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({reviews, search}) {
-
+export default function Sidebar({ products, reviews, page, handlePageChange }) {
   const classes = useStyles();
 
-   const [categories, setCategories] = React.useState([]);
-  
+  const [categories, setCategories] = React.useState([]);
 
-   const [products, setProducts ] = React.useState([]);
+  const [products, setProducts] = React.useState([]);
 
+  const [productsByCategory, setProductsByCategory] = React.useState([]);
 
+  const categoriesHandler = (id) => {
+    console.log("hice click :)", id);
+    axios
+      .get(`http://localhost:1337/api/categories/${id}`)
+      .then((res) => res.data)
+      .then((data) => setProductsByCategory(data));
+  };
 
-   const [productsByCategory, setProductsByCategory] = React.useState([]);
- 
-const categoriesHandler = (id) => {
-  console.log("hice click :)", id)
-  axios
-    .get(`http://localhost:1337/api/categories/${id}`)
-    .then((res) => res.data)
-    .then((data) => setProductsByCategory(data));
-   
-}
- 
- React.useEffect(() => {
-   axios
-     .get("http://localhost:1337/api/categories")
-     .then((res) => res.data)
-     .then((data) => setCategories(data))
-     .then((data) => console.log(data));
- }, []);
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:1337/api/categories")
+      .then((res) => res.data)
+      .then((data) => setCategories(data))
+      .then((data) => console.log(data));
+  }, []);
 
-const location = useLocation();
+  const location = useLocation();
 
-React.useEffect(() => {
-  console.log(location);
-  const path = location.search;
-  const query = new URLSearchParams(path);
-  console.log("busqueda ", query.get("search"));
-  const data = axios
-    .get("http://localhost:1337/api/products", {
-      params: { searchTerm: query.get("search") },
-    })
-    .then((res) => res.data)
-    .then((products) => {
-      setProducts(products);
-    })
-    .catch((err) => console.log(err));
-}, []);
-
+  React.useEffect(() => {
+    console.log(location);
+    const path = location.search;
+    const query = new URLSearchParams(path);
+    console.log("busqueda ", query.get("search"));
+    const data = axios
+      .get("http://localhost:1337/api/products", {
+        params: { searchTerm: query.get("search") },
+      })
+      .then((res) => res.data)
+      .then((products) => {
+        setProducts(products);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -130,25 +123,41 @@ React.useEffect(() => {
       <main className={classes.content}>
         <Route
           exact
-          path="/"
-          render={() => <Products products={products} reviews={reviews} />}
-        />
-        <Route
-          exact
-          path="/categories"
+          path='/'
           render={() => (
-            <Products products={productsByCategory} reviews={reviews} />
+            <Products
+              products={products}
+              reviews={reviews}
+              page={page}
+              handlePageChange={handlePageChange}
+            />
           )}
         />
         <Route
           exact
-          path="/search"
+          path='/categories'
           render={() => (
-            <Products products={search} reviews={reviews} />
+            <Products
+              products={productsByCategory}
+              reviews={reviews}
+              page={page}
+              handlePageChange={handlePageChange}
+            />
+          )}
+        />
+        <Route
+          exact
+          path='/search'
+          render={() => (
+            <Products
+              products={search}
+              reviews={reviews}
+              page={page}
+              handlePageChange={handlePageChange}
+            />
           )}
         />
       </main>
     </div>
   );
 }
- 

@@ -1,6 +1,7 @@
 import React from "react";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { Route, Redirect, Switch } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -15,10 +16,11 @@ import AddAdmin from "./AddAdmin";
 import AddProductsContainer from "../containers/AddProductsContainer";
 import AddCategoriesContainer from "../containers/AddCategoriesContainer";
 import Dashboard from "../components/Dashboard/Dashboard";
-import RemoveProductsContainer from '../containers/RemoveProductsContainer'
-import '../styles/ProductsStyle.css'
+import RemoveProductsContainer from "../containers/RemoveProductsContainer";
+import AllOrders from "./AllOrders";
+import "../styles/ProductsStyle.css";
 
-function AdminConfigs({ handleChange, handleSubmit, message }) {
+function AdminConfigs({ handleChange, handleSubmit, message, users }) {
   const classes = useStyles();
 
   return (
@@ -33,6 +35,7 @@ function AdminConfigs({ handleChange, handleSubmit, message }) {
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               message={message}
+              users={users}
             />
           )}
         />
@@ -51,6 +54,7 @@ function AdminConfigs({ handleChange, handleSubmit, message }) {
           path='/configs/addcategories'
           component={AddCategoriesContainer}
         />
+        <Route exact path='/configs/allorders' component={AllOrders} />
         <Route exact path='/configs/dashboard' component={Dashboard} />
         <Redirect from='/configs' to='/configs/addadmin' />
       </Switch>
