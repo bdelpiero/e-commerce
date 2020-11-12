@@ -17,6 +17,11 @@ const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
   },
+  container: {
+    position: "absolute",
+    left: 300,
+    marginTop: 20,
+  },
 }));
 
 export default function AllOrders() {
@@ -33,7 +38,7 @@ export default function AllOrders() {
 
   return (
     <React.Fragment>
-      <div style={{ position: "absolute", left: "300px" }}>
+      <div className={classes.container} style={{}}>
         <Title>All Orders</Title>
         <Table size='small'>
           <TableHead>
