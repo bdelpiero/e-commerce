@@ -175,7 +175,7 @@ function Navbar() {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              <Link to="/" className={classes.none}>
+              <Link  to="/" className={classes.none}>
                 {" "}
                 Bookstore
               </Link>
