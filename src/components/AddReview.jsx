@@ -79,18 +79,18 @@ useEffect(()=>{
 
   return (
     <div className={classes.root}>
-    {letreview?
+
       <Button variant='contained' color='primary' onClick={handleClickOpen}>
         + Agregar una review
       </Button>
-      :
-      <h2>you must have bought this book first to post a review</h2>
-    }
+
 
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'>
+        {letreview?
+        <div>
         <DialogTitle id='form-dialog-title'>Dejanos tu opinión</DialogTitle>
         <DialogContent className={classes.dialogBox}>
           <Box
@@ -126,6 +126,10 @@ useEffect(()=>{
             Enviar
           </Button>
         </DialogActions>
+        </div>
+        :
+        <h2>you must have bought this book first to post a review</h2>
+        }
       </Dialog>
     </div>
   );
