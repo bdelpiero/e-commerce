@@ -32,6 +32,9 @@ Product.init(
         else this.available = true;
         this.setDataValue("stock", valor);
       },
+      validate:{
+        min:0
+      }
     },
     imageUrl: {
       type: S.STRING,

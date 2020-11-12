@@ -15,6 +15,8 @@ import AddAdmin from "./AddAdmin";
 import AddProductsContainer from "../containers/AddProductsContainer";
 import AddCategoriesContainer from "../containers/AddCategoriesContainer";
 import Dashboard from "../components/Dashboard/Dashboard";
+import RemoveProductsContainer from '../containers/RemoveProductsContainer'
+import '../styles/ProductsStyle.css'
 
 function AdminConfigs({ handleChange, handleSubmit, message }) {
   const classes = useStyles();
@@ -38,6 +40,11 @@ function AdminConfigs({ handleChange, handleSubmit, message }) {
           exact
           path='/configs/addproducts'
           component={AddProductsContainer}
+        />
+        <Route
+          exact
+          path='/configs/removeproducts'
+          component={RemoveProductsContainer}
         />
         <Route
           exact

@@ -5,6 +5,7 @@ import {
   GET_CART,
   SET_COMPLETED_ORDER,
   GET_PRODUCTS_COMPLETED_ORDER,
+  SET_TOTAL
 } from "../constant";
 import axios from "axios";
 
@@ -30,6 +31,11 @@ const completedOrders = (orders) => ({
   type: SET_COMPLETED_ORDER,
   orders,
 });
+
+export const setTotal = total => ({
+  type: SET_TOTAL,
+  total,
+})
 
 // TRAE LOS PRODUCTOS DEL CARRO
 export const fetchCartProducts = (cart) => (dispatch) => {
@@ -57,11 +63,11 @@ export const addProductToCart = (product, user) => (dispatch) => {
 };
 
 //COMPLETE ORDER
-export const completeOrder = () => (dispatch) => {
+export const completeOrder = (total, data) => (dispatch) => {
+  console.log("ENTRANDO AL AXIOS PUT")
   return axios
-    .put(`http://localhost:1337/api/orders/cartId`)
+    .put(`http://localhost:1337/api/orders/cartId`, { total, data })
     .then(() => createCart())
-
     .then((cart) => {
       console.log("ESTE ES EL CART", cart);
       return fetchCartProducts(cart);
@@ -118,7 +124,7 @@ export const delProductFromCart = (product, user, cart) => (dispatch) => {
 // ELIMINA EL CARRITO ENTERO
 export const wipeCart = (cart) => (dispatch) => {
   return axios
-    .delete(`http://localhost:1337/api/orders/${cart.id}`)
+    .put(`http://localhost:1337/api/orders/logged/wipe/${cart.id}`)
     .then(() => dispatch(setCart({})))
     .catch((err) => console.log(err));
 };

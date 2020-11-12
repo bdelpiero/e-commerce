@@ -11,3 +11,5 @@ export const GET_CART = "GET_CART";
 export const SET_COMPLETED_ORDER = "SET_COMPLETED_ORDER";
 export const GET_PRODUCTS_COMPLETED_ORDER = "GET_PRODUCTS_COMPLETED_ORDER";
 export const LOGIN = "LOGIN";
+
+export const SET_TOTAL = "SET_TOTAL"

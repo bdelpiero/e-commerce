@@ -50,20 +50,21 @@ function SingleProductInfo({ product, reviews }) {
   console.log("reviews en singleProduct: ", product);
 
   return (
-    <div className='info-container'>
-      <div className='imgDiv'>
-        <img className='imgSize' src={product.imageUrl} />
+    <div className="info-container">
+      <div className="imgDiv">
+        <img className="imgSize" src={product.imageUrl} />
       </div>
-      <div className='textDiv'>
+      <div className="textDiv">
         <h1>Titulo: {product.title}</h1>
         <h2>Autor: {product.author}</h2>
         <Box
-          component='fieldset'
+          component="fieldset"
           mb={3}
-          borderColor='transparent'
-          style={{ marginBottom: "0px" }}>
+          borderColor="transparent"
+          style={{ marginBottom: "0px" }}
+        >
           <Rating
-            name='read-only'
+            name="read-only"
             value={reviewsAvg(reviews, product)}
             readOnly
           />
@@ -74,11 +75,7 @@ function SingleProductInfo({ product, reviews }) {
 
         <AddShoppingCartIcon />
         <button onClick={() => addToCart(product)}>Add To Cart</button>
-        {user.rol == "admin" ? (
-          <button className='b' onClick={handleRemove}>
-            Remove
-          </button>
-        ) : null}
+
       </div>
     </div>
   );

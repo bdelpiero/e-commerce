@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
 import {fetchProducts} from "../store/action-creators/products"
-import { delProductFromCart, wipeCart } from "../store/action-creators/cart";
+import { delProductFromCart, wipeCart, getProds } from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 
 
-function NotLogedCart({ productsInCart, cart }) {
+function NotLogedCart({ productsInCart, cart, localProducts }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
@@ -64,6 +64,17 @@ function NotLogedCart({ productsInCart, cart }) {
     localStorage.setItem(`${product.id}`, JSON.stringify(product))
     axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op})
     .then(()=> dispatch(fetchProducts()))
+  }
+
+  const deleteItemFromCart = (product, quantity) => {
+    localStorage.removeItem(`${product.id}`)
+    axios.put(`http://localhost:1337/api/orders/newOrder/deleteProduct/${product.id}`, {quantity})
+    .then(()=> dispatch(getProds(localProducts())))
+    }
+
+  const wipeNotLoggedCart = (products) => {
+    localStorage.clear()
+    axios.post(`http://localhost:1337/api/orders/newOrder/reAddProduct/notLoggedCart`, {products})
   }
   
   return (
@@ -96,20 +107,28 @@ function NotLogedCart({ productsInCart, cart }) {
                 </StyledTableCell>
                 <StyledTableCell align="right">edit</StyledTableCell>
                 <StyledTableCell align="right">
-                  <button
-                    onClick={()=> addOrRemoveItem(product, "resta")}
-                  >
-                    -
-                  </button>
+                  {product.total === 0 ?
+                    null
+                  :
+                    <button
+                      onClick={()=> addOrRemoveItem(product, "resta")}
+                    >
+                      -
+                    </button>
+                  }
                   {` ${product.total} `} 
-                  <button onClick={()=> addOrRemoveItem(product, "suma")}>
-                    +
-                  </button>
+                  {product.stock === product.total ?
+                    null
+                  :
+                    <button onClick={()=> addOrRemoveItem(product, "suma")}>
+                      +
+                    </button>
+                  }
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   <Button
                     onClick={() =>
-                      dispatch(delProductFromCart(product.product, user, cart))
+                      deleteItemFromCart(product, product.total)
                     }
                   >
                     <Icon component={DeleteIcon} />
@@ -133,14 +152,17 @@ function NotLogedCart({ productsInCart, cart }) {
                 variant="contained"
                 color="primary"
                 className={classes.firstButton}
-                onClick={() => dispatch(wipeCart(cart))}
+                onClick={() => wipeNotLoggedCart(productsInCart)}
               >
                 Vaciar Carrito
               </Button>
             </Link>
-            <Button variant="contained" color="primary">
-              Realizar pedido
-            </Button>
+            <Link to="/login">
+              <Button variant="contained" color="primary">
+                Realizar pedido
+              </Button>
+            </Link>
+            
           </div>
           : null
         }

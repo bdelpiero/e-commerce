@@ -5,6 +5,8 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
+    position:"relative",
+    zIndex:"3"
   },
   menuButton: {
     marginRight: theme.spacing(2),

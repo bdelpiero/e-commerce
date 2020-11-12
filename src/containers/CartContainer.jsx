@@ -7,8 +7,10 @@ import {
   fetchCart,
   getProds,
   showCompletedOrders,
-  completeOrder,
+  setTotal,
+  fetchProductsCompletedOrder
 } from "../store/action-creators/cart";
+import {useHistory} from "react-router-dom"
 
 function localProducts() {
   let productsArray = [];
@@ -34,8 +36,13 @@ function CartContainer() {
 
   const dispatch = useDispatch();
 
-  const completeOrderHandler = (order) => {
-    dispatch(completeOrder(order));
+  const history = useHistory()
+
+  const checkoutOrder = (total) => {
+    dispatch(setTotal(total));
+    dispatch(fetchProductsCompletedOrder(cart))
+      .then(()=> history.push("/checkout"))
+
   };
   const showCompletedHandler = () => {
     dispatch(showCompletedOrders());
@@ -65,10 +72,10 @@ function CartContainer() {
           productsInCart={productsInCart}
           cart={cart}
           showCompletedHandler={showCompletedHandler}
-          completeOrderHandler={completeOrderHandler}
+          checkoutOrder={checkoutOrder}
         />
       ) : (
-        <NotLogedCart productsInCart={productsInCart} />
+        <NotLogedCart productsInCart={productsInCart} localProducts={localProducts}/>
       )}
     </div>
   );
