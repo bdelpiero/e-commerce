@@ -109,21 +109,31 @@ function Cart({
                     </StyledTableCell>
                     <StyledTableCell align="right">edit</StyledTableCell>
                     <StyledTableCell align="right">
-                      <button
-                        onClick={() =>
-                          dispatch(addOneItem(cart, product.product, "resta"))
+                      {product.total === 0?
+                        null
+                        :
+                          <button
+                          onClick={() =>
+                            dispatch(addOneItem(cart, product.product, "resta"))
+                          }
+                          >
+                            -
+                          </button>
                         }
-                      >
-                        -
-                      </button>
+
                       {` ${product.total} `}
-                      <button
-                        onClick={() =>
-                          dispatch(addOneItem(cart, product.product, "suma"))
+                      {product.product.stock === 0 ?
+                        null
+                        :
+                          <button
+                          onClick={() =>
+                            dispatch(addOneItem(cart, product.product, "suma"))
+                          }
+                          >
+                            +
+                          </button>
                         }
-                      >
-                        +
-                      </button>
+
                     </StyledTableCell>
                     <StyledTableCell align="right">
                       {updateTotal(product)}
