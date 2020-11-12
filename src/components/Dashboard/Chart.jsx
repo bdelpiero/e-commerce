@@ -34,7 +34,7 @@ export default function Chart({ orders }) {
     console.log(order.createdAt);
     const time = order.createdAt.substring(11, 16);
     console.log("time: ", time);
-    return createData(time, order.total | 600);
+    return createData(time, order.total || order);
   });
   return (
     <React.Fragment>

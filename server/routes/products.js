@@ -6,12 +6,18 @@ const { Product, Category } = require("../db/models");
 
 router.get("/", (req, res, next) => {
   if (Object.keys(req.query).length !== 0) {
-    const filter = {
-      title: { [Op.iLike]: `%${req.query.searchTerm}%` },
-    };
-    Product.findAll({ where: filter }).then((filtered) => res.send(filtered));
+    Product.findAll({
+      where: {
+        [Op.or]: [
+          { title: { [Op.iLike]: `%${req.query.searchTerm}%` } },
+          { author: { [Op.iLike]: `%${req.query.searchTerm}%` } },
+        ],
+      },
+    }).then((filtered) => res.send(filtered));
   } else {
-    Product.findAll({}).then((products) => res.send(products));
+    Product.findAll({ include: { model: Category } }).then((products) =>
+      res.send(products)
+    );
   }
 });
 
@@ -45,9 +51,11 @@ router.post("/", (req, res, next) => {
 });
 
 router.put("/:productId", (req, res, next) => {
-  Product.update(req.body, { where: { id: req.params.productId } }).then(() =>
-    res.sendStatus(200)
-  );
+  Product.update(req.body, {
+    where: { id: req.params.productId },
+  })
+    .then(() => res.sendStatus(200))
+    .catch(next);
 });
 
 router.delete("/:productId", (req, res, next) => {

@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from "react";
 import AdminConfigs from "../components/AdminConfigs";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 function AdminConfigsContainer() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState([]);
 
+  const history = useHistory();
+
   useEffect(() => {
+    axios
+      .get("http://localhost:1337/api/user/me")
+      .then((res) => res.data)
+      .then((user) => {
+        // console.log("user desde el back: ", user);
+        if (!user.rol || user.rol !== "admin") history.push("/");
+      })
+      .catch(() => history.push("/"));
+  });
+  useEffect(() => {
+    // console.log("user en admin: ", user);
+    // if (!user.rol || user.rol !== "admin") history.push("/");
     axios
       .get("http://localhost:1337/api/user")
       .then((res) => res.data)

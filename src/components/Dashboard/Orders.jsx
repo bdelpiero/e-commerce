@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -37,13 +37,16 @@ export default function Orders({ orders }) {
         <TableBody>
           {orders.length !== 0 &&
             orders
+              .filter((order) => order.status != "Pendiente")
               .reverse()
               .slice(0, 5)
               .map((order) => (
                 <TableRow key={order.id}>
                   <TableCell>{order.updatedAt.substring(0, 10)}</TableCell>
-                  <TableCell>{order.name || "hardcodeado"}</TableCell>
-                  <TableCell>{order.shippingAdress}</TableCell>
+                  <TableCell>
+                    {`${order.firstName} ${order.lastName}` || "hardcodeado"}
+                  </TableCell>
+                  <TableCell>{order.address}</TableCell>
                   <TableCell>{order.paymentMethod}</TableCell>
                   <TableCell>{order.status}</TableCell>
                   <TableCell align='right'>{order.total || 0}</TableCell>
@@ -52,7 +55,7 @@ export default function Orders({ orders }) {
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color='primary' href='#' onClick={preventDefault}>
+        <Link color='primary' to='/configs/allorders'>
           See more orders
         </Link>
       </div>

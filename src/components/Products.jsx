@@ -155,9 +155,9 @@ function Products({ products, reviews, page, handlePageChange }) {
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
-                  <Link className='bw' onClick={() => addToCart(product)}>
-                    <AddShoppingCartIcon />
-                  </Link>
+                  {/* <Link className='bw' onClick={() => addToCart(product)}> */}
+                  <AddShoppingCartIcon onClick={() => addToCart(product)} />
+                  {/* </Link> */}
                 </Badge>
               </CardContent>
             </Grid>

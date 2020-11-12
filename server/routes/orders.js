@@ -143,7 +143,8 @@ router.put("/cartId", (req, res, next) => {
       });
     })
     .then(() => mailConfirmation(req.user.email))
-    .then(() => res.sendStatus(200)); /*.then(aca manda mail)*/
+    .then(() => res.sendStatus(200))
+    .catch(() => res.sendStatus(400));
 });
 
 // // SEND CONFIRMATION EMAIL

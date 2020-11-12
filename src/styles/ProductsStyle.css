@@ -1,30 +1,28 @@
-.bw{
+.bw {
   background: none;
-  border:none;
-  color:black;
-  position:relative;
-  left:300%;
-
+  border: none;
+  color: black;
+  position: relative;
+  left: 300%;
 }
 
-.absolute{
-position:relative;
-z-index:2
+.absolute {
+  position: absolute;
+  left: 300;
+  /* z-index:2 */
 }
-.absoluteTwo{
-position:relative;
-z-index:1
-}
-
-.link{
-position:relative;
-right:7%
+.absoluteTwo {
+  position: absolute;
+  left: 300;
 }
 
+.link {
+  position: relative;
+  right: 7%;
+}
 
-
-.p{
-  position:relative;
-  bottom:50%;
-  left: 25%
+.p {
+  position: relative;
+  bottom: 50%;
+  left: 25%;
 }
