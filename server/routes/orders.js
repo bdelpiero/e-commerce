@@ -183,7 +183,7 @@ router.post("/newOrder/:userId", (req, res, next)=>{
     if(!foundOrder[1]) {
       return res.send(foundOrder[0])
     } else {
-      if(req.body.productsArray.length === 0) return; 
+      if(req.body.productsArray.length === 0) return;
       const newArray = req.body.productsArray.map((product) => {
         return {
           productId: product.id,
@@ -216,6 +216,7 @@ router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
   Product.findByPk(req.params.productId)
     .then(product => product.update({stock: req.body.quantity + product.stock}))
 })
+
 
 module.exports = router;
 

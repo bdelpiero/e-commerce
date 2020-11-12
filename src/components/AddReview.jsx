@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -26,10 +26,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormDialog({ productId, user, setReviews, reviews }) {
+
+console.log(productId);
+
+
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [letreview, setLetreview] = useState(false)
+
+
+useEffect(()=>{
+  axios.get(`http://localhost:1337/api/reviews/${productId}/${user.id}`)
+    .then(res => res.data)
+    .then(data => setLetreview(data))
+    .then(()=> console.log("asd",letreview))
+    .catch(err=>console.log(err))
+},[letreview])
+
 
   const handleInputChange = (event) => {
     setComment(event.target.value);
@@ -64,9 +79,14 @@ function FormDialog({ productId, user, setReviews, reviews }) {
 
   return (
     <div className={classes.root}>
+    {letreview?
       <Button variant='contained' color='primary' onClick={handleClickOpen}>
         + Agregar una review
       </Button>
+      :
+      <h2>you must have bought this book first to post a review</h2>
+    }
+
       <Dialog
         open={open}
         onClose={handleClose}
