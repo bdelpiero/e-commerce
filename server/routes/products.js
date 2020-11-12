@@ -4,6 +4,22 @@ const router = express.Router();
 const Op = Sequelize.Op;
 const { Product, Category } = require("../db/models");
 
+// router.get("/", (req, res, next) => {
+//   console.log("holssss", req.query);
+//   if (Object.keys(req.query).length !== 0) {
+//     const filter = {
+//       title: { [Op.iLike]: `%${req.query.searchTerm}%` },
+//     };
+//     Product.findAll({ where: filter, include: Category }).then((filtered) =>
+//       res.send(filtered)
+//     );
+//   } else {
+//     Product.findAll({ include: Category }).then((products) =>
+//       res.send(products)
+//     );
+//   }
+// });
+
 router.get("/", (req, res, next) => {
   if (Object.keys(req.query).length !== 0) {
     Product.findAll({
@@ -35,7 +51,7 @@ router.get("/page/:pageNumber", (req, res, next) => {
 // });
 
 router.get("/:productId", (req, res, next) => {
-  Product.findByPk(req.params.productId)
+  Product.findByPk(req.params.productId, { include: Category })
     .then((product) => res.send(product))
     .catch((err) => console.log(err));
 });

@@ -124,7 +124,7 @@ export const delProductFromCart = (product, user, cart) => (dispatch) => {
 // ELIMINA EL CARRITO ENTERO
 export const wipeCart = (cart) => (dispatch) => {
   return axios
-    .delete(`http://localhost:1337/api/orders/${cart.id}`)
+    .put(`http://localhost:1337/api/orders/logged/wipe/${cart.id}`)
     .then(() => dispatch(setCart({})))
     .catch((err) => console.log(err));
 };

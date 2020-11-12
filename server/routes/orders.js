@@ -113,12 +113,7 @@ router.delete("/:userId/:productId", (req, res, next) => {
     .then(() => res.sendStatus(200));
 });
 
-// DELETE ENTIRE CART
-router.delete("/:orderId", (req, res, next) => {
-  Order.destroy({
-    where: { userId: req.user.id, status: "Pendiente" },
-  }).then(() => res.sendStatus(200));
-});
+
 
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
@@ -141,10 +136,19 @@ router.put("/cartId", (req, res, next) => {
         cardNumber,
         address,
       });
+<<<<<<< HEAD
     })
     .then(() => mailConfirmation(req.user.email))
     .then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(400));
+=======
+      return order
+    }
+  )
+  .then((order)=> mailConfirmation(req.user.email, req.body.data, req.body.total, order.id))
+  .then(()=> res.sendStatus(200))
+  .catch(err=> console.log(err)) /*.then(aca manda mail)*/
+>>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
 });
 
 // // SEND CONFIRMATION EMAIL
@@ -221,6 +225,7 @@ router.put("/newOrder/product/:productId", (req, res, next) => {
     .then(() => res.sendStatus(200));
 });
 
+<<<<<<< HEAD
 router.get("/", (req, res, next) => {
   Order.findAll({})
     .then((orders) => res.send(orders))
@@ -232,6 +237,41 @@ router.put("/newOrder/deleteProduct/:productId", (req, res, next) => {
     product.update({ stock: req.body.quantity + product.stock })
   );
 });
+=======
+
+router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
+  Product.findByPk(req.params.productId)
+    .then(product => product.update({stock: req.body.quantity + product.stock}))
+    .then(()=> res.sendStatus(200))
+})
+>>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
+
+router.put("/logged/wipe/:orderId", (req,res,next)=>{
+  Order_Product.findAll({where: {orderId: req.params.orderId}, include:Product})
+    .then(ordersProducts => {
+      Promise.all(ordersProducts.map(order=>{
+       return Product.findByPk(order.productId)
+          .then(product => {
+            product.stock = order.total + product.stock
+            return product.save()
+          })
+      }))
+      .then(()=> Order.destroy({where:{ id: req.params.orderId}}))
+      .then(()=>res.sendStatus(200))
+    })
+})
+
+router.post("/newOrder/reAddProduct/notLoggedCart", (req, res, next) => {
+  console.log(req.body.products, "LOS PRODUCTOS DEL BODY DESLOGUEADO")
+  Promise.all(req.body.products.map(product=>{
+    return Product.findByPk(product.id)
+       .then(productFromDB => {
+        productFromDB.stock = product.total + productFromDB.stock
+         return productFromDB.save()
+       })
+   }))
+   .then(()=>res.sendStatus(200))
+ })
 
 module.exports = router;
 
