@@ -3,6 +3,14 @@ import AddCategories from "../components/AddCategories";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
+const getCategories = (setCategories) => {
+  return axios
+    .get("http://localhost:1337/api/categories")
+    .then((res) => res.data)
+    .then((data) => setCategories(data))
+    .then((da) => console.log(da));
+};
+
 function AddCategoriesContainer() {
   const dispatch = useDispatch();
   const [category, setCategory] = useState("");
@@ -10,11 +18,7 @@ function AddCategoriesContainer() {
   const [categories, setCategories] = React.useState([]);
 
   React.useEffect(() => {
-    axios
-      .get("http://localhost:1337/api/categories")
-      .then((res) => res.data)
-      .then((data) => setCategories(data))
-      .then((da) => console.log(da));
+    getCategories(setCategories);
   }, []);
 
   const handleChange = (e) => {
@@ -28,8 +32,9 @@ function AddCategoriesContainer() {
         name: category,
       })
       .then((res) => res.data)
-      .then((category) => setCategories([...categories, category]))
-      .then((data) => console.log(data, " created successfully"))
+      .then(() => {
+        getCategories(setCategories);
+      })
       .then(() => setCategory(""))
       .catch(() => setCategory(""));
   };

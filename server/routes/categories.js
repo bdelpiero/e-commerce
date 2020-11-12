@@ -11,6 +11,7 @@ router.post("/", (req, res, next) => {
   }).then((category) => {
     if (category && category.name == req.body.name) {
       category.destroy();
+      res.status(201).send("");
     } else {
       Category.create(req.body).then((category) =>
         res.status(201).send(category)

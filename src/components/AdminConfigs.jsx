@@ -15,10 +15,10 @@ import AddAdmin from "./AddAdmin";
 import AddProductsContainer from "../containers/AddProductsContainer";
 import AddCategoriesContainer from "../containers/AddCategoriesContainer";
 import Dashboard from "../components/Dashboard/Dashboard";
-import RemoveProductsContainer from '../containers/RemoveProductsContainer'
-import '../styles/ProductsStyle.css'
+import RemoveProductsContainer from "../containers/RemoveProductsContainer";
+import "../styles/ProductsStyle.css";
 
-function AdminConfigs({ handleChange, handleSubmit, message }) {
+function AdminConfigs({ handleChange, handleSubmit, message, users }) {
   const classes = useStyles();
 
   return (
@@ -33,6 +33,7 @@ function AdminConfigs({ handleChange, handleSubmit, message }) {
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               message={message}
+              users={users}
             />
           )}
         />

@@ -10,16 +10,22 @@ import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { addProductToCart } from "../store/action-creators/cart";
-import { fetchProducts } from "../store/action-creators/products"
+import { fetchProducts } from "../store/action-creators/products";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
-import '../styles/ProductsStyle.css'
-import axios from "axios"
+import "../styles/ProductsStyle.css";
+import Pagination from "@material-ui/lab/Pagination";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  paginationRoot: {
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
   },
   control: {
     padding: theme.spacing(5),
@@ -33,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 275,
-    width: 200
+    width: 200,
   },
   cardinfo: {
     height: 50,
@@ -52,9 +58,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
   },
   content: {
-  maxWidth: 200,
+    maxWidth: 200,
   },
-
 }));
 
 const reviewsAvg = (reviews, product) => {
@@ -67,8 +72,8 @@ const reviewsAvg = (reviews, product) => {
     }, 0);
 };
 
-function Products({ products, reviews }) {
-  console.log("LOS PRODUCTOS", products)
+function Products({ products, reviews, page, handlePageChange }) {
+  console.log("LOS PRODUCTOS", products);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = useState(5);
@@ -78,25 +83,29 @@ function Products({ products, reviews }) {
     setSpacing(Number(event.target.value));
   };
 
-  const addToCart = (product)=>{
-    if(user.id) {
-      dispatch(addProductToCart(product, user))
-    } else{
+  const addToCart = (product) => {
+    if (user.id) {
+      dispatch(addProductToCart(product, user));
+    } else {
       const newProduct = JSON.parse(localStorage.getItem(product.id));
-      product.total = newProduct ? newProduct.total + 1 : 1
-      localStorage.setItem(`${product.id}`, JSON.stringify(product))
+      product.total = newProduct ? newProduct.total + 1 : 1;
+      localStorage.setItem(`${product.id}`, JSON.stringify(product));
 
-      axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op : "suma"})
-    .then(()=> dispatch(fetchProducts()))
+      axios
+        .put(
+          `http://localhost:1337/api/orders/newOrder/product/${product.id}`,
+          { op: "suma" }
+        )
+        .then(() => dispatch(fetchProducts()));
     }
-  }
+  };
 
   // console.log("reviews: ", reviews);
-   console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products)
+  //console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products);
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
       <Grid container justify='center' spacing={spacing}>
-        {products.length != 0 &&
+        {Array.isArray(products) &&
           products.map((product) => (
             <Grid key={product.id} item>
               <Card className={classes.cardroot}>
@@ -146,8 +155,7 @@ function Products({ products, reviews }) {
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
                 <Badge color='secondary'>
-                  <Link className="bw"
-                    onClick={() => addToCart(product)}>
+                  <Link className='bw' onClick={() => addToCart(product)}>
                     <AddShoppingCartIcon />
                   </Link>
                 </Badge>
@@ -155,6 +163,10 @@ function Products({ products, reviews }) {
             </Grid>
           ))}
       </Grid>
+      <div className={classes.paginationRoot}>
+        <Typography>Page: {page}</Typography>
+        <Pagination count={4} page={page} onChange={handlePageChange} />
+      </div>
     </Grid>
   );
 }

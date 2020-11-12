@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ products, reviews }) {
+export default function Sidebar({ products, reviews, page, handlePageChange }) {
   const classes = useStyles();
 
   return (
@@ -64,7 +64,12 @@ export default function Sidebar({ products, reviews }) {
         </div>
       </Drawer>
       <main className={classes.content}>
-        <Products products={products} reviews={reviews} />
+        <Products
+          products={products}
+          reviews={reviews}
+          page={page}
+          handlePageChange={handlePageChange}
+        />
       </main>
     </div>
   );

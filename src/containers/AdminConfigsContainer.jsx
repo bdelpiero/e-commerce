@@ -5,6 +5,15 @@ import axios from "axios";
 function AdminConfigsContainer() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:1337/api/user")
+      .then((res) => res.data)
+      .then((data) => setUsers(data))
+      .catch((err) => console.log("error del back: ", err));
+  }, []);
 
   const handleChange = (e) => {
     setEmail(e.target.value);
@@ -18,7 +27,13 @@ function AdminConfigsContainer() {
         email: email,
       })
       .then((res) => res.data)
-      .then(() => setMessage("Please refresh the page to see changes"))
+      .then(() =>
+        axios
+          .get("http://localhost:1337/api/user")
+          .then((res) => res.data)
+          .then((data) => setUsers(data))
+          .then(() => console.log(users))
+      )
       .catch((err) => console.log(err));
   };
 
@@ -27,6 +42,7 @@ function AdminConfigsContainer() {
       message={message}
       handleSubmit={handleSubmit}
       handleChange={handleChange}
+      users={users}
     />
   );
 }

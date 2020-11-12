@@ -11,7 +11,7 @@ import useStyles from "../styles/AdminConfigStyle";
 import Button from "@material-ui/core/Button";
 import UsersListContainer from "../containers/UserListContainer";
 
-function AddAdmin({ handleChange, handleSubmit, message }) {
+function AddAdmin({ handleChange, handleSubmit, message, users }) {
   const classes = useStyles();
 
   return (
@@ -34,7 +34,7 @@ function AddAdmin({ handleChange, handleSubmit, message }) {
                 ),
               }}
             />
-            <div className={classes.alert}>{message}</div>
+            <br />
             <Button
               type='submit'
               className={classes.b}
@@ -46,7 +46,7 @@ function AddAdmin({ handleChange, handleSubmit, message }) {
         </FormControl>
       </form>
 
-      <UsersListContainer />
+      <UsersListContainer users={users} />
     </div>
   );
 }
