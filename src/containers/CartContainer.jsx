@@ -75,7 +75,7 @@ function CartContainer() {
           checkoutOrder={checkoutOrder}
         />
       ) : (
-        <NotLogedCart productsInCart={productsInCart} />
+        <NotLogedCart productsInCart={productsInCart} localProducts={localProducts}/>
       )}
     </div>
   );
