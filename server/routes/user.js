@@ -44,7 +44,7 @@ router.post("/logout", function (req, res) {
 });
 
 router.get("/me", function (req, res) {
-  console.log(req.user);
+  //console.log(req.user);
   if (!req.user) {
     return res.sendStatus(401);
   }

@@ -27,8 +27,10 @@ router.get("/", (req, res, next) => {
         [Op.or]: [
           { title: { [Op.iLike]: `%${req.query.searchTerm}%` } },
           { author: { [Op.iLike]: `%${req.query.searchTerm}%` } },
+          { "$categories.name$": { [Op.iLike]: `%${req.query.searchTerm}%` } },
         ],
       },
+      include: [{ model: Category, as: "categories" }],
     }).then((filtered) => res.send(filtered));
   } else {
     Product.findAll({ include: { model: Category } }).then((products) =>
@@ -37,9 +39,26 @@ router.get("/", (req, res, next) => {
   }
 });
 
+// where: {
+//   '$Instruments.size$': { [Op.ne]: 'small' }
+// },
+// include: [{
+//   model: Tool,
+//   as: 'Instruments'
+// }]
+
+router.get("/total", (req, res, next) => {
+  Product.count()
+    .then((total) => res.status(200).send("" + total))
+    .catch((err) => console.log(err));
+});
+
 router.get("/page/:pageNumber", (req, res, next) => {
   // console.log("req params: ", req.params.pageNumber);
-  const range = [req.params.pageNumber * 4 - 3, req.params.pageNumber * 4];
+  const range = [
+    req.params.pageNumber * 8 - 8 + (req.params.pageNumber - 1),
+    req.params.pageNumber * 8 + (req.params.pageNumber - 1),
+  ];
   // console.log("range: ", range);
   Product.findAll({
     where: { id: { [Op.between]: range } },

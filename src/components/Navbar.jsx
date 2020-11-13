@@ -79,10 +79,11 @@ function Navbar() {
   const handleSubmit = (event) => {
     event.preventDefault();
     // history.push({pathname:"/products/busqueda/", search: `?search=${event.target[0].value}`});
-    // event.target[0].value= " ";
+
     dispatch(searchProduct(searchInput.trim())).then(() => {
       history.push("/search");
     });
+    setSearchInput("");
   };
 
   const handleLogout = () => {
@@ -105,15 +106,16 @@ function Navbar() {
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
+      onClose={handleMenuClose}>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       {user.rol == "admin" ? (
-        <Link to="/configs" className={classes.noneTwo}>
+        <Link to='/configs' className={classes.noneTwo}>
           <MenuItem onClick={handleMenuClose}>Admin settings</MenuItem>
         </Link>
       ) : (
-        <MenuItem onClick={handleMenuClose}>settings</MenuItem>
+        <Link to={`/completed`} style={{ textDecoration: "none" }}>
+          <MenuItem onClick={handleMenuClose}>Compras pasadas</MenuItem>
+        </Link>
       )}
     </Menu>
   );
@@ -127,21 +129,20 @@ function Navbar() {
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
+      onClose={handleMobileMenuClose}>
       <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
+        <IconButton aria-label='show 4 new mails' color='inherit'>
           {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color="secondary">
+          <Badge color='secondary'>
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
+        <IconButton aria-label='show 11 new notifications' color='inherit'>
           {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color="secondary">
+          <Badge color='secondary'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -149,11 +150,10 @@ function Navbar() {
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+          aria-label='account of current user'
+          aria-controls='primary-search-account-menu'
+          aria-haspopup='true'
+          color='inherit'>
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
@@ -164,18 +164,17 @@ function Navbar() {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.grow}>
-        <AppBar position="static">
+        <AppBar position='static'>
           <Toolbar>
             <IconButton
-              edge="start"
+              edge='start'
               className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
-            >
+              color='inherit'
+              aria-label='open drawer'>
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
-              <Link  to="/" className={classes.none}>
+            <Typography className={classes.title} variant='h6' noWrap>
+              <Link to='/' className={classes.none}>
                 {" "}
                 Bookstore
               </Link>
@@ -186,7 +185,7 @@ function Navbar() {
               </div>
               <form onSubmit={handleSubmit}>
                 <InputBase
-                  placeholder="Search…"
+                  placeholder='Search…'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,
@@ -202,65 +201,63 @@ function Navbar() {
             <div className={classes.sectionDesktop}>
               {logged ? (
                 <Button
-                  color="inherit"
+                  color='inherit'
                   onClick={handleLogout}
                   className={classes.none}
-                  title="register"
-                >
+                  style={{ marginTop: 0 }}
+                  title='register'>
                   Logout
                 </Button>
               ) : (
                 <div>
-                  <Link to="/login" className={classes.noneTwo}>
+                  <Link to='/login' className={classes.noneTwo}>
                     <Button
-                      color="inherit"
+                      color='inherit'
                       className={classes.none}
-                      title="login"
-                    >
+                      title='login'>
                       Login
                     </Button>
                   </Link>
-                  <Link to="/register" className={classes.noneTwo}>
+                  <Link to='/register' className={classes.noneTwo}>
                     <Button
-                      color="inherit"
+                      color='inherit'
                       className={classes.none}
-                      title="register"
-                    >
+                      title='register'>
                       Sign up
                     </Button>
                   </Link>
                 </div>
               )}
-              <IconButton aria-label="show 4 new mails" color="inherit">
+              <IconButton aria-label='show 4 new mails' color='inherit'>
                 {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color="secondary">
-                  <Link to="/cart">
+                <Link to='/cart'>
+                  <Badge color='secondary'>
                     <AddShoppingCartIcon />
-                  </Link>
-                </Badge>
+                  </Badge>
+                </Link>
               </IconButton>
 
               {logged ? (
                 <IconButton
-                  edge="end"
-                  aria-label="account of current user"
+                  className={classes.userContainer}
+                  edge='end'
+                  aria-label='account of current user'
                   aria-controls={menuId}
-                  aria-haspopup="true"
+                  aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
-                  color="inherit"
-                >
+                  color='inherit'>
+                  <p className={classes.userName}>{user.userName}</p>
                   <AccountCircle />
                 </IconButton>
               ) : null}
             </div>
             <div className={classes.sectionMobile}>
               <IconButton
-                aria-label="show more"
+                aria-label='show more'
                 aria-controls={mobileMenuId}
-                aria-haspopup="true"
+                aria-haspopup='true'
                 onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
+                color='inherit'>
                 <MoreIcon />
               </IconButton>
             </div>

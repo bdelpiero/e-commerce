@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function a11yProps(index) {
   return {
     id: `wrapped-tab-${index}`,
@@ -38,7 +37,6 @@ function SingleProduct({ product, reviews, path, url, setReviews, user }) {
     setValue(newValue);
   };
 
-  console.log("reviews en singleProduct: ", reviews);
   return (
     <div className={classes.root}>
       <div className='container'>

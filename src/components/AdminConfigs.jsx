@@ -56,7 +56,7 @@ function AdminConfigs({ handleChange, handleSubmit, message, users }) {
         />
         <Route exact path='/configs/allorders' component={AllOrders} />
         <Route exact path='/configs/dashboard' component={Dashboard} />
-        <Redirect from='/configs' to='/configs/addadmin' />
+        <Redirect from='/configs' to='/configs/dashboard' />
       </Switch>
     </div>
   );

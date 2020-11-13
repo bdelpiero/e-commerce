@@ -38,21 +38,6 @@ function ProductsContainer() {
 
   // const location = useLocation();
 
-  React.useEffect(() => {
-    // console.log(location);
-    // const path = location.search;
-    // const query = new URLSearchParams(path);
-    // console.log("busqueda ", query.get("search"));
-    console.log(("page: ", page));
-    const data = axios
-      .get(`http://localhost:1337/api/products/page/${page}`)
-      .then((res) => res.data)
-      .then((products) => {
-        setProducts(products);
-      })
-      .catch((err) => console.log(err));
-  }, [page]);
-
   return (
     <div>
       <Sidebar

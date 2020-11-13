@@ -54,7 +54,7 @@ function CompletedOrderDetails({
   const user = useSelector((state) => state.login.loggedUser);
   const cartProducts = useSelector((state) => state.cart.productsInCart);
   const order = useSelector((state) => {
-    console.log("ACA ESTA EL ESTADO", state);
+    // console.log("ACA ESTA EL ESTADO", state);
     return state.cart.selected;
   });
   const history = useHistory();
@@ -67,47 +67,47 @@ function CompletedOrderDetails({
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
+        <Table className={classes.table} aria-label='customized table'>
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left">Producto</StyledTableCell>
-              <StyledTableCell align="center">Precio unitario</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">Cantidad</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'>Producto</StyledTableCell>
+              <StyledTableCell align='center'>Precio unitario</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'>Cantidad</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {completedOrdersProduct.map((product) => (
               <StyledTableRow key={product.product.id}>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell component='th' scope='row'>
                   <img
-                    className="imgSize"
+                    className='imgSize'
                     src={product.product.imageUrl}
                     style={{ height: "150px", width: "100px" }}
                   />
                 </StyledTableCell>
-                <StyledTableCell align="left">
+                <StyledTableCell align='left'>
                   {product.product.title}
                 </StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell align='center'>
                   {`$ ${updateTotal(product)}`}
                 </StyledTableCell>
-                <StyledTableCell align="right">edit</StyledTableCell>
-                <StyledTableCell align="right">{product.total}</StyledTableCell>
-                <StyledTableCell align="right"></StyledTableCell>
+                <StyledTableCell align='right'>edit</StyledTableCell>
+                <StyledTableCell align='right'>{product.total}</StyledTableCell>
+                <StyledTableCell align='right'></StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left">Total:</StyledTableCell>
-              <StyledTableCell align="center">{`$ ${total}`}</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'>Total:</StyledTableCell>
+              <StyledTableCell align='center'>{`$ ${total}`}</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
         </Table>
@@ -118,10 +118,9 @@ function CompletedOrderDetails({
             onClick={() => {
               showCompletedHandler();
             }}
-            variant="contained"
-            color="primary"
-            className={classes.firstButton}
-          >
+            variant='contained'
+            color='primary'
+            className={classes.firstButton}>
             Mis Compras
           </Button>
         </Link>

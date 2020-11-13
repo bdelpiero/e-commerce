@@ -8,9 +8,9 @@ import {
   getProds,
   showCompletedOrders,
   setTotal,
-  fetchProductsCompletedOrder
+  fetchProductsCompletedOrder,
 } from "../store/action-creators/cart";
-import {useHistory} from "react-router-dom"
+import { useHistory } from "react-router-dom";
 
 function localProducts() {
   let productsArray = [];
@@ -36,17 +36,17 @@ function CartContainer() {
 
   const dispatch = useDispatch();
 
-  const history = useHistory()
+  const history = useHistory();
 
   const checkoutOrder = (total) => {
     dispatch(setTotal(total));
-    dispatch(fetchProductsCompletedOrder(cart))
-      .then(()=> history.push("/checkout"))
-
+    dispatch(fetchProductsCompletedOrder(cart)).then(() =>
+      history.push("/checkout")
+    );
   };
-  const showCompletedHandler = () => {
-    dispatch(showCompletedOrders());
-  };
+  // const showCompletedHandler = () => {
+  //   dispatch(showCompletedOrders());
+  // };
 
   useEffect(() => {
     // si no hay usuario logeado. Habría que corregirlo cuando podamos
@@ -71,11 +71,14 @@ function CartContainer() {
         <Cart
           productsInCart={productsInCart}
           cart={cart}
-          showCompletedHandler={showCompletedHandler}
+          // showCompletedHandler={showCompletedHandler}
           checkoutOrder={checkoutOrder}
         />
       ) : (
-        <NotLogedCart productsInCart={productsInCart} localProducts={localProducts}/>
+        <NotLogedCart
+          productsInCart={productsInCart}
+          localProducts={localProducts}
+        />
       )}
     </div>
   );
