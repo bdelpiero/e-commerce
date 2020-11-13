@@ -30,12 +30,15 @@ function createData(time, amount) {
 export default function Chart({ orders }) {
   const theme = useTheme();
 
-  const data = orders.map((order) => {
-    console.log(order.createdAt);
-    const time = order.createdAt.substring(11, 16);
-    console.log("time: ", time);
-    return createData(time, order.total || order);
-  });
+  const data = orders
+    .filter((order) => order.status != "Pendiente")
+    .map((order) => {
+      // console.log(order.status);
+      // console.log(order.createdAt);
+      const time = order.createdAt.substring(11, 16);
+      // console.log("time: ", time);
+      return createData(time, order.total || order);
+    });
   return (
     <React.Fragment>
       <Title>Today</Title>

@@ -1,12 +1,18 @@
-
 import { fade, makeStyles } from "@material-ui/core/styles";
 
-
 const useStyles = makeStyles((theme) => ({
+  userContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  userName: {
+    fontSize: 18,
+    marginRight: 5,
+  },
   grow: {
     flexGrow: 1,
-    position:"relative",
-    zIndex:"3"
+    position: "relative",
+    zIndex: "3",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -66,17 +72,16 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
-  none:{
+  none: {
     textDecorationLine: "none",
     color: "white",
-    fontSize:"100%",
-    marginTop:"5%"
+    fontSize: "100%",
+    marginTop: "5%",
   },
-  noneTwo:{
+  noneTwo: {
     textDecorationLine: "none",
-    color:"black",
+    color: "black",
   },
-
 }));
 
-export default useStyles
+export default useStyles;

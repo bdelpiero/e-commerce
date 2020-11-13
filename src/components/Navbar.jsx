@@ -113,7 +113,9 @@ function Navbar() {
           <MenuItem onClick={handleMenuClose}>Admin settings</MenuItem>
         </Link>
       ) : (
-        <MenuItem onClick={handleMenuClose}>settings</MenuItem>
+        <Link to={`/completed`} style={{ textDecoration: "none" }}>
+          <MenuItem onClick={handleMenuClose}>Compras pasadas</MenuItem>
+        </Link>
       )}
     </Menu>
   );
@@ -202,6 +204,7 @@ function Navbar() {
                   color='inherit'
                   onClick={handleLogout}
                   className={classes.none}
+                  style={{ marginTop: 0 }}
                   title='register'>
                   Logout
                 </Button>
@@ -227,21 +230,23 @@ function Navbar() {
               )}
               <IconButton aria-label='show 4 new mails' color='inherit'>
                 {/* <Badge badgeContent={""} color='secondary'> */}
-                <Badge color='secondary'>
-                  <Link to='/cart'>
+                <Link to='/cart'>
+                  <Badge color='secondary'>
                     <AddShoppingCartIcon />
-                  </Link>
-                </Badge>
+                  </Badge>
+                </Link>
               </IconButton>
 
               {logged ? (
                 <IconButton
+                  className={classes.userContainer}
                   edge='end'
                   aria-label='account of current user'
                   aria-controls={menuId}
                   aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
                   color='inherit'>
+                  <p className={classes.userName}>{user.userName}</p>
                   <AccountCircle />
                 </IconButton>
               ) : null}

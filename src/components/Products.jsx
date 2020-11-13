@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -91,15 +91,34 @@ const reviewsAvg = (reviews, product) => {
     }, 0);
 };
 
-function Products({ products, reviews, page, handlePageChange, showPage }) {
+function Products({
+  products,
+  reviews,
+  page,
+  handlePageChange,
+  showPage,
+  nothingFound,
+}) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = useState(5);
+  const [totalPages, setTotalPages] = useState(0);
+
   const classes = useStyles();
 
   const handleChange = (event) => {
     setSpacing(Number(event.target.value));
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:1337/api/products/total")
+      .then((res) => res.data)
+      .then((total) => {
+        setTotalPages(total / 8);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const addToCart = (product) => {
     if (user.id) {
@@ -126,6 +145,7 @@ function Products({ products, reviews, page, handlePageChange, showPage }) {
       xs={12}
       style={{ marginTop: "50px" }}
       className={classes.container}>
+      {nothingFound && <h3>No se ha encontrado ningun resultado</h3>}
       <Grid container justify='center' spacing={spacing}>
         {Array.isArray(products) &&
           products.map((product) => (
@@ -197,7 +217,11 @@ function Products({ products, reviews, page, handlePageChange, showPage }) {
       {showPage && (
         <div className={classes.paginationRoot}>
           <Typography>Page: {page}</Typography>
-          <Pagination count={4} page={page} onChange={handlePageChange} />
+          <Pagination
+            count={Math.ceil(totalPages)}
+            page={page}
+            onChange={handlePageChange}
+          />
         </div>
       )}
     </Grid>

@@ -56,7 +56,7 @@ const useStyles = makeStyles({
 function Cart({
   productsInCart,
   cart,
-  showCompletedHandler,
+  // showCompletedHandler,
   checkoutOrder,
 }) {
   const classes = useStyles();
@@ -77,16 +77,16 @@ function Cart({
   return (
     <div>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
+        <Table className={classes.table} aria-label='customized table'>
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left">Producto</StyledTableCell>
-              <StyledTableCell align="center">Precio unitario</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">Cantidad</StyledTableCell>
-              <StyledTableCell align="right">Subtotal</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'>Producto</StyledTableCell>
+              <StyledTableCell align='center'>Precio unitario</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'>Cantidad</StyledTableCell>
+              <StyledTableCell align='right'>Subtotal</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,59 +94,51 @@ function Cart({
               productsInCart.map((product) => {
                 return (
                   <StyledTableRow key={product.product.id}>
-                    <StyledTableCell component="th" scope="row">
+                    <StyledTableCell component='th' scope='row'>
                       <img
-                        className="imgSize"
+                        className='imgSize'
                         src={product.product.imageUrl}
                         style={{ height: "150px", width: "100px" }}
                       />
                     </StyledTableCell>
-                    <StyledTableCell align="left">
+                    <StyledTableCell align='left'>
                       {product.product.title}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell align='center'>
                       {product.product.price}
                     </StyledTableCell>
-                    <StyledTableCell align="right">edit</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {product.total === 0?
-                        null
-                        :
-                          <button
+                    <StyledTableCell align='right'>edit</StyledTableCell>
+                    <StyledTableCell align='right'>
+                      {product.total === 0 ? null : (
+                        <button
                           onClick={() =>
                             dispatch(addOneItem(cart, product.product, "resta"))
-                          }
-                          >
-                            -
-                          </button>
-                        }
+                          }>
+                          -
+                        </button>
+                      )}
 
                       {` ${product.total} `}
-                      {product.product.stock === 0 ?
-                        null
-                        :
-                          <button
+                      {product.product.stock === 0 ? null : (
+                        <button
                           onClick={() =>
                             dispatch(addOneItem(cart, product.product, "suma"))
-                          }
-                          >
-                            +
-                          </button>
-                        }
-
+                          }>
+                          +
+                        </button>
+                      )}
                     </StyledTableCell>
-                    <StyledTableCell align="right">
+                    <StyledTableCell align='right'>
                       {updateTotal(product)}
                     </StyledTableCell>
 
-                    <StyledTableCell align="right">
+                    <StyledTableCell align='right'>
                       <Button
                         onClick={() =>
                           dispatch(
                             delProductFromCart(product.product, user, cart)
                           )
-                        }
-                      >
+                        }>
                         <Icon component={DeleteIcon} />
                       </Button>
                     </StyledTableCell>
@@ -160,23 +152,23 @@ function Cart({
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left"></StyledTableCell>
-              <StyledTableCell align="center"></StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">Total</StyledTableCell>
-              <StyledTableCell align="right">{`$ ${total}`}</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'></StyledTableCell>
+              <StyledTableCell align='center'></StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'>Total</StyledTableCell>
+              <StyledTableCell align='right'>{`$ ${total}`}</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
-        <Button variant="contained" color="primary">
+        <Button variant='contained' color='primary'>
           Seguir comprando
         </Button>
 
         <div className={classes.buttonsLeft}>
-          <Link to={`/completed`}>
+          {/* <Link to={`/completed`}>
             <Button
               onClick={() => {
                 showCompletedHandler();
@@ -187,30 +179,28 @@ function Cart({
             >
               Mis Compras
             </Button>
-          </Link>
-            <Button
-              onClick={() => {
-                checkoutOrder(total);  
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Completar pedido
-            </Button>
-          <Link to="/products">
-            <Button variant="contained" color="primary">
+          </Link> */}
+          <Button
+            onClick={() => {
+              checkoutOrder(total);
+            }}
+            variant='contained'
+            color='primary'>
+            Completar pedido
+          </Button>
+          <Link to='/products'>
+            <Button variant='contained' color='primary'>
               Seguir comprando
             </Button>
           </Link>
           {productsInCart.length !== 0 ? (
             <div className={classes.buttonsLeft}>
-              <Link to="/products">
+              <Link to='/products'>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   className={classes.firstButton}
-                  onClick={() => dispatch(wipeCart(cart))}
-                >
+                  onClick={() => dispatch(wipeCart(cart))}>
                   Vaciar Carrito
                 </Button>
               </Link>

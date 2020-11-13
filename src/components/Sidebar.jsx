@@ -54,7 +54,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ reviews, page, handlePageChange, search }) {
+export default function Sidebar({
+  reviews,
+  page,
+  handlePageChange,
+  search = [],
+}) {
   const classes = useStyles();
 
   const [categories, setCategories] = React.useState([]);
@@ -62,6 +67,7 @@ export default function Sidebar({ reviews, page, handlePageChange, search }) {
   const [products, setProducts] = React.useState([]);
 
   const [productsByCategory, setProductsByCategory] = React.useState([]);
+  const [nothingFound, setNothingFound] = React.useState(false);
 
   const categoriesHandler = (id) => {
     console.log("id: ", id);
@@ -74,6 +80,11 @@ export default function Sidebar({ reviews, page, handlePageChange, search }) {
       })
       .then((data) => setProductsByCategory(data));
   };
+
+  React.useEffect(() => {
+    if (search.length == 0) setNothingFound(true);
+    else setNothingFound(false);
+  }, [search]);
 
   React.useEffect(() => {
     axios
@@ -165,6 +176,7 @@ export default function Sidebar({ reviews, page, handlePageChange, search }) {
           path='/search'
           render={() => (
             <Products
+              nothingFound={nothingFound}
               products={search}
               reviews={reviews}
               page={page}

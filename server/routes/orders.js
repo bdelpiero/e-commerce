@@ -7,10 +7,16 @@ const { Product, Order, Order_Product } = require("../db/models");
 //GET COMPLETED ORDERS
 
 router.get("/completed", (req, res, next) => {
-  console.log("ACA ESTA EL USER LOG", req.user.id);
+  // console.log("ACA ESTA EL USER LOG", req.user.id);
+  if (!req.user) return res.sendStatus(400);
   Order.findAll({
     where: { userId: req.user.id, status: "Completado" },
-  }).then((orders) => res.send(orders));
+  })
+    .then((orders) => res.send(orders))
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
 });
 // http://localhost:1337/api/orders    //  POST
 router.post("/", (req, res, next) => {
