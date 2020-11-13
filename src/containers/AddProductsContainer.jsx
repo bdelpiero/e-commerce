@@ -85,6 +85,14 @@ function AddProductsContainer() {
       handleOpen={handleOpen}
       category={category}
       categories={categories}
+      title={title}
+      author={author}
+      isbn={isbn}
+      publisher={publisher}
+      description={description}
+      imageUrl={imageUrl}
+      stock={stock}
+      amount={amount}
     />
   );
 }
