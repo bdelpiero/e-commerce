@@ -62,6 +62,14 @@ export default function AddProducts({
   handleOpen,
   category,
   categories,
+  title,
+  author,
+  isbn,
+  publisher,
+  description,
+  imageUrl,
+  stock,
+  amount,
 }) {
   const classes = useStyles();
 
@@ -78,6 +86,7 @@ export default function AddProducts({
           name='title'
           autoComplete='email'
           autoFocus
+          value={title}
         />
         <TextField
           onChange={handleChange}
@@ -87,6 +96,7 @@ export default function AddProducts({
           name='author'
           label='Author'
           type='text'
+          value={author}
         />
 
         <TextField
@@ -97,6 +107,7 @@ export default function AddProducts({
           name='isbn'
           label='ISBN'
           type='text'
+          value={isbn}
         />
         <TextField
           onChange={handleChange}
@@ -106,6 +117,7 @@ export default function AddProducts({
           name='publisher'
           label='Publisher'
           type='text'
+          value={publisher}
         />
 
         <TextField
@@ -117,6 +129,7 @@ export default function AddProducts({
           name='description'
           label='Description'
           type='text'
+          value={description}
         />
         <TextField
           onChange={handleChange}
@@ -127,6 +140,7 @@ export default function AddProducts({
           name='imageUrl'
           label='ImageUrl'
           type='text'
+          value={imageUrl}
         />
 
         <TextField
@@ -137,6 +151,7 @@ export default function AddProducts({
           name='stock'
           label='Stock'
           type='Stock'
+          value={stock}
         />
         <TextField
           onChange={handleChange}
@@ -145,6 +160,7 @@ export default function AddProducts({
           name='price'
           label='Amount'
           type='Stock'
+          value={amount}
         />
         {/* <FormControl variant='outlined' className={classes.formControl}>
           <InputLabel htmlFor='outlined-age-native-simple'>Age</InputLabel>
