@@ -4,7 +4,21 @@ const Sequelize = require("sequelize");
 const router = express.Router();
 const { Category, Product } = require("../db/models");
 const Op = Sequelize.Op;
-const { Category } = require("../db/models");
+
+router.get("/:id", (req, res, next) => {
+  Product.findAll({
+    include: [
+      {
+        model: Category,
+        where: {
+          id: req.params.id,
+        },
+      },
+    ],
+  })
+    .then((data) => res.send(data))
+    .catch((err) => console.log(err));
+});
 
 router.post("/", (req, res, next) => {
   Category.findOne({
@@ -20,19 +34,6 @@ router.post("/", (req, res, next) => {
         res.status(201).send(category)
       );
     }
-  });
-
-  router.get("/:id", (req, res, next) => {
-    Product.findAll({
-      include: [
-        {
-          model: Category,
-          where: {
-            id: req.params.id,
-          },
-        },
-      ],
-    }).then((data) => res.send(data));
   });
 });
 

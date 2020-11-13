@@ -113,8 +113,6 @@ router.delete("/:userId/:productId", (req, res, next) => {
     .then(() => res.sendStatus(200));
 });
 
-
-
 // UPDATE ORDER
 router.put("/cartId", (req, res, next) => {
   const {
@@ -131,24 +129,19 @@ router.put("/cartId", (req, res, next) => {
         status: "Completado",
         firstName,
         lastName,
+        paymentMethod: "Tarjeta de Credito",
         city,
         total: Number(req.body.total),
         cardNumber,
         address,
       });
-<<<<<<< HEAD
+      return order;
     })
-    .then(() => mailConfirmation(req.user.email))
+    .then((order) =>
+      mailConfirmation(req.user.email, req.body.data, req.body.total, order.id)
+    )
     .then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(400));
-=======
-      return order
-    }
-  )
-  .then((order)=> mailConfirmation(req.user.email, req.body.data, req.body.total, order.id))
-  .then(()=> res.sendStatus(200))
-  .catch(err=> console.log(err)) /*.then(aca manda mail)*/
->>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
+    .catch((err) => console.log(err)); /*.then(aca manda mail)*/
 });
 
 // // SEND CONFIRMATION EMAIL
@@ -225,53 +218,49 @@ router.put("/newOrder/product/:productId", (req, res, next) => {
     .then(() => res.sendStatus(200));
 });
 
-<<<<<<< HEAD
 router.get("/", (req, res, next) => {
   Order.findAll({})
     .then((orders) => res.send(orders))
     .catch((err) => console.log(err));
 });
+
 router.put("/newOrder/deleteProduct/:productId", (req, res, next) => {
-  console.log("EL RECO BODYU", req.body);
-  Product.findByPk(req.params.productId).then((product) =>
-    product.update({ stock: req.body.quantity + product.stock })
-  );
-});
-=======
-
-router.put("/newOrder/deleteProduct/:productId", (req, res, next)=>{
   Product.findByPk(req.params.productId)
-    .then(product => product.update({stock: req.body.quantity + product.stock}))
-    .then(()=> res.sendStatus(200))
-})
->>>>>>> fbd6d76cc0227fe6386561a14fb42e666e4c5478
+    .then((product) =>
+      product.update({ stock: req.body.quantity + product.stock })
+    )
+    .then(() => res.sendStatus(200));
+});
 
-router.put("/logged/wipe/:orderId", (req,res,next)=>{
-  Order_Product.findAll({where: {orderId: req.params.orderId}, include:Product})
-    .then(ordersProducts => {
-      Promise.all(ordersProducts.map(order=>{
-       return Product.findByPk(order.productId)
-          .then(product => {
-            product.stock = order.total + product.stock
-            return product.save()
-          })
-      }))
-      .then(()=> Order.destroy({where:{ id: req.params.orderId}}))
-      .then(()=>res.sendStatus(200))
-    })
-})
+router.put("/logged/wipe/:orderId", (req, res, next) => {
+  Order_Product.findAll({
+    where: { orderId: req.params.orderId },
+    include: Product,
+  }).then((ordersProducts) => {
+    Promise.all(
+      ordersProducts.map((order) => {
+        return Product.findByPk(order.productId).then((product) => {
+          product.stock = order.total + product.stock;
+          return product.save();
+        });
+      })
+    )
+      .then(() => Order.destroy({ where: { id: req.params.orderId } }))
+      .then(() => res.sendStatus(200));
+  });
+});
 
 router.post("/newOrder/reAddProduct/notLoggedCart", (req, res, next) => {
-  console.log(req.body.products, "LOS PRODUCTOS DEL BODY DESLOGUEADO")
-  Promise.all(req.body.products.map(product=>{
-    return Product.findByPk(product.id)
-       .then(productFromDB => {
-        productFromDB.stock = product.total + productFromDB.stock
-         return productFromDB.save()
-       })
-   }))
-   .then(()=>res.sendStatus(200))
- })
+  console.log(req.body.products, "LOS PRODUCTOS DEL BODY DESLOGUEADO");
+  Promise.all(
+    req.body.products.map((product) => {
+      return Product.findByPk(product.id).then((productFromDB) => {
+        productFromDB.stock = product.total + productFromDB.stock;
+        return productFromDB.save();
+      });
+    })
+  ).then(() => res.sendStatus(200));
+});
 
 module.exports = router;
 

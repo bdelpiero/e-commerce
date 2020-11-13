@@ -62,7 +62,17 @@ function AddProductsContainer() {
         category: category,
       })
       .then((res) => res.data)
-      .then((data) => console.log(data))
+      .then(() => {
+        setTitle("");
+        setAuthoer("");
+        setIsbn("");
+        setPublisher("");
+        setDescription("");
+        setImageUrl("");
+        setStock("");
+        setAmount("");
+        setCategory("");
+      })
       .catch((err) => console.log(err));
   };
 

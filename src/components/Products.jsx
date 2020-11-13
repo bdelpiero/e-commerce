@@ -22,9 +22,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   paginationRoot: {
     "& > * + *": {
       marginTop: theme.spacing(2),
+      marginLeft: "auto",
+      marginRight: "auto",
     },
   },
   control: {
@@ -59,6 +66,18 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     maxWidth: 200,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  button: {
+    margin: "auto",
+  },
+  box: {
+    display: "flex",
+    justifyContent: "center",
+    padding: 0,
+    margin: 5,
   },
 }));
 
@@ -72,8 +91,7 @@ const reviewsAvg = (reviews, product) => {
     }, 0);
 };
 
-function Products({ products, reviews, page, handlePageChange }) {
-  console.log("LOS PRODUCTOS", products);
+function Products({ products, reviews, page, handlePageChange, showPage }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.login.loggedUser);
   const [spacing, setSpacing] = useState(5);
@@ -103,11 +121,15 @@ function Products({ products, reviews, page, handlePageChange }) {
   // console.log("reviews: ", reviews);
   //console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products);
   return (
-    <Grid item xs={12} style={{ marginTop: "50px" }}>
+    <Grid
+      item
+      xs={12}
+      style={{ marginTop: "50px" }}
+      className={classes.container}>
       <Grid container justify='center' spacing={spacing}>
         {Array.isArray(products) &&
           products.map((product) => (
-            <Grid key={product.id} item>
+            <Grid key={product.id} item sytle={{ border: "1px solid black" }}>
               <Card className={classes.cardroot}>
                 <CardActionArea>
                   <Link to={`/products/${product.id}`}>
@@ -145,28 +167,39 @@ function Products({ products, reviews, page, handlePageChange }) {
                   component='fieldset'
                   mb={3}
                   borderColor='transparent'
-                  style={{ marginBottom: "0px" }}>
+                  className={classes.box}>
                   <Rating
                     name='read-only'
                     value={reviewsAvg(reviews, product)}
                     readOnly
+                    style={{ margin: "0 auto" }}
                   />
                 </Box>
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
-                <Badge color='secondary'>
-                  {/* <Link className='bw' onClick={() => addToCart(product)}> */}
-                  <AddShoppingCartIcon onClick={() => addToCart(product)} />
-                  {/* </Link> */}
-                </Badge>
+                <button
+                  onClick={() => addToCart(product)}
+                  style={{
+                    width: "50px",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}>
+                  <Badge color='secondary' className={classes.button}>
+                    {/* <Link className='bw' onClick={() => addToCart(product)}> */}
+                    <AddShoppingCartIcon />
+                    {/* </Link> */}
+                  </Badge>
+                </button>
               </CardContent>
             </Grid>
           ))}
       </Grid>
-      <div className={classes.paginationRoot}>
-        <Typography>Page: {page}</Typography>
-        <Pagination count={4} page={page} onChange={handlePageChange} />
-      </div>
+      {showPage && (
+        <div className={classes.paginationRoot}>
+          <Typography>Page: {page}</Typography>
+          <Pagination count={4} page={page} onChange={handlePageChange} />
+        </div>
+      )}
     </Grid>
   );
 }

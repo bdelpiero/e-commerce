@@ -26,25 +26,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormDialog({ productId, user, setReviews, reviews }) {
-
-console.log(productId);
-
+  console.log(productId);
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [letreview, setLetreview] = useState(false)
+  const [letreview, setLetreview] = useState(false);
 
-
-useEffect(()=>{
-  axios.get(`http://localhost:1337/api/reviews/${productId}/${user.id}`)
-    .then(res => res.data)
-    .then(data => setLetreview(data))
-    .then(()=> console.log("asd",letreview))
-    .catch(err=>console.log(err))
-},[letreview])
-
+  useEffect(() => {
+    axios
+      .get(`http://localhost:1337/api/reviews/${productId}/${user.id}`)
+      .then((res) => res.data)
+      .then((data) => setLetreview(data))
+      .then(() => console.log("asd", letreview))
+      .catch((err) => console.log(err));
+  }, [letreview]);
 
   const handleInputChange = (event) => {
     setComment(event.target.value);
@@ -79,57 +76,55 @@ useEffect(()=>{
 
   return (
     <div className={classes.root}>
-
       <Button variant='contained' color='primary' onClick={handleClickOpen}>
         + Agregar una review
       </Button>
-
 
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'>
-        {letreview?
+        {/* {letreview? */}
         <div>
-        <DialogTitle id='form-dialog-title'>Dejanos tu opinión</DialogTitle>
-        <DialogContent className={classes.dialogBox}>
-          <Box
-            component='fieldset'
-            mb={3}
-            borderColor='transparent'
-            className={classes.starsContainter}>
-            <Rating
-              name='simple-controlled'
-              value={rating}
-              onChange={(event, newValue) => {
-                setRating(newValue);
-              }}
+          <DialogTitle id='form-dialog-title'>Dejanos tu opinión</DialogTitle>
+          <DialogContent className={classes.dialogBox}>
+            <Box
+              component='fieldset'
+              mb={3}
+              borderColor='transparent'
+              className={classes.starsContainter}>
+              <Rating
+                name='simple-controlled'
+                value={rating}
+                onChange={(event, newValue) => {
+                  setRating(newValue);
+                }}
+              />
+            </Box>
+            <TextField
+              value={comment}
+              autoFocus
+              multiline
+              margin='dense'
+              id='opinion'
+              label='Opinión'
+              type='text'
+              fullWidth
+              onChange={handleInputChange}
             />
-          </Box>
-          <TextField
-            value={comment}
-            autoFocus
-            multiline
-            margin='dense'
-            id='opinion'
-            label='Opinión'
-            type='text'
-            fullWidth
-            onChange={handleInputChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color='primary'>
-            Cancelar
-          </Button>
-          <Button onClick={handleReview} color='primary'>
-            Enviar
-          </Button>
-        </DialogActions>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color='primary'>
+              Cancelar
+            </Button>
+            <Button onClick={handleReview} color='primary'>
+              Enviar
+            </Button>
+          </DialogActions>
         </div>
-        :
-        <h2>you must have bought this book first to post a review</h2>
-        }
+        {/* // :
+        // <h2>you must have bought this book first to post a review</h2>
+        // } */}
       </Dialog>
     </div>
   );

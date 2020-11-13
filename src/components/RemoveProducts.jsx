@@ -153,7 +153,6 @@ function AlertDialog({ id, setProducts }) {
   };
 
   const handleRemove = (e) => {
-    console.log(id);
     axios
       .delete(`http://localhost:1337/api/products/${id}`)
       .then(() =>
@@ -161,7 +160,6 @@ function AlertDialog({ id, setProducts }) {
           .get("http://localhost:1337/api/products")
           .then((res) => res.data)
           .then((products) => {
-            console.log("products después de remove: ", products);
             return products;
           })
           .then((products) => setProducts([...products]))
@@ -202,7 +200,6 @@ function AlertDialog({ id, setProducts }) {
 }
 //------------------------------------------------------------------------------
 function FormDialog({ id, product, setProducts }) {
-  console.log(product);
   //const [product,setProduct] = useState({})
 
   /*useEffect(()=>{
@@ -248,7 +245,6 @@ function FormDialog({ id, product, setProducts }) {
   };
 
   const handleSubmit = (e) => {
-    console.log("submit attempt");
     axios
       .put(`http://localhost:1337/api/products/${id}`, {
         title: title,

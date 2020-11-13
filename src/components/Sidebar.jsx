@@ -16,6 +16,7 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import Products from "./Products";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const drawerWidth = 240;
 
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Sidebar({ products, reviews, page, handlePageChange }) {
+export default function Sidebar({ reviews, page, handlePageChange, search }) {
   const classes = useStyles();
 
   const [categories, setCategories] = React.useState([]);
@@ -63,10 +64,14 @@ export default function Sidebar({ products, reviews, page, handlePageChange }) {
   const [productsByCategory, setProductsByCategory] = React.useState([]);
 
   const categoriesHandler = (id) => {
-    console.log("hice click :)", id);
+    console.log("id: ", id);
     axios
       .get(`http://localhost:1337/api/categories/${id}`)
       .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+        return data;
+      })
       .then((data) => setProductsByCategory(data));
   };
 
@@ -75,16 +80,14 @@ export default function Sidebar({ products, reviews, page, handlePageChange }) {
       .get("http://localhost:1337/api/categories")
       .then((res) => res.data)
       .then((data) => setCategories(data))
-      .then((data) => console.log(data));
+      .catch((err) => console.log(err));
   }, []);
 
   const location = useLocation();
 
   React.useEffect(() => {
-    console.log(location);
     const path = location.search;
     const query = new URLSearchParams(path);
-    console.log("busqueda ", query.get("search"));
     const data = axios
       .get("http://localhost:1337/api/products", {
         params: { searchTerm: query.get("search") },
@@ -95,6 +98,17 @@ export default function Sidebar({ products, reviews, page, handlePageChange }) {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  React.useEffect(() => {
+    const data = axios
+      .get(`http://localhost:1337/api/products/page/${page}`)
+      .then((res) => res.data)
+      .then((products) => {
+        // console.log("current products: ", products);
+        setProducts(products);
+      })
+      .catch((err) => console.log(err));
+  }, [page]);
 
   return (
     <div className={classes.root}>
@@ -107,12 +121,12 @@ export default function Sidebar({ products, reviews, page, handlePageChange }) {
         </List>
         <Divider />
         <div className={classes.list}>
-          {categories.map((categories) => {
+          {categories.map((category) => {
             return (
-              <div>
+              <div key={category.id}>
                 <Link to={"/categories"}>
-                  <Button onClick={() => categoriesHandler(categories.id)}>
-                    {categories.name}
+                  <Button onClick={() => categoriesHandler(category.id)}>
+                    {category.name}
                   </Button>
                 </Link>
               </div>
@@ -130,6 +144,7 @@ export default function Sidebar({ products, reviews, page, handlePageChange }) {
               reviews={reviews}
               page={page}
               handlePageChange={handlePageChange}
+              showPage={true}
             />
           )}
         />

@@ -39,7 +39,7 @@ router.get("/", (req, res, next) => {
 
 router.get("/page/:pageNumber", (req, res, next) => {
   // console.log("req params: ", req.params.pageNumber);
-  const range = [req.params.pageNumber * 4 - 3, req.params.pageNumber * 4];
+  const range = [req.params.pageNumber * 8 - 7, req.params.pageNumber * 8];
   // console.log("range: ", range);
   Product.findAll({
     where: { id: { [Op.between]: range } },
