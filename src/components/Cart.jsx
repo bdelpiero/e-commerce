@@ -78,9 +78,9 @@ function Cart({
     return subtotal;
   };
   return (
-    <div>
+    <div style={{ margin: "100px 50px" }}>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label='customized table'>
+        <Table className={classes.table} aria-label='customized table '>
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>

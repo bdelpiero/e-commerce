@@ -10,8 +10,12 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Icon from "@material-ui/core/Icon";
-import {fetchProducts} from "../store/action-creators/products"
-import { delProductFromCart, wipeCart, getProds } from "../store/action-creators/cart";
+import { fetchProducts } from "../store/action-creators/products";
+import {
+  delProductFromCart,
+  wipeCart,
+  getProds,
+} from "../store/action-creators/cart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -47,8 +51,6 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 function NotLogedCart({ productsInCart, cart, localProducts }) {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -56,117 +58,122 @@ function NotLogedCart({ productsInCart, cart, localProducts }) {
   const products = useSelector((state) => state.products.list);
 
   const addOrRemoveItem = (product, op) => {
-    if(op === "suma"){
+    if (op === "suma") {
       product.total = product.total + 1;
-    }else {
+    } else {
       product.total = product.total - 1;
     }
-    localStorage.setItem(`${product.id}`, JSON.stringify(product))
-    axios.put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {op})
-    .then(()=> dispatch(fetchProducts()))
-  }
+    localStorage.setItem(`${product.id}`, JSON.stringify(product));
+    axios
+      .put(`http://localhost:1337/api/orders/newOrder/product/${product.id}`, {
+        op,
+      })
+      .then(() => dispatch(fetchProducts()));
+  };
 
   const deleteItemFromCart = (product, quantity) => {
-    localStorage.removeItem(`${product.id}`)
-    axios.put(`http://localhost:1337/api/orders/newOrder/deleteProduct/${product.id}`, {quantity})
-    .then(()=> dispatch(getProds(localProducts())))
-    }
+    localStorage.removeItem(`${product.id}`);
+    axios
+      .put(
+        `http://localhost:1337/api/orders/newOrder/deleteProduct/${product.id}`,
+        { quantity }
+      )
+      .then(() => dispatch(getProds(localProducts())));
+  };
 
   const wipeNotLoggedCart = (products) => {
-    localStorage.clear()
-    axios.post(`http://localhost:1337/api/orders/newOrder/reAddProduct/notLoggedCart`, {products})
-  }
-  
+    localStorage.clear();
+    axios.post(
+      `http://localhost:1337/api/orders/newOrder/reAddProduct/notLoggedCart`,
+      { products }
+    );
+  };
+
   return (
-    <div>
+    <div style={{ margin: "100px 50px" }}>
       <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
+        <Table className={classes.table} aria-label='customized table'>
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left">Producto</StyledTableCell>
-              <StyledTableCell align="center">Precio unitario</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">Cantidad</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
+              <StyledTableCell align='left'>Producto</StyledTableCell>
+              <StyledTableCell align='center'>Precio unitario</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'>Cantidad</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {productsInCart.length !== 0 ? productsInCart.map((product) => (
-              <StyledTableRow key={product.id}>
-                <StyledTableCell component="th" scope="row">
-                  <img
-                    className="imgSize"
-                    src={product.imageUrl}
-                    style={{ height: "150px", width: "100px" }}
-                  />
-                </StyledTableCell>
-                <StyledTableCell align="left">{product.title}</StyledTableCell>
-                <StyledTableCell align="center">
-                  {product.price}
-                </StyledTableCell>
-                <StyledTableCell align="right">edit</StyledTableCell>
-                <StyledTableCell align="right">
-                  {product.total === 0 ?
-                    null
-                  :
-                    <button
-                      onClick={()=> addOrRemoveItem(product, "resta")}
-                    >
-                      -
-                    </button>
-                  }
-                  {` ${product.total} `} 
-                  {product.stock === product.total ?
-                    null
-                  :
-                    <button onClick={()=> addOrRemoveItem(product, "suma")}>
-                      +
-                    </button>
-                  }
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  <Button
-                    onClick={() =>
-                      deleteItemFromCart(product, product.total)
-                    }
-                  >
-                    <Icon component={DeleteIcon} />
-                  </Button>
-                </StyledTableCell>
-              </StyledTableRow>
-            )): <h1 >Tu carrito esta vacio.</h1>}
+            {productsInCart.length !== 0 ? (
+              productsInCart.map((product) => (
+                <StyledTableRow key={product.id}>
+                  <StyledTableCell component='th' scope='row'>
+                    <img
+                      className='imgSize'
+                      src={product.imageUrl}
+                      style={{ height: "150px", width: "100px" }}
+                    />
+                  </StyledTableCell>
+                  <StyledTableCell align='left'>
+                    {product.title}
+                  </StyledTableCell>
+                  <StyledTableCell align='center'>
+                    {product.price}
+                  </StyledTableCell>
+                  <StyledTableCell align='right'>edit</StyledTableCell>
+                  <StyledTableCell align='right'>
+                    {product.total === 0 ? null : (
+                      <button onClick={() => addOrRemoveItem(product, "resta")}>
+                        -
+                      </button>
+                    )}
+                    {` ${product.total} `}
+                    {product.stock === product.total ? null : (
+                      <button onClick={() => addOrRemoveItem(product, "suma")}>
+                        +
+                      </button>
+                    )}
+                  </StyledTableCell>
+                  <StyledTableCell align='right'>
+                    <Button
+                      onClick={() =>
+                        deleteItemFromCart(product, product.total)
+                      }>
+                      <Icon component={DeleteIcon} />
+                    </Button>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
+            ) : (
+              <h1>Tu carrito esta vacio.</h1>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
-        <Link to="/products">
-          <Button variant="contained" color="primary">
+        <Link to='/products'>
+          <Button variant='contained' color='primary'>
             Seguir comprando
           </Button>
-        </Link> 
-        {productsInCart.length !== 0 ?
+        </Link>
+        {productsInCart.length !== 0 ? (
           <div className={classes.buttonsLeft}>
-            <Link to="/products">
+            <Link to='/products'>
               <Button
-                variant="contained"
-                color="primary"
+                variant='contained'
+                color='primary'
                 className={classes.firstButton}
-                onClick={() => wipeNotLoggedCart(productsInCart)}
-              >
+                onClick={() => wipeNotLoggedCart(productsInCart)}>
                 Vaciar Carrito
               </Button>
             </Link>
-            <Link to="/login">
-              <Button variant="contained" color="primary">
+            <Link to='/login'>
+              <Button variant='contained' color='primary'>
                 Realizar pedido
               </Button>
             </Link>
-            
           </div>
-          : null
-        }
-        
+        ) : null}
       </div>
     </div>
   );

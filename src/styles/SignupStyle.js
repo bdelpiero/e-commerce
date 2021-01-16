@@ -2,10 +2,12 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    height: "78vh",
+    marginTop: 65,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
   },
   avatar: {
     margin: theme.spacing(1),

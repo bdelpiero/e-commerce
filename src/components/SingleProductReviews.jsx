@@ -12,9 +12,10 @@ const useStyles = makeStyles((theme) => ({
     width: 600,
     minWidth: 300,
     backgroundColor: theme.palette.background.paper,
-  },
-  block: {
-    display: "block",
+    ["@media (max-width:740px)"]: {
+      width: "auto",
+      minWidth: 200,
+    },
   },
   stars: {
     fontSize: "1rem",
@@ -31,33 +32,44 @@ const useStyles = makeStyles((theme) => ({
 
 function SingleProductReviews({ reviews }) {
   const classes = useStyles();
-  console.log("reviews in container: ", reviews);
+  // console.log("reviews in container: ", reviews);
   return (
     <div>
       <List className={classes.root}>
-        {reviews.map((review) => {
-          if (!review.user) return;
-          return (
-            <div key={review.id}>
-              <ListItem alignItems='flex-start' className={classes.listItem}>
-                <ListItemText primary={review.user.userName} />
-                <Box
-                  component='fieldset'
-                  borderColor='transparent'
-                  className={classes.starsContainter}>
-                  <Rating
-                    name='read-only'
-                    value={review.rating}
-                    readOnly
-                    className={classes.stars}
-                  />
-                </Box>
-                <ListItemText secondary={review.comment} />
-              </ListItem>
-              <Divider variant='inset' component='li' />
-            </div>
-          );
-        })}
+        {reviews.length > 0 ? (
+          reviews.map((review) => {
+            if (!review.user) return;
+            return (
+              <div key={review.id}>
+                <ListItem alignItems='flex-start' className={classes.listItem}>
+                  <ListItemText primary={review.user.userName} />
+                  <Box
+                    component='fieldset'
+                    borderColor='transparent'
+                    className={classes.starsContainter}>
+                    <Rating
+                      name='read-only'
+                      value={review.rating}
+                      readOnly
+                      className={classes.stars}
+                    />
+                  </Box>
+                  <ListItemText secondary={review.comment} />
+                </ListItem>
+                <Divider variant='inset' component='li' />
+              </div>
+            );
+          })
+        ) : (
+          <h3
+            style={{
+              margin: "100px auto",
+              textAlign: "center",
+              color: "gray",
+            }}>
+            There are no reviews aveilable for this book
+          </h3>
+        )}
       </List>
     </div>
   );

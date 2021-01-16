@@ -144,7 +144,7 @@ function Products({
     <Grid
       item
       xs={12}
-      style={{ marginTop: "50px" }}
+      style={{ marginTop: "80px" }}
       className={classes.container}>
       {nothingFound && <h3>No se ha encontrado ningun resultado</h3>}
       <Grid container justify='center' spacing={spacing}>

@@ -169,7 +169,13 @@ function Navbar() {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.grow}>
-        <AppBar position='static' style={{ backgroundColor: "black" }}>
+        <AppBar
+          position='fixed'
+          style={{
+            backgroundColor: "black",
+            height: 65,
+            zIndex: 1,
+          }}>
           <Toolbar>
             {/* <IconButton
               edge='start'

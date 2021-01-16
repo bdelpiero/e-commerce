@@ -7,6 +7,7 @@ import { addProductToCart } from "../store/action-creators/cart";
 import { fetchProducts } from "../store/action-creators/products";
 import Rating from "@material-ui/lab/Rating";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import axios from "axios";
 // es la misma función que para todos los productos. Tendŕia que estar en /utils
 const reviewsAvg = (reviews, product) => {
@@ -21,8 +22,8 @@ const reviewsAvg = (reviews, product) => {
 
 const trimDescription = (description) => {
   if (!description) return;
-  if (description.length >= 50) {
-    return description.substring(0, 50) + "...";
+  if (description.length >= 100) {
+    return description.substring(0, 100) + "...";
   }
   return description;
 };
@@ -61,8 +62,8 @@ function SingleProductInfo({ product, reviews }) {
         <img className='imgSize' src={product.imageUrl} />
       </div>
       <div className='textDiv'>
-        <h1>Titulo: {product.title}</h1>
-        <h2>Autor: {product.author}</h2>
+        <h1>{product.title}</h1>
+        <h3>by {product.author}</h3>
         <Box
           component='fieldset'
           mb={3}
@@ -74,15 +75,35 @@ function SingleProductInfo({ product, reviews }) {
             readOnly
           />
         </Box>
-        <h3>Descripcion: {trimDescription(product.description)}</h3>
-        <h3>Precio: {product.price}</h3>
-        <p>Disponible: {product.stock}</p>
+        <h4 style={{ maxWidth: 650 }}>
+          {trimDescription(product.description)}
+        </h4>
 
-        <button
-          onClick={() => addToCart(product)}
-          style={{ display: "flex", alignItems: "center" }}>
-          <AddShoppingCartIcon /> Add To Cart
-        </button>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <h3>{product.price}</h3>
+          <Button
+            onClick={() => addToCart(product)}
+            variant='contained'
+            color='secondary'
+            // style={{
+            //   display: "flex",
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            //   height: 50,
+            //   width: 200,
+            // }}
+          >
+            Add To Cart
+            <AddShoppingCartIcon style={{ marginLeft: 5 }} />
+          </Button>
+        </div>
       </div>
     </div>
   );

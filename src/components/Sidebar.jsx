@@ -22,8 +22,9 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    marginTop: 60,
     display: "flex",
-    marginTop: 20,
+
     ["@media (max-width:700px)"]: {
       // eslint-disable-line no-useless-computed-key
       flexDirection: "column",
@@ -33,43 +34,78 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
   },
   drawer: {
-    width: drawerWidth,
+    width: "100%",
     flexShrink: 0,
     zIndex: -1,
     position: "zIndex",
   },
-  drawerPaper: {
-    width: drawerWidth,
-  },
   drawerContainer: {
+    paddingTop: 15,
+    height: "100vh",
+    width: 270,
+    minWidth: 250,
+    boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
     overflow: "auto",
     // width: drawerWidth,
     flexShrink: 0,
 
     position: "zIndex",
+    position: "fixed",
     ["@media (max-width:700px)"]: {
       // eslint-disable-line no-useless-computed-key
+      width: "100%",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      position: "static",
+      height: "auto",
     },
   },
   content: {
+    marginLeft: 270,
     flexGrow: 1,
     padding: theme.spacing(3),
     display: "flex",
     justifyContent: "center",
+    ["@media (max-width:700px)"]: {
+      marginLeft: "auto",
+    },
   },
   list: {
+    width: 270,
+    position: "fixed",
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    marginTop: 30,
+    marginBottom: 30,
     ["@media (max-width:700px)"]: {
       // eslint-disable-line no-useless-computed-key
-
+      position: "static",
       alignItems: "center",
+      paddingLeft: 0,
+      width: "auto",
+      position: "static",
+    },
+  },
+  category: {
+    boxShadow: "0 1px 1px  rgba(0,0,0,0.2)",
+    marginBottom: 20,
+    width: 270,
+    paddingLeft: 20,
+    paddingTop: 30,
+    paddingBottom: 10,
+    ["@media (max-width:700px)"]: {
+      // width: "98vw",
+      boxShadow: "none",
+      textAlign: "center",
+      paddingLeft: 0,
+    },
+  },
+  item: {
+    paddingLeft: 15,
+    ["@media (max-width:700px)"]: {
+      paddingLeft: 0,
     },
   },
 }));
@@ -145,18 +181,20 @@ export default function Sidebar({
     <div className={classes.root}>
       <CssBaseline />
       <div className={classes.drawerContainer}>
-        <List>
-          <ListItem>
-            <ListItemText primary={"CATEGORIES"} />
-          </ListItem>
-        </List>
-        <Divider />
         <div className={classes.list}>
+          <div className={classes.category}>
+            <h3>CATEGORIES</h3>
+          </div>
           {categories.map((category) => {
             return (
               <div key={category.id}>
-                <Link to={"/categories"} style={{ textDecoration: "none" }}>
-                  <Button onClick={() => categoriesHandler(category.id)}>
+                <Link
+                  to={"/categories"}
+                  className={classes.item}
+                  style={{ textDecoration: "none" }}>
+                  <Button
+                    onClick={() => categoriesHandler(category.id)}
+                    style={{ color: "grey" }}>
                     {category.name}
                   </Button>
                 </Link>

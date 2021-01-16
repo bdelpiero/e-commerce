@@ -15,7 +15,7 @@ import AddReview from "./AddReview";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    // backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -42,10 +42,13 @@ function SingleProduct({ product, reviews, path, url, setReviews, user }) {
       <div className='container'>
         <AppBar position='static'>
           <Tabs
+            style={{ backgroundColor: "white" }}
             value={value}
             onChange={handleChange}
-            indicatorColor='secondary'
-            textColor='secondary'>
+            textColor='primary'
+            // indicatorColor='secondary'
+            // textColor='secondary'>
+          >
             <Tab
               label='Info'
               value='one'
@@ -62,7 +65,7 @@ function SingleProduct({ product, reviews, path, url, setReviews, user }) {
             />
           </Tabs>
         </AppBar>
-        <div role='tabpanel'>
+        <div role='tabpanel' style={{ width: "100%" }}>
           <Route
             exact
             path={`${path}`}
