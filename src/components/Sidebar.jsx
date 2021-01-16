@@ -23,6 +23,11 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    marginTop: 20,
+    ["@media (max-width:700px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      flexDirection: "column",
+    },
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -42,15 +47,30 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
 
     position: "zIndex",
+    ["@media (max-width:700px)"]: {
+      // eslint-disable-line no-useless-computed-key
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    display: "flex",
+    justifyContent: "center",
   },
   list: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+    marginTop: 30,
+    ["@media (max-width:700px)"]: {
+      // eslint-disable-line no-useless-computed-key
+
+      alignItems: "center",
+    },
   },
 }));
 
@@ -127,7 +147,7 @@ export default function Sidebar({
       <div className={classes.drawerContainer}>
         <List>
           <ListItem>
-            <ListItemText primary={"Categories"} />
+            <ListItemText primary={"CATEGORIES"} />
           </ListItem>
         </List>
         <Divider />
@@ -135,7 +155,7 @@ export default function Sidebar({
           {categories.map((category) => {
             return (
               <div key={category.id}>
-                <Link to={"/categories"}>
+                <Link to={"/categories"} style={{ textDecoration: "none" }}>
                   <Button onClick={() => categoriesHandler(category.id)}>
                     {category.name}
                   </Button>

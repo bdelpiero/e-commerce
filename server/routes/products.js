@@ -54,14 +54,9 @@ router.get("/total", (req, res, next) => {
 });
 
 router.get("/page/:pageNumber", (req, res, next) => {
-  // console.log("req params: ", req.params.pageNumber);
-  const range = [
-    req.params.pageNumber * 8 - 8 + (req.params.pageNumber - 1),
-    req.params.pageNumber * 8 + (req.params.pageNumber - 1),
-  ];
-  // console.log("range: ", range);
   Product.findAll({
-    where: { id: { [Op.between]: range } },
+    limit: 8,
+    offset: (req.params.pageNumber - 1) * 8,
   }).then((products) => res.send(products));
 });
 

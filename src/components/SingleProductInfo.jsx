@@ -78,8 +78,11 @@ function SingleProductInfo({ product, reviews }) {
         <h3>Precio: {product.price}</h3>
         <p>Disponible: {product.stock}</p>
 
-        <AddShoppingCartIcon />
-        <button onClick={() => addToCart(product)}>Add To Cart</button>
+        <button
+          onClick={() => addToCart(product)}
+          style={{ display: "flex", alignItems: "center" }}>
+          <AddShoppingCartIcon /> Add To Cart
+        </button>
       </div>
     </div>
   );

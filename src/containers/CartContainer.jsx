@@ -15,8 +15,12 @@ import { useHistory } from "react-router-dom";
 function localProducts() {
   let productsArray = [];
   for (const key in localStorage) {
-    if (localStorage.hasOwnProperty(key)) {
-      productsArray.push(JSON.parse(localStorage.getItem(key)));
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      if (!value.price) return;
+      productsArray.push(value);
+    } catch (e) {
+      console.log("error catched while parsing");
     }
   }
   return productsArray;

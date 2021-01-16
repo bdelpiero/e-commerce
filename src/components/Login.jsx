@@ -32,9 +32,9 @@ const theme = createMuiTheme({
 function Copyright() {
   return (
     <Typography variant='body2' color='textSecondary' align='center'>
-      {"Copyright © "}
+      {"© "}
       <Link color='inherit' href=''>
-        Your Website
+        ecommerce - proyecto P5
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -94,7 +94,7 @@ export default function SignInSide({
                 <CircularProgress />
               </div>
             )}
-            <a href='http://localhost:1337/auth/facebook'>
+            {/* <a href='http://localhost:1337/auth/facebook'>
               <Button
                 fullWidth
                 variant='contained'
@@ -102,7 +102,7 @@ export default function SignInSide({
                 className={classes.facebook}>
                 Login via Facebook
               </Button>
-            </a>
+            </a> */}
             <Button
               type='submit'
               fullWidth

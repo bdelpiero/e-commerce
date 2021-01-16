@@ -95,10 +95,10 @@ function BookCategories({ products, reviews }) {
   };
 
   // console.log("reviews: ", reviews);
-  console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products);
+  // console.log("ESTOS SON LOD PRODS DE BUSQUEDA", products);
   return (
     <Grid item xs={12} style={{ marginTop: "50px" }}>
-      <Grid container justify="center" spacing={spacing}>
+      <Grid container justify='center' spacing={spacing}>
         {products.length != 0 &&
           products.map((product) => (
             <Grid key={product.id} item>
@@ -108,7 +108,7 @@ function BookCategories({ products, reviews }) {
                     <CardMedia
                       className={classes.media}
                       image={product.imageUrl}
-                      title="Contemplative Reptile"
+                      title='Contemplative Reptile'
                     />
                   </Link>
                 </CardActionArea>
@@ -116,44 +116,40 @@ function BookCategories({ products, reviews }) {
               <CardContent className={classes.content}>
                 <Typography
                   gutterBottom
-                  variant="h5"
-                  component="h2"
-                  className={classes.titletypo}
-                >
+                  variant='h5'
+                  component='h2'
+                  className={classes.titletypo}>
                   {product.title}
                 </Typography>
                 <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                  className={classes.authortypo}
-                >
+                  variant='body2'
+                  color='textSecondary'
+                  component='p'
+                  className={classes.authortypo}>
                   <span>by: {product.author}</span>
                 </Typography>
                 <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  component="p"
-                  className={classes.pricetypo}
-                >
+                  variant='body2'
+                  color='textSecondary'
+                  component='p'
+                  className={classes.pricetypo}>
                   <span> {product.price}</span>
                 </Typography>
                 <Box
-                  component="fieldset"
+                  component='fieldset'
                   mb={3}
-                  borderColor="transparent"
-                  style={{ marginBottom: "0px" }}
-                >
+                  borderColor='transparent'
+                  style={{ marginBottom: "0px" }}>
                   <Rating
-                    name="read-only"
+                    name='read-only'
                     value={reviewsAvg(reviews, product)}
                     readOnly
                   />
                 </Box>
 
                 {/* <Badge badgeContent={4} color='secondary'> */}
-                <Badge color="secondary">
-                  <button className="bw" onClick={() => addToCart(product)}>
+                <Badge color='secondary'>
+                  <button className='bw' onClick={() => addToCart(product)}>
                     <AddShoppingCartIcon />
                   </button>
                 </Badge>

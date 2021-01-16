@@ -17,6 +17,7 @@ import ResultsProductContainer from "../containers/ResultsProductContainer";
 import Checkout from "../components/Checkout/Checkout";
 import BookCategoriesContainer from "../containers/BookCategoriesContainer";
 import Products from "../components/Products";
+import { FavoriteSharp } from "@material-ui/icons";
 
 axios.defaults.withCredentials = true;
 
@@ -51,8 +52,12 @@ function App() {
         if (!user.id) return;
         const productsArray = [];
         for (const key in localStorage) {
-          if (localStorage.hasOwnProperty(key)) {
-            productsArray.push(JSON.parse(localStorage.getItem(key)));
+          try {
+            const value = JSON.parse(localStorage.getItem(key));
+            if (!value.price) return;
+            productsArray.push(value);
+          } catch (e) {
+            console.log("error catched while parsing");
           }
         }
         if (productsArray.length === 0) return;
@@ -68,8 +73,12 @@ function App() {
   useEffect(() => {
     const productsArray = [];
     for (const key in localStorage) {
-      if (localStorage.hasOwnProperty(key)) {
-        productsArray.push(JSON.parse(localStorage.getItem(key)));
+      try {
+        const value = JSON.parse(localStorage.getItem(key));
+        if (!value.price) return;
+        productsArray.push(value);
+      } catch (e) {
+        console.log("error catched while parsing");
       }
     }
     if (productsArray.length === 0) return;

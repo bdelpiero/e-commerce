@@ -51,6 +51,9 @@ const useStyles = makeStyles({
   firstButton: {
     marginRight: 20,
   },
+  buttonsContainerLeft: {
+    display: "flex",
+  },
 });
 
 function Cart({
@@ -163,11 +166,13 @@ function Cart({
         </Table>
       </TableContainer>
       <div className={classes.buttons}>
-        <Button variant='contained' color='primary'>
-          Seguir comprando
-        </Button>
+        <Link to='/products'>
+          <Button variant='contained' color='primary'>
+            Seguir comprando
+          </Button>
+        </Link>
 
-        <div className={classes.buttonsLeft}>
+        <div className={classes.buttonsContainerLeft}>
           {/* <Link to={`/completed`}>
             <Button
               onClick={() => {
@@ -188,13 +193,13 @@ function Cart({
             color='primary'>
             Completar pedido
           </Button>
-          <Link to='/products'>
+          {/* <Link to='/products'>
             <Button variant='contained' color='primary'>
               Seguir comprando
             </Button>
-          </Link>
+          </Link> */}
           {productsInCart.length !== 0 ? (
-            <div className={classes.buttonsLeft}>
+            <div className={classes.buttonsLeft} style={{ marginLeft: 15 }}>
               <Link to='/products'>
                 <Button
                   variant='contained'

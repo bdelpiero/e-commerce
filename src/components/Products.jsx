@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   container: {
+    maxWidth: 1100,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -148,7 +149,7 @@ function Products({
       {nothingFound && <h3>No se ha encontrado ningun resultado</h3>}
       <Grid container justify='center' spacing={spacing}>
         {Array.isArray(products) &&
-          products.map((product) => (
+          products.slice(0, 8).map((product) => (
             <Grid key={product.id} item sytle={{ border: "1px solid black" }}>
               <Card className={classes.cardroot}>
                 <CardActionArea>

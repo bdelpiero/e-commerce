@@ -131,23 +131,28 @@ function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}>
       <MenuItem>
+        <Link to='/' style={{ textDecoration: "none", textAlign: "center" }}>
+          Back to Bookstore
+        </Link>
+      </MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label='show 4 new mails' color='inherit'>
           {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color='secondary'>
+      {/* <Badge color='secondary'>
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label='show 11 new notifications' color='inherit'>
-          {/* <Badge badgeContent={""} color='secondary'> */}
-          <Badge color='secondary'>
+      </MenuItem> */}
+      {/* <MenuItem>
+        <IconButton aria-label='show 11 new notifications' color='inherit'> */}
+      {/* <Badge badgeContent={""} color='secondary'> */}
+      {/* <Badge color='secondary'>
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem>  */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label='account of current user'
@@ -164,15 +169,15 @@ function Navbar() {
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.grow}>
-        <AppBar position='static'>
+        <AppBar position='static' style={{ backgroundColor: "black" }}>
           <Toolbar>
-            <IconButton
+            {/* <IconButton
               edge='start'
               className={classes.menuButton}
               color='inherit'
               aria-label='open drawer'>
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Typography className={classes.title} variant='h6' noWrap>
               <Link to='/' className={classes.none}>
                 {" "}
@@ -185,7 +190,7 @@ function Navbar() {
               </div>
               <form onSubmit={handleSubmit}>
                 <InputBase
-                  placeholder='Search…'
+                  placeholder='Title, Author, Category...'
                   classes={{
                     root: classes.inputRoot,
                     input: classes.inputInput,
@@ -232,7 +237,7 @@ function Navbar() {
                 {/* <Badge badgeContent={""} color='secondary'> */}
                 <Link to='/cart'>
                   <Badge color='secondary'>
-                    <AddShoppingCartIcon />
+                    <AddShoppingCartIcon style={{ color: "white" }} />
                   </Badge>
                 </Link>
               </IconButton>
